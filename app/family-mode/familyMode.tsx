@@ -14,6 +14,7 @@ import { useFamilyActions } from "../../hooks/useFamilyActions"
 import { useFamilyView } from "@/context/FamilyViewContext";
 import { useAuthState } from "@/hooks/useAuthState";
 import { useLatestHealthDiary } from "@/hooks/useLatestHealthDiary";
+import { useEarlyWarning } from "@/hooks/useEarlyWarning";
 
 export default function FamilyMode() {
   const insets = useSafeAreaInsets();
@@ -106,20 +107,13 @@ type MemberStatCardProps = {
   router: any;
 };
 
-function MemberStatCard({
-  m,
-  editMode,
-  removeMember,
-  setViewingUid,
-  router,
-}: {
-  m: any;
-  editMode: boolean;
-  removeMember: (uid: string, relation: string) => Promise<any>;
-  setViewingUid: (uid: string) => void;
-  router: any;
-}) {
+function MemberStatCard({ m, editMode, removeMember, setViewingUid, router }: MemberStatCardProps) {
   const { data: latestDiary, loading: loadingDiary } = useLatestHealthDiary(m.uid);
+  const { warnings = [], loading: loadingWarning } = useEarlyWarning(m.uid);
+
+  const warningCount = warnings.filter(
+    warn => warn.status && !warn.status.toLowerCase().includes("good")
+  ).length;
 
   return (
     <View style={styles.memberCard}>
@@ -174,13 +168,19 @@ function MemberStatCard({
         </View>
       </View>
 
-      <View style={styles.alertRow}>
-        <Image
-          source={require("@/assets/family/alert-icon.png")}
-          style={styles.alertIcon}
-        />
-        <Text style={styles.alertText}>1 Alert Need Attentions</Text>
-      </View>
+      {warningCount > 0 && (
+        <View style={styles.alertRow}>
+          <Image
+            source={require("@/assets/family/alert-icon.png")}
+            style={styles.alertIcon}
+          />
+          <Text style={[styles.alertText, { color: "red" }]}>
+            {loadingWarning
+              ? "-"
+              : `${warningCount} Alert Need Attentions`}
+          </Text>
+        </View>
+      )}
 
       <TouchableOpacity style={styles.monitorBtn} onPress={() => {
         setViewingUid(m.uid);
