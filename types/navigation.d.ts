@@ -1,6 +1,6 @@
 
 export type RootStackParamList = {
-    SignPage: undefined;
+    Login: undefined;
 };
 
 export type NavigationProp = StackNavigationProp<RootStackParamList>;

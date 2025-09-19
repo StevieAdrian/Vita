@@ -2,7 +2,7 @@ import { useAuthState } from "@/hooks/useAuthState";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ActivityIndicator, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import SignPage from "./auth/Login";
+import Login from "./auth/Login";
 
 const Stack = createNativeStackNavigator();
 
@@ -26,7 +26,7 @@ export default function Index() {
                     </>
                     ) : (
                     <>
-                        <Stack.Screen name="SignPage" component={SignPage} options={{ headerShown: false }} />
+                        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
                     </>
                 )}
             </Stack.Navigator>
