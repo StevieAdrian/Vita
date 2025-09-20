@@ -1,5 +1,10 @@
 import { Stack } from "expo-router";
+import { AuthContext } from "@/context/AuthContext";
 
 export default function RootLayout() {
-  return <Stack screenOptions={{ headerShown: false }}/>
+  return (
+    <AuthContext>
+      <Stack screenOptions={{ headerShown: false }} />
+    </AuthContext>
+  );
 }

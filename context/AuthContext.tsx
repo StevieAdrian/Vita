@@ -16,13 +16,13 @@ export function AuthContext({ children }: { children: React.ReactNode}) {
     useEffect(() => {
         if (initializing) return;
 
-        const inAuthGroup = segments[0] && segments[0].startsWith("auth");
+        const inAuthGroup = segments[0] === "auth";
 
         if (user && !inAuthGroup) {
             // temp
             return;
-        } else if (!user) {
-            router.replace("/");
+        } else if (!user && !inAuthGroup) {
+            router.replace("/auth/login" as any);
         }  
     }, [user, initializing, segments])
     
