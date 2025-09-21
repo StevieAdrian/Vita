@@ -34,7 +34,6 @@ export const styles = StyleSheet.create({
     marginBottom: scaleHeight(40),
     lineHeight: moderateScale(38),
   },
-  // ✅ Manual Progress Bar
   progressBarContainer: {
     marginBottom: scaleHeight(30),
     paddingHorizontal: scaleWidth(20),
@@ -50,7 +49,6 @@ export const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderRadius: scaleHeight(4),
   },
-  // ✅ Container gabungan options + continue
   selectionContainer: {
     flex: 1,
     justifyContent: "center",
