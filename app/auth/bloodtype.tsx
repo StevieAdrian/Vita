@@ -36,7 +36,7 @@ const BloodType: React.FC<BloodTypeProps> = () => {
         <Text style={styles.title}>What is your{"\n"}Blood Type</Text>
         <View style={styles.progressBarContainer}>
           <View style={styles.progressBar}>
-            <View style={[styles.progressFill, { width: "25%" }]} />
+            <View style={[styles.progressFill, { width: "20%" }]} />
           </View>
         </View>
 
