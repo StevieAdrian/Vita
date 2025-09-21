@@ -1,5 +1,5 @@
 import { Text, TextInput, TextInputProps, View } from "react-native";
-import { styles } from "../app/auth/login.styles";
+import { styles } from "../styles/input.styles";
 
 interface InputFieldProps extends TextInputProps {
     label: string;
