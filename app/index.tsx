@@ -2,7 +2,7 @@ import { useAuthState } from "@/hooks/useAuthState";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ActivityIndicator, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import Login from "./auth/Login";
+import Login from "./auth/login";
 
 const Stack = createNativeStackNavigator();
 
