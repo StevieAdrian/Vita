@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Dimensions,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -14,12 +13,6 @@ import {
 import Icon from "react-native-vector-icons/Feather";
 import { styles } from "./singup.styles";
 
-const { width, height } = Dimensions.get("window");
-
-const scaleWidth = (size) => (width / 375) * size;
-const scaleHeight = (size) => (height / 812) * size;
-const moderateScale = (size, factor = 0.5) => size + (scaleWidth(size) - size) * factor;
-
 export default function Signup({ navigation }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -32,7 +25,6 @@ export default function Signup({ navigation }) {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const handleCalendarPress = () => {
-    // In a real app, you would show a date picker modal here
     setDateOfBirth("August 25, 2005");
     setShowDatePicker(true);
   };
