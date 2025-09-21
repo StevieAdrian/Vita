@@ -24,29 +24,6 @@ export const styles = StyleSheet.create({
         padding: 20,
         alignItems: "center",
     },
-    innerContainer: {
-        width: "100%",
-        borderWidth: 1,
-        borderColor: "#ccc",
-        borderRadius: 8,
-        marginBottom: 15,
-        paddingHorizontal: 10,
-    },
-    label: {
-        alignSelf: "flex-start",  
-        fontSize: 14,
-        color: "#333",
-        marginBottom: 5,
-        fontWeight: 500,
-    },
-    required: {
-        color: "red",
-    },
-    input: {
-        height: 45,
-        fontSize: 14,
-        color: "#333",
-    },
     continueButton: {
         backgroundColor: "black",
         width: "100%",
