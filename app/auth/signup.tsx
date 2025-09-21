@@ -1,3 +1,4 @@
+import InputField from "@/components/InputField";
 import React, { useState } from "react";
 import {
   Image,
@@ -6,7 +7,6 @@ import {
   ScrollView,
   StatusBar,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -54,100 +54,66 @@ export default function Signup({ navigation }) {
 
         <View style={styles.formWrapper}>
           <View style={styles.formContainer}>
-            <Text style={styles.label}>
-              First Name <Text style={styles.required}>*</Text>
-            </Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                placeholder="John"
-                placeholderTextColor="#999"
-                style={styles.input}
-                value={firstName}
-                onChangeText={setFirstName}
-              />
-            </View>
+            <InputField
+              label="First Name"
+              placeholder="John"
+              value={firstName}
+              onChangeText={setFirstName}
+              required
+            />
 
-            <Text style={styles.label}>
-              Last Name <Text style={styles.required}>*</Text>
-            </Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                placeholder="Doe"
-                placeholderTextColor="#999"
-                style={styles.input}
-                value={lastName}
-                onChangeText={setLastName}
-              />
-            </View>
+            <InputField
+              label="Last Name"
+              placeholder="Doe"
+              value={lastName}
+              onChangeText={setLastName}
+              required
+            />
 
-            <Text style={styles.label}>
-              Email <Text style={styles.required}>*</Text>
-            </Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                placeholder="johndoe@gmail.com"
-                placeholderTextColor="#999"
-                style={styles.input}
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
-            </View>
+            <InputField
+              label="Email"
+              placeholder="johndoe@gmail.com"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              required
+            />
 
-            <Text style={styles.label}>
-              Password <Text style={styles.required}>*</Text>
-            </Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                placeholder="***********"
-                placeholderTextColor="#999"
-                style={styles.input}
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-              />
-            </View>
+            <InputField
+              label="Password"
+              placeholder="***********"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              required
+            />
 
-            <Text style={styles.label}>
-              Confirm Password <Text style={styles.required}>*</Text>
-            </Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                placeholder="***********"
-                placeholderTextColor="#999"
-                style={styles.input}
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                secureTextEntry
-              />
-            </View>
+            <InputField
+              label="Confirm Password"
+              placeholder="***********"
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              secureTextEntry
+              required
+            />
 
-            <Text style={styles.label}>
-              Phone Number <Text style={styles.required}>*</Text>
-            </Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                placeholder="087223627139"
-                placeholderTextColor="#999"
-                style={styles.input}
-                value={phoneNumber}
-                onChangeText={setPhoneNumber}
-                keyboardType="phone-pad"
-              />
-            </View>
+            <InputField
+              label="Phone Number"
+              placeholder="087223627139"
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
+              keyboardType="phone-pad"
+              required
+            />
 
-            <Text style={styles.label}>
-              Date of Birth <Text style={styles.required}>*</Text>
-            </Text>
-            <View style={styles.dobContainer}>
-              <TextInput
+            <View style={styles.dobWrapper}>
+              <InputField
+                label="Date of Birth"
                 placeholder="August 25, 2005"
-                placeholderTextColor="#999"
-                style={styles.dobInput}
                 value={dateOfBirth}
                 onChangeText={setDateOfBirth}
-                editable={true} 
+                required
               />
               <TouchableOpacity
                 style={styles.calendarIcon}
