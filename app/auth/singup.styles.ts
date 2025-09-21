@@ -1,0 +1,193 @@
+import { Dimensions, StyleSheet } from "react-native";
+
+const { width, height } = Dimensions.get("window");
+
+const scaleWidth = (size) => (width / 375) * size;
+const scaleHeight = (size) => (height / 812) * size;
+const moderateScale = (size, factor = 0.5) =>
+  size + (scaleWidth(size) - size) * factor;
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#4285F4",
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    paddingBottom: scaleHeight(20),
+  },
+  header: {
+    backgroundColor: "#4285F4",
+    paddingTop: scaleHeight(50),
+    paddingHorizontal: scaleWidth(25),
+    paddingBottom: scaleHeight(30),
+    alignItems: "flex-start",
+    minHeight: height * 0.25,
+    justifyContent: "center",
+  },
+  logo: {
+    width: scaleWidth(35),
+    height: scaleWidth(35),
+    marginBottom: scaleHeight(20),
+    tintColor: "white",
+    alignSelf: "flex-start",
+  },
+  title: {
+    fontSize: width < 375 ? scaleWidth(28) : scaleWidth(32),
+    fontWeight: "bold",
+    color: "white",
+    marginBottom: scaleHeight(6),
+    textAlign: "left",
+    width: "100%",
+  },
+  subtitle: {
+    fontSize: width < 375 ? scaleWidth(14) : scaleWidth(16),
+    color: "rgba(255, 255, 255, 0.85)",
+    textAlign: "left",
+    lineHeight: scaleHeight(20),
+    width: "100%",
+  },
+  formWrapper: {
+    alignItems: "center",
+    width: "100%",
+  },
+  formContainer: {
+    backgroundColor: "white",
+    paddingHorizontal: scaleWidth(20),
+    paddingVertical: scaleHeight(24),
+    width: width - scaleWidth(40),
+    marginHorizontal: scaleWidth(20),
+    borderRadius: scaleWidth(12),
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: scaleHeight(2),
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: scaleWidth(4),
+    elevation: 3,
+  },
+  bottomContainer: {
+    width: width - scaleWidth(40),
+    marginHorizontal: scaleWidth(20),
+    alignItems: "center",
+    marginTop: scaleHeight(20),
+  },
+  label: {
+    alignSelf: "flex-start",
+    fontSize: 14,
+    color: "#333",
+    marginBottom: 5,
+    fontWeight: "500",
+  },
+  required: {
+    color: "red",
+  },
+  dobWrapper: {
+    width: "100%",
+    position: "relative",
+    marginBottom: 15,
+  },
+  calendarIcon: {
+    position: "absolute",
+    right: 15,
+    top: 38,
+  },
+  genderContainer: {
+    flexDirection: "row",
+    marginTop: scaleHeight(6),
+    marginBottom: scaleHeight(12),
+    width: "100%",
+  },
+  genderOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginRight: scaleWidth(30),
+  },
+  radioButton: {
+    width: scaleWidth(18),
+    height: scaleWidth(18),
+    borderRadius: scaleWidth(9),
+    borderWidth: 2,
+    borderColor: "#D0D0D0",
+    marginRight: scaleWidth(8),
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  radioButtonSelected: {
+    borderColor: "#2d2d2d",
+  },
+  radioButtonInner: {
+    width: scaleWidth(8),
+    height: scaleWidth(8),
+    borderRadius: scaleWidth(4),
+    backgroundColor: "#2d2d2d",
+  },
+  genderText: {
+    fontSize: moderateScale(15),
+    color: "#2d2d2d",
+  },
+  continueButton: {
+    backgroundColor: "#2d2d2d",
+    paddingVertical: scaleHeight(14),
+    borderRadius: scaleWidth(6),
+    alignItems: "center",
+    marginTop: scaleHeight(20),
+    marginBottom: scaleHeight(16),
+    width: "100%",
+  },
+  continueText: {
+    color: "white",
+    fontSize: moderateScale(15),
+    fontWeight: "600",
+  },
+  loginText: {
+    textAlign: "center",
+    fontSize: moderateScale(14),
+    color: "#666",
+    marginBottom: scaleHeight(20),
+    width: "100%",
+  },
+  loginLink: {
+    color: "#4285F4",
+    fontWeight: "500",
+  },
+  dividerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: scaleHeight(16),
+    width: "100%",
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: "#FFFFFF",
+  },
+  dividerText: {
+    marginHorizontal: scaleWidth(12),
+    fontSize: moderateScale(13),
+    color: "#FFFFFF",
+  },
+  googleButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#FFFFFF",
+    paddingVertical: scaleHeight(12),
+    borderRadius: scaleWidth(8),
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    marginBottom: scaleHeight(16),
+    width: "100%",
+  },
+  googleIcon: {
+    width: scaleWidth(18),
+    height: scaleWidth(18),
+    marginRight: scaleWidth(8),
+  },
+  googleText: {
+    fontSize: moderateScale(15),
+    color: "#2d2d2d",
+    fontWeight: "500",
+  },
+});
