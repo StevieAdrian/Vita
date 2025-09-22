@@ -1,4 +1,10 @@
 import InputField from "@/components/InputField";
+import { Relation, RELATION_OPTIONS } from "@/constants/relations";
+import {
+  EmergencyValues,
+  validateForm,
+  ValidationErrors,
+} from "@/utils/emergencyValidation";
 import React, { useState } from "react";
 import {
   Image,
@@ -12,21 +18,35 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import { styles } from "./emergency.styles";
-import { Relation, RELATION_OPTIONS } from "@/constants/relations";
 
 export default function EmergencyContact() {
   const [name, setName] = useState("");
   const [relations, setRelations] = useState<Relation | "">("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [showRelationsDropdown, setShowRelationsDropdown] = useState(false);  
+  const [showRelationsDropdown, setShowRelationsDropdown] = useState(false);
+  const [errors, setErrors] = useState<ValidationErrors>({});
 
   const handleRelationsPress = () => {
     setShowRelationsDropdown(!showRelationsDropdown);
   };
 
-  const selectRelation = (relation: any) => {
+  const selectRelation = (relation: Relation) => {
     setRelations(relation);
     setShowRelationsDropdown(false);
+  };
+
+  const handleContinue = () => {
+    const values: EmergencyValues = {
+      name,
+      phoneNumber,
+      relation: relations,
+    };
+    const newErrors = validateForm(values);
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      // save db
+    }
   };
 
   return (
@@ -66,6 +86,7 @@ export default function EmergencyContact() {
               onChangeText={setName}
               required
             />
+            {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
 
             <View style={styles.dropdownWrapper}>
               <Text style={styles.label}>
@@ -110,6 +131,9 @@ export default function EmergencyContact() {
                   </ScrollView>
                 </View>
               )}
+              {errors.relation && (
+                <Text style={styles.errorText}>{errors.relation}</Text>
+              )}
             </View>
 
             <InputField
@@ -120,8 +144,15 @@ export default function EmergencyContact() {
               keyboardType="phone-pad"
               required
             />
+            {errors.phoneNumber && (
+              <Text style={styles.errorText}>{errors.phoneNumber}</Text>
+            )}
 
-            <TouchableOpacity style={styles.continueButton} activeOpacity={0.8}>
+            <TouchableOpacity
+              style={styles.continueButton}
+              activeOpacity={0.8}
+              onPress={handleContinue}
+            >
               <Text style={styles.continueText}>Continue</Text>
             </TouchableOpacity>
           </View>

@@ -31,7 +31,6 @@ export default function Signup({ navigation }) {
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  // realtime validasi per field
   const handleChange = (field: keyof SignupValues, value: string) => {
     setValues((prev) => ({ ...prev, [field]: value }));
 
@@ -50,7 +49,7 @@ export default function Signup({ navigation }) {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      // navigation.navigate("Home");
+      // kalau aman semua navigate ke profilesignup
     }
   };
 
@@ -89,7 +88,7 @@ export default function Signup({ navigation }) {
             <View style={styles.formContainer}>
               <InputField
                 label="Username"
-                placeholder="yourusername"
+                placeholder="johndoe123"
                 value={values.username}
                 onChangeText={(text) => handleChange("username", text)}
                 required

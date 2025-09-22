@@ -1,6 +1,7 @@
 import OptionField from "@/components/OptionField";
-import { ALLERGIC_OPTIONS, Allergic } from "@/constants/allergic";
-import React, { useState } from "react";
+import { ALLERGIC_OPTIONS } from "@/constants/allergic";
+import { useAllergics } from "@/utils/allergicValidation";
+import React from "react";
 import {
   Image,
   StatusBar,
@@ -13,45 +14,18 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./allergics.style";
 
 const Allergics: React.FC = () => {
-  const [selectedAllergics, setSelectedAllergics] = useState<Allergic[]>([]);
-  const [otherAllergics, setOtherAllergics] = useState<string>("");
-
-  const handleAllergicSelect = (allergic: Allergic) => {
-    if (allergic === "There is no Allergics") {
-      setSelectedAllergics(
-        selectedAllergics.includes(allergic) ? [] : [allergic]
-      );
-    } else {
-      const filteredAllergics = selectedAllergics.filter(
-        (item) => item !== "There is no Allergics"
-      );
-
-      if (selectedAllergics.includes(allergic)) {
-        setSelectedAllergics(
-          filteredAllergics.filter((item) => item !== allergic)
-        );
-      } else {
-        setSelectedAllergics([...filteredAllergics, allergic]);
-      }
-    }
-  };
-
-  const isSelected = (allergic: Allergic) =>
-    selectedAllergics.includes(allergic);
-
-  const handleContinue = () => {
-    const allergicsData = {
-      selectedAllergics,
-      otherAllergics: otherAllergics.trim(),
-    };
-    console.log("Allergics data:", allergicsData);
-  };
-
-  const canContinue = selectedAllergics.length > 0;
+  const {
+    otherAllergics,
+    setOtherAllergics,
+    handleAllergicSelect,
+    isSelected,
+    canContinue,
+    handleContinue,
+  } = useAllergics();
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#4A90E2" />
+      <StatusBar barStyle="light-content" backgroundColor="#4285F4" />
 
       <View style={styles.content}>
         <View style={styles.logoContainer}>
