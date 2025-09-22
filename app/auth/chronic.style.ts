@@ -51,7 +51,7 @@ export const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: moderateScale(16),
-    color: "#FFFFFF",
+    color: "rgba(255, 255, 255, 0.85)",
     textAlign: "left",
     marginBottom: scaleHeight(20),
     opacity: 0.9,
