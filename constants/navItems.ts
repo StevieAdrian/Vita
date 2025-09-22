@@ -1,34 +1,39 @@
 import { NavItem } from "@/types/nav";
 
 export const NAV_ITEMS: NavItem[] = [
-    { 
-        id: "home", 
-        label: "Home", 
-        icon: require("@/assets/images/home-icon.png"), 
-        route: "/" 
-    },
-    { 
-        id: "analysis", 
-        label: "Analysis", 
-        icon: require("@/assets/images/analysis-icon.png"), 
-        route: "/analysis" 
-    },
-    { 
-        id: "notes", 
-        label: "Notes", 
-        icon: require("@/assets/images/notes-icon.png"), 
-        route: "/notes" 
-    },
-    { 
-        id: "schedule", 
-        label: "Schedule", 
-        icon: require("@/assets/images/schedule-icon.png"), 
-        route: "/schedule" 
-    },
-    { 
-        id: "family", 
-        label: "Family", 
-        icon: require("@/assets/images/family-icon.png"), 
-        route: "/family" 
-    },
+  {
+    id: "home",
+    label: "Home",
+    icon: require("@/assets/passiveIconNavBottom/passiveHomeIcon.png"),
+    activeIcon: require("@/assets/activeIcon/homeActiveIcon.png"),
+    route: "/",
+  },
+  {
+    id: "analysis",
+    label: "Analysis",
+    icon: require("@/assets/passiveIconNavBottom/passiveAnalysisIcon.png"),
+    activeIcon: require("@/assets/activeIcon/analysisActiveIcon.png"),
+    route: "/analysis",
+  },
+  {
+    id: "notes",
+    label: "Notes",
+    icon: require("@/assets/activeIcon/notesActiveIcon.png"),
+    activeIcon: require("@/assets/activeIcon/notesActiveIcon.png"),
+    route: "/hcd/createDiary",
+  },
+  {
+    id: "schedule",
+    label: "Schedule",
+    icon: require("@/assets/passiveIconNavBottom/passiveScheduleIcon.png"),
+    activeIcon: require("@/assets/activeIcon/scheduleActiveIcon.png"),
+    route: "/schedule",
+  },
+  {
+    id: "family",
+    label: "Family",
+    icon: require("@/assets/passiveIconNavBottom/passiveFamilyIcon.png"),
+    activeIcon: require("@/assets/activeIcon/familyActiveIcon.png"),
+    route: "/family",
+  },
 ] as const;
