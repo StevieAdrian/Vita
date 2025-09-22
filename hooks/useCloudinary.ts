@@ -1,5 +1,5 @@
 import { FileProps } from "@/types/avatar";
-import cloudinaryConfig from "../constants/cloudinaryConfig";
+import cloudinaryConfig from "../config/cloudinaryConfig";
 
 const handleUpData = async (file: FileProps, preset?: string): Promise<string | null> => {
     const data = new FormData();
