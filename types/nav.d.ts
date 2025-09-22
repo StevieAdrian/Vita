@@ -1,12 +1,13 @@
 export interface NavItem {
-    id: string;
-    label: string;
-    icon: any; 
-    route: string;
+  id: string;
+  label: string;
+  icon: any;
+  activeIcon: any;
+  route: string;
 }
 
 export interface BottomNavProps {
-    items: NavItem[];
-    activeId: string;
-    onSelect: (id: string, route: string) => void;
+  items: NavItem[];
+  activeId: string;
+  onSelect: (id: string, route: string) => void;
 }
