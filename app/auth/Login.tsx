@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { styles } from "./Login.styles";
+import { styles } from "./login.styles";
 import { useAuth } from "@/hooks/useAuth";
 import InputField from "@/components/InputField";
 
-export default function Login() {
+export default function login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { signIn, loading } = useAuth();

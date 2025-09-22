@@ -11,7 +11,6 @@ export const styles = StyleSheet.create({
     height: NAV_ITEMS,
     flexDirection: "row",
     marginHorizontal: 20,
-    // marginBottom:40,
     justifyContent: "space-around",
     alignItems: "center",
     borderTopWidth: 1,
