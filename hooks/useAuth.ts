@@ -1,4 +1,4 @@
-import { auth } from "@/constants/firebaseConfig";
+import { auth } from "@/config/firebaseConfig";
 import { router } from "expo-router";
 import { FirebaseError } from "firebase/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
