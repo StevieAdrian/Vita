@@ -1,4 +1,5 @@
 import OptionField from "@/components/OptionField";
+import { ALLERGIC_OPTIONS, Allergic } from "@/constants/allergic";
 import React, { useState } from "react";
 import {
   Image,
@@ -11,21 +12,11 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./allergics.style";
 
-interface AllergicsProps {}
-
-const Allergics: React.FC<AllergicsProps> = () => {
-  const [selectedAllergics, setSelectedAllergics] = useState<string[]>([]);
+const Allergics: React.FC = () => {
+  const [selectedAllergics, setSelectedAllergics] = useState<Allergic[]>([]);
   const [otherAllergics, setOtherAllergics] = useState<string>("");
 
-  const allergicOptions = [
-    "There is no Allergics",
-    "Peanuts",
-    "Seafood",
-    "Tree Nuts",
-    "Milk",
-  ];
-
-  const handleAllergicSelect = (allergic: string) => {
+  const handleAllergicSelect = (allergic: Allergic) => {
     if (allergic === "There is no Allergics") {
       setSelectedAllergics(
         selectedAllergics.includes(allergic) ? [] : [allergic]
@@ -45,16 +36,15 @@ const Allergics: React.FC<AllergicsProps> = () => {
     }
   };
 
-  const isSelected = (allergic: string) => selectedAllergics.includes(allergic);
+  const isSelected = (allergic: Allergic) =>
+    selectedAllergics.includes(allergic);
 
   const handleContinue = () => {
     const allergicsData = {
       selectedAllergics,
       otherAllergics: otherAllergics.trim(),
     };
-
     console.log("Allergics data:", allergicsData);
-    // href kemana dan simpan kemana
   };
 
   const canContinue = selectedAllergics.length > 0;
@@ -84,7 +74,7 @@ const Allergics: React.FC<AllergicsProps> = () => {
 
         <View style={styles.selectionContainer}>
           <View style={styles.optionsContainer}>
-            {allergicOptions.map((allergic) => (
+            {ALLERGIC_OPTIONS.map((allergic) => (
               <OptionField
                 key={allergic}
                 label={allergic}
