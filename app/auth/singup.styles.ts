@@ -196,4 +196,10 @@ export const styles = StyleSheet.create({
     color: "#2d2d2d",
     fontWeight: "500",
   },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 2,
+    marginBottom: 4,
+  },
 });
