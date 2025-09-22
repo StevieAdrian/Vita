@@ -2,9 +2,9 @@ import { Dimensions, StyleSheet } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
-const scaleWidth = (size) => (width / 375) * size;
-const scaleHeight = (size) => (height / 812) * size;
-const moderateScale = (size, factor = 0.5) =>
+const scaleWidth = (size: number) => (width / 375) * size;
+const scaleHeight = (size: number) => (height / 812) * size;
+const moderateScale = (size: number, factor = 0.5) =>
   size + (scaleWidth(size) - size) * factor;
 
 export const styles = StyleSheet.create({
@@ -12,23 +12,24 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#4285F4",
   },
+  scrollView: {
+    flex: 1,
+  },
   scrollContainer: {
     flexGrow: 1,
-    paddingBottom: scaleHeight(20),
+    paddingBottom: scaleHeight(100),
   },
   header: {
     backgroundColor: "#4285F4",
-    paddingTop: scaleHeight(50),
+    paddingTop: scaleHeight(40),
     paddingHorizontal: scaleWidth(25),
-    paddingBottom: scaleHeight(30),
+    paddingBottom: scaleHeight(18),
     alignItems: "flex-start",
-    minHeight: height * 0.25,
-    justifyContent: "center",
   },
   logo: {
     width: scaleWidth(35),
     height: scaleWidth(35),
-    marginBottom: scaleHeight(20),
+    marginBottom: scaleHeight(14),
     tintColor: "white",
     alignSelf: "flex-start",
   },
@@ -48,30 +49,34 @@ export const styles = StyleSheet.create({
     width: "100%",
   },
   formWrapper: {
-    alignItems: "center",
     width: "100%",
+    alignItems: "center",
+    marginTop: scaleHeight(12),
+    paddingBottom: scaleHeight(200),
   },
   formContainer: {
     backgroundColor: "white",
-    paddingHorizontal: scaleWidth(20),
-    paddingVertical: scaleHeight(24),
-    width: width - scaleWidth(40),
-    marginHorizontal: scaleWidth(20),
+    paddingHorizontal: scaleWidth(18),
+    paddingVertical: scaleHeight(18),
+    width: "90%",
+    alignSelf: "center",
     borderRadius: scaleWidth(12),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: scaleHeight(2),
     },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.08,
     shadowRadius: scaleWidth(4),
     elevation: 3,
+    marginBottom: scaleHeight(10),
   },
   bottomContainer: {
-    width: width - scaleWidth(40),
-    marginHorizontal: scaleWidth(20),
+    width: "90%",
     alignItems: "center",
-    marginTop: scaleHeight(20),
+    marginTop: scaleHeight(10),
+    alignSelf: "center",
+    marginBottom: scaleHeight(20),
   },
   label: {
     alignSelf: "flex-start",
@@ -90,8 +95,9 @@ export const styles = StyleSheet.create({
   },
   calendarIcon: {
     position: "absolute",
-    right: 15,
-    top: 38,
+    right: 12,
+    top: 36,
+    zIndex: 1,
   },
   genderContainer: {
     flexDirection: "row",
@@ -128,7 +134,7 @@ export const styles = StyleSheet.create({
     color: "#2d2d2d",
   },
   continueButton: {
-    backgroundColor: "#2d2d2d",
+    backgroundColor: "#000",
     paddingVertical: scaleHeight(14),
     borderRadius: scaleWidth(6),
     alignItems: "center",
