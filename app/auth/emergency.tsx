@@ -12,27 +12,19 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import { styles } from "./emergency.styles";
+import { Relation, RELATION_OPTIONS } from "@/constants/relations";
 
-export default function EmergencyContacts({ navigation }) {
+export default function EmergencyContact() {
   const [name, setName] = useState("");
-  const [relations, setRelations] = useState("");
+  const [relations, setRelations] = useState<Relation | "">("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [showRelationsDropdown, setShowRelationsDropdown] = useState(false);
-
-  const relationOptions = [
-    "Grandparents",
-    "Grandchildren",
-    "Parents",
-    "Cousins",
-    "Children",
-    "Others",
-  ];
+  const [showRelationsDropdown, setShowRelationsDropdown] = useState(false);  
 
   const handleRelationsPress = () => {
     setShowRelationsDropdown(!showRelationsDropdown);
   };
 
-  const selectRelation = (relation) => {
+  const selectRelation = (relation: any) => {
     setRelations(relation);
     setShowRelationsDropdown(false);
   };
@@ -105,9 +97,9 @@ export default function EmergencyContacts({ navigation }) {
                     style={styles.dropdownScroll}
                     nestedScrollEnabled={true}
                   >
-                    {relationOptions.map((option, index) => (
+                    {RELATION_OPTIONS.map((option) => (
                       <TouchableOpacity
-                        key={index}
+                        key={option}
                         style={styles.dropdownOption}
                         onPress={() => selectRelation(option)}
                         activeOpacity={0.7}
