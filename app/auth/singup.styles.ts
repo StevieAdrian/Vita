@@ -1,3 +1,4 @@
+import { COLORS } from "@/constants/colors";
 import { Dimensions, StyleSheet } from "react-native";
 
 const { width, height } = Dimensions.get("window");
@@ -10,7 +11,7 @@ const moderateScale = (size: number, factor = 0.5) =>
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#4285F4",
+    backgroundColor: COLORS.primary,
   },
   scrollView: {
     flex: 1,
@@ -20,7 +21,7 @@ export const styles = StyleSheet.create({
     paddingBottom: scaleHeight(100),
   },
   header: {
-    backgroundColor: "#4285F4",
+    backgroundColor: COLORS.primary,
     paddingTop: scaleHeight(40),
     paddingHorizontal: scaleWidth(25),
     paddingBottom: scaleHeight(18),
@@ -30,13 +31,13 @@ export const styles = StyleSheet.create({
     width: scaleWidth(35),
     height: scaleWidth(35),
     marginBottom: scaleHeight(14),
-    tintColor: "white",
+    tintColor: COLORS.white,
     alignSelf: "flex-start",
   },
   title: {
     fontSize: width < 375 ? scaleWidth(28) : scaleWidth(32),
     fontWeight: "bold",
-    color: "white",
+    color: COLORS.white,
     marginBottom: scaleHeight(6),
     textAlign: "left",
     width: "100%",
@@ -55,13 +56,13 @@ export const styles = StyleSheet.create({
     paddingBottom: scaleHeight(200),
   },
   formContainer: {
-    backgroundColor: "white",
+    backgroundColor: COLORS.white,
     paddingHorizontal: scaleWidth(18),
     paddingVertical: scaleHeight(18),
     width: "90%",
     alignSelf: "center",
     borderRadius: scaleWidth(12),
-    shadowColor: "#000",
+    shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
       height: scaleHeight(2),
@@ -81,12 +82,12 @@ export const styles = StyleSheet.create({
   label: {
     alignSelf: "flex-start",
     fontSize: 14,
-    color: "#333",
+    color: COLORS.gray1,
     marginBottom: 5,
     fontWeight: "500",
   },
   required: {
-    color: "red",
+    color: COLORS.red,
   },
   dobWrapper: {
     width: "100%",
@@ -121,20 +122,20 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
   },
   radioButtonSelected: {
-    borderColor: "#2d2d2d",
+    borderColor: COLORS.black,
   },
   radioButtonInner: {
     width: scaleWidth(8),
     height: scaleWidth(8),
     borderRadius: scaleWidth(4),
-    backgroundColor: "#2d2d2d",
+    backgroundColor: COLORS.black,
   },
   genderText: {
     fontSize: moderateScale(15),
-    color: "#2d2d2d",
+    color: COLORS.black,
   },
   continueButton: {
-    backgroundColor: "#000",
+    backgroundColor: COLORS.black,
     paddingVertical: scaleHeight(14),
     borderRadius: scaleWidth(6),
     alignItems: "center",
@@ -143,19 +144,19 @@ export const styles = StyleSheet.create({
     width: "100%",
   },
   continueText: {
-    color: "white",
+    color: COLORS.white,
     fontSize: moderateScale(15),
     fontWeight: "600",
   },
   loginText: {
     textAlign: "center",
     fontSize: moderateScale(14),
-    color: "#666",
+    color: COLORS.gray2,
     marginBottom: scaleHeight(20),
     width: "100%",
   },
   loginLink: {
-    color: "#4285F4",
+    color: COLORS.primary,
     fontWeight: "500",
   },
   dividerContainer: {
@@ -167,22 +168,22 @@ export const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
   },
   dividerText: {
     marginHorizontal: scaleWidth(12),
     fontSize: moderateScale(13),
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
   googleButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     paddingVertical: scaleHeight(12),
     borderRadius: scaleWidth(8),
     borderWidth: 1,
-    borderColor: "#E0E0E0",
+    borderColor: COLORS.secondary4th,
     marginBottom: scaleHeight(16),
     width: "100%",
   },
@@ -193,11 +194,11 @@ export const styles = StyleSheet.create({
   },
   googleText: {
     fontSize: moderateScale(15),
-    color: "#2d2d2d",
+    color: COLORS.black,
     fontWeight: "500",
   },
   errorText: {
-    color: "red",
+    color: COLORS.red,
     fontSize: 12,
     marginTop: 2,
     marginBottom: 4,

@@ -1,5 +1,6 @@
 import Calender from "@/components/Calender";
 import InputField from "@/components/InputField";
+import { COLORS } from "@/constants/colors";
 import { SignupValues, validateField } from "@/utils/signUpValidation";
 import React, { useState } from "react";
 import {
@@ -54,7 +55,7 @@ export default function Signup({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#4285F4" />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -92,6 +93,7 @@ export default function Signup({ navigation }) {
                 onChangeText={(text) => handleChange("username", text)}
                 required
                 error={errors.username}
+                placeholderTextColor={COLORS.gray2}
               />
 
               <InputField
@@ -101,6 +103,7 @@ export default function Signup({ navigation }) {
                 onChangeText={(text) => handleChange("firstName", text)}
                 required
                 error={errors.firstName}
+                placeholderTextColor={COLORS.gray2}
               />
               <InputField
                 label="Last Name"
@@ -109,6 +112,7 @@ export default function Signup({ navigation }) {
                 onChangeText={(text) => handleChange("lastName", text)}
                 required
                 error={errors.lastName}
+                placeholderTextColor={COLORS.gray2}
               />
               <InputField
                 label="Email"
@@ -119,6 +123,7 @@ export default function Signup({ navigation }) {
                 autoCapitalize="none"
                 required
                 error={errors.email}
+                placeholderTextColor={COLORS.gray2}
               />
               <InputField
                 label="Password"
@@ -128,6 +133,7 @@ export default function Signup({ navigation }) {
                 secureTextEntry
                 required
                 error={errors.password}
+                placeholderTextColor={COLORS.gray2}
               />
               <InputField
                 label="Confirm Password"
@@ -137,6 +143,7 @@ export default function Signup({ navigation }) {
                 secureTextEntry
                 required
                 error={errors.confirmPassword}
+                placeholderTextColor={COLORS.gray2}
               />
               <InputField
                 label="Phone Number"
@@ -146,6 +153,7 @@ export default function Signup({ navigation }) {
                 keyboardType="phone-pad"
                 required
                 error={errors.phoneNumber}
+                placeholderTextColor={COLORS.gray2}
               />
               <View style={styles.dobWrapper}>
                 <InputField
@@ -156,6 +164,7 @@ export default function Signup({ navigation }) {
                   required
                   editable={false}
                   error={errors.dateOfBirth}
+                  placeholderTextColor={COLORS.gray2}
                 />
                 <Calender
                   value={values.dateOfBirth}

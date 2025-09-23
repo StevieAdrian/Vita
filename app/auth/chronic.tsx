@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./chronic.style";
+import { COLORS } from "@/constants/colors";
 
 const Chronic: React.FC = () => {
   const {
@@ -25,7 +26,7 @@ const Chronic: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#4285F4" />
+      <StatusBar barStyle="light-content" backgroundColor= {COLORS.primary} />
 
       <View style={styles.content}>
         <View style={styles.logoContainer}>
@@ -61,7 +62,7 @@ const Chronic: React.FC = () => {
             <TextInput
               style={styles.otherInput}
               placeholder="Other Chronic Conditions...."
-              placeholderTextColor="#666"
+              placeholderTextColor= {COLORS.gray2}
               value={otherCondition}
               onChangeText={setOtherCondition}
               multiline

@@ -1,4 +1,5 @@
 import { Dimensions, StyleSheet } from "react-native";
+import { COLORS } from "@/constants/colors";
 
 const { width, height } = Dimensions.get("window");
 
@@ -10,7 +11,7 @@ const moderateScale = (size: number, factor: number = 0.5): number =>
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#4285F4",
+    backgroundColor: COLORS.primary,
   },
   content: {
     flex: 1,
@@ -29,7 +30,7 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: moderateScale(32),
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: COLORS.white,
     textAlign: "center",
     marginBottom: scaleHeight(40),
     lineHeight: moderateScale(38),
@@ -46,7 +47,7 @@ export const styles = StyleSheet.create({
   },
   progressFill: {
     height: "100%",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     borderRadius: scaleHeight(4),
   },
   selectionContainer: {
@@ -58,12 +59,12 @@ export const styles = StyleSheet.create({
     gap: scaleHeight(12),
   },
   optionButton: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     paddingVertical: scaleHeight(18),
     paddingHorizontal: scaleWidth(24),
     borderRadius: scaleWidth(12),
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
       height: scaleHeight(2),
@@ -73,26 +74,26 @@ export const styles = StyleSheet.create({
     elevation: 3,
   },
   selectedOption: {
-    backgroundColor: "#2E7BD4",
-    shadowColor: "#2E7BD4",
+    backgroundColor: COLORS.primary2nd,
+    shadowColor: COLORS.primary2nd,
     shadowOpacity: 0.3,
     elevation: 6,
   },
   optionText: {
     fontSize: moderateScale(20),
     fontWeight: "600",
-    color: "#333333",
+    color: COLORS.black,
   },
   selectedOptionText: {
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
   continueButton: {
-    backgroundColor: "#000",
+    backgroundColor: COLORS.black,
     paddingVertical: scaleHeight(18),
     paddingHorizontal: scaleWidth(24),
     borderRadius: scaleWidth(12),
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
       height: scaleHeight(4),
@@ -102,17 +103,17 @@ export const styles = StyleSheet.create({
     elevation: 8,
   },
   continueButtonDisabled: {
-    backgroundColor: "#000",
+    backgroundColor: COLORS.black,
     shadowOpacity: 0.1,
     elevation: 2,
   },
   continueButtonText: {
     fontSize: moderateScale(18),
     fontWeight: "600",
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
   errorText: {
-    color: "B00020",
+    color: COLORS.red,
     fontSize: 14,
     marginTop: 8,
     textAlign: "center",

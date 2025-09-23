@@ -1,3 +1,4 @@
+import { COLORS } from "@/constants/colors";
 import { styles } from "@/styles/calender.styles";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
@@ -76,7 +77,7 @@ export default function Calender({ value, onSelectDate }: CalenderProps) {
         onPress={() => setShowCalendar(true)}
         activeOpacity={0.7}
       >
-        <FontAwesome6 name="calendar" size={24} color="#000" />
+        <FontAwesome6 name="calendar" size={24} color={COLORS.black} />
       </TouchableOpacity>
 
       <Modal
@@ -99,7 +100,7 @@ export default function Calender({ value, onSelectDate }: CalenderProps) {
                 }}
                 style={styles.closeButton}
               >
-                <Ionicons name="close" size={24} color="#000" />
+                <Ionicons name="close" size={24} color={COLORS.black} />
               </TouchableOpacity>
             </View>
 
@@ -113,7 +114,11 @@ export default function Calender({ value, onSelectDate }: CalenderProps) {
                     <Text style={styles.monthYearText}>
                       {formatMonthYear()}
                     </Text>
-                    <Ionicons name="chevron-down" size={12} color="#4285F4" />
+                    <Ionicons
+                      name="chevron-down"
+                      size={12}
+                      color={COLORS.primary}
+                    />
                   </TouchableOpacity>
                 </View>
 
@@ -127,22 +132,22 @@ export default function Calender({ value, onSelectDate }: CalenderProps) {
                   markedDates={{
                     [getSelectedDate()]: {
                       selected: true,
-                      selectedColor: "#4285F4",
-                      selectedTextColor: "#ffffff",
+                      selectedColor: COLORS.primary,
+                      selectedTextColor: COLORS.white,
                     },
                   }}
                   theme={{
-                    selectedDayBackgroundColor: "#4285F4",
-                    selectedDayTextColor: "#ffffff",
-                    todayTextColor: "#4285F4",
-                    dayTextColor: "#2d4150",
-                    textDisabledColor: "#d9e1e8",
-                    dotColor: "#00adf5",
-                    selectedDotColor: "#ffffff",
-                    arrowColor: "#4285F4",
-                    disabledArrowColor: "#d9e1e8",
-                    monthTextColor: "#2d4150",
-                    indicatorColor: "#4285F4",
+                    selectedDayBackgroundColor: COLORS.primary,
+                    selectedDayTextColor: COLORS.white,
+                    todayTextColor: COLORS.primary,
+                    dayTextColor: COLORS.black,
+                    textDisabledColor: COLORS.background2nd,
+                    dotColor: COLORS.primary3rd,
+                    selectedDotColor: COLORS.white,
+                    arrowColor: COLORS.primary2nd,
+                    disabledArrowColor: COLORS.background2nd,
+                    monthTextColor: COLORS.black,
+                    indicatorColor: COLORS.primary,
                     textDayFontWeight: "400",
                     textMonthFontWeight: "bold",
                     textDayHeaderFontWeight: "600",
@@ -159,7 +164,11 @@ export default function Calender({ value, onSelectDate }: CalenderProps) {
                     onPress={() => setShowYearPicker(false)}
                     style={styles.backButton}
                   >
-                    <Ionicons name="arrow-back" size={16} color="#4285F4" />
+                    <Ionicons
+                      name="arrow-back"
+                      size={16}
+                      color={COLORS.primary}
+                    />
                     <Text style={styles.backButtonText}>Back</Text>
                   </TouchableOpacity>
                   <Text style={styles.yearPickerTitle}>Select Year</Text>

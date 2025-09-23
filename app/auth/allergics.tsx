@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./allergics.style";
+import { COLORS } from "@/constants/colors";
 
 const Allergics: React.FC = () => {
   const {
@@ -25,7 +26,7 @@ const Allergics: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#4285F4" />
+      <StatusBar barStyle="light-content" backgroundColor= {COLORS.primary} />
 
       <View style={styles.content}>
         <View style={styles.logoContainer}>
@@ -61,7 +62,7 @@ const Allergics: React.FC = () => {
             <TextInput
               style={styles.otherInput}
               placeholder="Other Allergics..."
-              placeholderTextColor="#666"
+              placeholderTextColor= {COLORS.gray2}
               value={otherAllergics}
               onChangeText={setOtherAllergics}
               multiline

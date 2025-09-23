@@ -1,4 +1,5 @@
 import InputField from "@/components/InputField";
+import { COLORS } from "@/constants/colors";
 import { Relation, RELATION_OPTIONS } from "@/constants/relations";
 import {
   EmergencyValues,
@@ -55,7 +56,7 @@ export default function EmergencyContact() {
       style={styles.container}
       keyboardVerticalOffset={Platform.OS === "ios" ? 40 : 0}
     >
-      <StatusBar barStyle="light-content" backgroundColor="#4285F4" />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
@@ -78,6 +79,7 @@ export default function EmergencyContact() {
         <View style={styles.formWrapper}>
           <View style={styles.formContainer}>
             <Text style={styles.sectionTitle}>Emergency Contact</Text>
+            <View style={styles.underline} />
 
             <InputField
               label="Name"
@@ -85,6 +87,7 @@ export default function EmergencyContact() {
               value={name}
               onChangeText={setName}
               required
+              placeholderTextColor={COLORS.gray2}
             />
             {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
 
@@ -108,7 +111,7 @@ export default function EmergencyContact() {
                 <Icon
                   name={showRelationsDropdown ? "chevron-up" : "chevron-down"}
                   size={20}
-                  color="#666"
+                  color={COLORS.black}
                 />
               </TouchableOpacity>
 
@@ -143,6 +146,7 @@ export default function EmergencyContact() {
               onChangeText={setPhoneNumber}
               keyboardType="phone-pad"
               required
+              placeholderTextColor={COLORS.gray2}
             />
             {errors.phoneNumber && (
               <Text style={styles.errorText}>{errors.phoneNumber}</Text>
