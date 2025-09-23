@@ -1,4 +1,4 @@
-// app/screens/Signup.tsx
+import Calender from "@/components/Calender";
 import InputField from "@/components/InputField";
 import { SignupValues, validateField } from "@/utils/signUpValidation";
 import React, { useState } from "react";
@@ -13,7 +13,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Icon from "react-native-vector-icons/Feather";
 import { styles } from "./singup.styles";
 
 export default function Signup({ navigation }) {
@@ -49,7 +48,7 @@ export default function Signup({ navigation }) {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      // kalau aman semua navigate ke profilesignup
+      // navigate ke profilesignup
     }
   };
 
@@ -155,14 +154,13 @@ export default function Signup({ navigation }) {
                   value={values.dateOfBirth}
                   onChangeText={(text) => handleChange("dateOfBirth", text)}
                   required
+                  editable={false}
                   error={errors.dateOfBirth}
                 />
-                <TouchableOpacity
-                  style={styles.calendarIcon}
-                  activeOpacity={0.7}
-                >
-                  <Icon name="calendar" size={20} color="#666" />
-                </TouchableOpacity>
+                <Calender
+                  value={values.dateOfBirth}
+                  onSelectDate={(date) => handleChange("dateOfBirth", date)}
+                />
               </View>
               <Text style={styles.label}>
                 Gender <Text style={styles.required}>*</Text>
