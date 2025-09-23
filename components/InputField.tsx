@@ -2,11 +2,17 @@ import { Text, TextInput, TextInputProps, View } from "react-native";
 import { styles } from "../styles/input.styles";
 
 interface InputFieldProps extends TextInputProps {
-    label: string;
-    required?: boolean;
+  label: string;
+  required?: boolean;
+  error?: string;
 }
 
-export default function InputField({ label, required, ...props }: InputFieldProps) {
+export default function InputField({
+  label,
+  required,
+  error,
+  ...props
+}: InputFieldProps) {
   return (
     <>
       <Text style={styles.label}>
@@ -15,6 +21,7 @@ export default function InputField({ label, required, ...props }: InputFieldProp
       <View style={styles.innerContainer}>
         <TextInput {...props} style={styles.input} />
       </View>
+      {error ? <Text style={styles.errorText}>{error}</Text> : null}
     </>
   );
 }

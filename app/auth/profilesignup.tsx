@@ -9,7 +9,6 @@ interface ProfileSignupProps {}
 
 const ProfileSignup: React.FC<ProfileSignupProps> = () => {
   const { image, uploading, pickPhoto } = useAvatarPicker();
-  const [fullName, setFullName] = useState<string>("");
   const [selectedAvatar, setSelectedAvatar] = useState<string>("");
 
   const handleAvatarSelect = (avatarUri: string) => {
@@ -18,17 +17,17 @@ const ProfileSignup: React.FC<ProfileSignupProps> = () => {
 
   const handleContinue = () => {
     const profileData = {
-      fullName: fullName.trim(),
+      // username,
       avatar: selectedAvatar,
     };
     // href
   };
 
-  const canContinue = fullName.trim().length > 0;
+  // const canContinue = !!username;
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#4A90E2" />
+      <StatusBar barStyle="light-content" backgroundColor="#4285F4" />
 
       <View style={styles.content}>
         <View style={styles.mainWrapper}>
@@ -50,10 +49,10 @@ const ProfileSignup: React.FC<ProfileSignupProps> = () => {
           <View style={styles.inputSection}>
             <TextInput
               placeholder="Doe Doe"
-              value={fullName}
-              onChangeText={setFullName}
-              autoCapitalize="words"
-              style={styles.inputBox}
+              // value={username}
+              // value -> username ambil dr db / atau pindahin data dr signup
+              editable={false}
+              style={[styles.inputBox, { backgroundColor: "#eee" }]}
             />
           </View>
 
@@ -61,10 +60,10 @@ const ProfileSignup: React.FC<ProfileSignupProps> = () => {
             <TouchableOpacity
               style={[
                 styles.continueButton,
-                !canContinue && styles.continueButtonDisabled,
+                // !canContinue && styles.continueButtonDisabled,
               ]}
               onPress={handleContinue}
-              disabled={!canContinue}
+              // disabled={!canContinue}
               activeOpacity={0.8}
             >
               <Text style={styles.continueButtonText}>Continue</Text>

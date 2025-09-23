@@ -10,7 +10,7 @@ const moderateScale = (size: number, factor: number = 0.5): number =>
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#4A90E2", 
+    backgroundColor: "#4285F4",
   },
   content: {
     flex: 1,

@@ -10,7 +10,7 @@ const moderateScale = (size: number, factor: number = 0.5): number =>
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#4A90E2",
+    backgroundColor: "#4285F4",
   },
   content: {
     flex: 1,
@@ -110,5 +110,11 @@ export const styles = StyleSheet.create({
     fontSize: moderateScale(18),
     fontWeight: "600",
     color: "#FFFFFF",
+  },
+  errorText: {
+    color: "B00020",
+    fontSize: 14,
+    marginTop: 8,
+    textAlign: "center",
   },
 });

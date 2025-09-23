@@ -1,28 +1,32 @@
+import { BLOODTYPE_OPTIONS, bloodType } from "@/constants/bloodType";
 import React, { useState } from "react";
 import { Image, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./bloodtype.style";
 
-interface BloodTypeProps {}
+const BloodType: React.FC = () => {
+  const [selectedBloodType, setSelectedBloodType] = useState<bloodType | "">(
+    ""
+  );
+  const [error, setError] = useState<string>("");
 
-const BloodType: React.FC<BloodTypeProps> = () => {
-  const [selectedBloodType, setSelectedBloodType] = useState<string>("");
-
-  const bloodTypes = ["A", "B", "AB", "O"];
-
-  const handleBloodTypeSelect = (bloodType: string) => {
-    setSelectedBloodType(bloodType);
+  const handleBloodTypeSelect = (type: bloodType) => {
+    setSelectedBloodType(type);
+    setError("");
   };
 
   const handleContinue = () => {
-    if (selectedBloodType) {
-      // href kemana dan simpan kemana
+    if (!selectedBloodType) {
+      setError("Please select your blood type");
+      return;
     }
+
+    // href kemana
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#4A90E2" />
+      <StatusBar barStyle="light-content" backgroundColor="#4285F4" />
 
       <View style={styles.content}>
         <View style={styles.logoContainer}>
@@ -34,6 +38,7 @@ const BloodType: React.FC<BloodTypeProps> = () => {
         </View>
 
         <Text style={styles.title}>What is your{"\n"}Blood Type</Text>
+
         <View style={styles.progressBarContainer}>
           <View style={styles.progressBar}>
             <View style={[styles.progressFill, { width: "20%" }]} />
@@ -42,28 +47,29 @@ const BloodType: React.FC<BloodTypeProps> = () => {
 
         <View style={styles.selectionContainer}>
           <View style={styles.optionsContainer}>
-            {bloodTypes.map((bloodType) => (
+            {BLOODTYPE_OPTIONS.map((type) => (
               <TouchableOpacity
-                key={bloodType}
+                key={type}
                 style={[
                   styles.optionButton,
-                  selectedBloodType === bloodType && styles.selectedOption,
+                  selectedBloodType === type && styles.selectedOption,
                 ]}
-                onPress={() => handleBloodTypeSelect(bloodType)}
+                onPress={() => handleBloodTypeSelect(type)}
                 activeOpacity={0.7}
               >
                 <Text
                   style={[
                     styles.optionText,
-                    selectedBloodType === bloodType &&
-                      styles.selectedOptionText,
+                    selectedBloodType === type && styles.selectedOptionText,
                   ]}
                 >
-                  {bloodType}
+                  {type}
                 </Text>
               </TouchableOpacity>
             ))}
           </View>
+
+          {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
           <TouchableOpacity
             style={[
@@ -71,7 +77,6 @@ const BloodType: React.FC<BloodTypeProps> = () => {
               !selectedBloodType && styles.continueButtonDisabled,
             ]}
             onPress={handleContinue}
-            disabled={!selectedBloodType}
             activeOpacity={0.8}
           >
             <Text style={styles.continueButtonText}>Continue</Text>

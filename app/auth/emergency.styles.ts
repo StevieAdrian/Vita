@@ -179,4 +179,10 @@ export const styles = StyleSheet.create({
     fontSize: moderateScale(15),
     fontWeight: "600",
   },
+  errorText: {
+    color: "red",
+    fontSize: 14,
+    marginTop: 8,
+    textAlign: "left",
+  },
 });
