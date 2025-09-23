@@ -4,7 +4,7 @@ import { COLORS } from "@/constants/colors";
 export const styles = StyleSheet.create({
   container: { flex: 1 },
   headerContainer: {
-    flex: 1,
+    width: "100%",
     backgroundColor: COLORS.background2nd,
   },
   safeArea: {
@@ -19,22 +19,114 @@ export const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     alignItems: "center",
+    justifyContent: "flex-start",
     backgroundColor: COLORS.background2nd,
   },
   formContainer: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: "flex-start",
     backgroundColor: COLORS.white,
     width: 369,
-    // minHeight: "100%",
     borderRadius: 10,
     shadowColor: "#D7D7D7",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 2,
+    paddingHorizontal: 17,
+    paddingVertical: 25,
+  },
+  titleForm: {
+    width: "80%",
+    fontSize: 20,
+    fontFamily: "Inter-SemiBold",
+    textAlign: "left",
+  },
+  formHeaderContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%",
   },
   text: {
-    fontSize: 32,
+    fontSize: 18,
+    textAlign: "left",
+    alignSelf: "flex-start",
+  },
+  divider: {
+    height: 1,
+    backgroundColor: COLORS.gray3,
+    width: "100%",
+    marginVertical: 12,
+  },
+
+  subformContainer: {
+    gap: 10,
+  },
+
+  subtitle: {
+    color: COLORS.primary,
+    fontFamily: "Inter-SemiBold",
+    fontSize: 14,
+    textAlign: "left",
+  },
+
+  inputTitle: {
+    color: COLORS.black,
+    fontFamily: "Inter-Medium",
+    fontSize: 16,
+    textAlign: "left",
+  },
+
+  shadowContent: {
+    color: COLORS.gray1,
+    fontFamily: "Inter-Regular",
+    fontSize: 14,
+  },
+
+  separatedInput: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 15,
+  },
+
+  bottomInputCont: {
+    gap: 10,
+  },
+
+  halfInput: {
+    width: 155,
+    height: 44,
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+    borderRadius: 4,
+    borderWidth: 0.497,
+    borderColor: COLORS.gray2,
+  },
+
+  fullInput: {
+    width: "100%",
+    height: 44,
+    paddingHorizontal: 5,
+    paddingVertical: 3,
+    borderRadius: 4,
+    borderWidth: 0.497,
+    borderColor: COLORS.gray2,
+  },
+
+  descInput: {
+    width: "100%",
+    height: 78,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 4,
+    borderWidth: 0.497,
+    borderColor: COLORS.gray2,
+    textAlignVertical: "top",
+    minHeight: 78,
+  },
+
+  fullContainer: {
+    gap: 10,
+    width: "100%",
   },
 });
