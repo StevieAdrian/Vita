@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { COLORS } from "@/constants/colors";
 
 export const NAV_ITEMS = 107;
 
@@ -9,17 +10,18 @@ export const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     height: NAV_ITEMS,
+    paddingHorizontal: 20,
+    width: "100%",
     flexDirection: "row",
-    marginHorizontal: 20,
     justifyContent: "space-around",
     alignItems: "center",
     borderTopWidth: 1,
     borderColor: "#E5E7EB",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     zIndex: 10,
     shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
+    shadowOpacity: 0.01,
+    shadowRadius: 2,
     shadowOffset: { width: 0, height: -2 },
     elevation: 12,
   },
@@ -36,11 +38,13 @@ export const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: "#555",
+    fontFamily: "Inter-Regular",
+    color: COLORS.black,
   },
   activeLabel: {
     color: "#007bff",
     fontWeight: "600",
+    fontFamily: "Inter-Regular",
   },
   notesItem: {
     marginTop: -35,
