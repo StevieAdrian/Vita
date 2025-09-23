@@ -4,10 +4,23 @@ export const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 70,
-    marginHorizontal: 30,
+    width: "100%",
+    paddingTop: 50,
     marginBottom: 37,
   },
+  backButton: {
+    position: "absolute",
+    left: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+  },
+  icon: {
+    width: 24,
+    height: 24,
+    resizeMode: "contain",
+  },
+
   title: {
     fontSize: 24,
     fontWeight: 600,

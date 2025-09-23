@@ -9,10 +9,12 @@ export default function TitleBack({ title, onPress }: TitleBackProps) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handlePress}>
-        <Image source={require("@/assets/utilsIcon/arrow-left.png")} />
+      <TouchableOpacity style={styles.backButton} onPress={handlePress}>
+        <Image
+          source={require("@/assets/utilsIcon/arrow-left.png")}
+          style={styles.icon}
+        />
       </TouchableOpacity>
-
       <Text style={styles.title}>{title}</Text>
     </View>
   );
