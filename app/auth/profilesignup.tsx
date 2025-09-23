@@ -1,13 +1,12 @@
 import AvatarPicker from "@/components/AvatarPicker";
+import { COLORS } from "@/constants/colors";
 import { useAvatarPicker } from "@/hooks/useAvatarPicker";
 import React, { useState } from "react";
 import { Image, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { styles } from "./profilesignup.style";
 
-interface ProfileSignupProps {}
-
-const ProfileSignup: React.FC<ProfileSignupProps> = () => {
+const ProfileSignup: React.FC = () => {
   const { image, uploading, pickPhoto } = useAvatarPicker();
   const [selectedAvatar, setSelectedAvatar] = useState<string>("");
 
@@ -27,7 +26,7 @@ const ProfileSignup: React.FC<ProfileSignupProps> = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#4285F4" />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
 
       <View style={styles.content}>
         <View style={styles.mainWrapper}>
@@ -52,7 +51,10 @@ const ProfileSignup: React.FC<ProfileSignupProps> = () => {
               // value={username}
               // value -> username ambil dr db / atau pindahin data dr signup
               editable={false}
-              style={[styles.inputBox, { backgroundColor: "#eee" }]}
+              style={[
+                styles.inputBox,
+                { backgroundColor: COLORS.background2nd },
+              ]}
             />
           </View>
 

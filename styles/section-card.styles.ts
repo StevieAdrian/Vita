@@ -1,12 +1,13 @@
 import { StyleSheet } from "react-native";
+import { COLORS } from "@/constants/colors";
 
 export const styles = StyleSheet.create({
     card: {
-        backgroundColor: "#E9F3FF",
+        backgroundColor: COLORS.background2nd,
         borderRadius: 14,
         padding: 14,
         borderWidth: 1,
-        borderColor: "#1A73E8",
+        borderColor: COLORS.primary2nd,
     },
     header: { 
         marginBottom: 10 
@@ -14,11 +15,11 @@ export const styles = StyleSheet.create({
     title: { 
         fontSize: 14, 
         fontWeight: "600", 
-        color: "#111827" 
+        color: COLORS.black 
     },
     subtitle: { 
         fontSize: 12, 
-        color: "#6B7280", 
+        color: COLORS.gray2, 
         marginTop: 2 
     },
     footer: { 

@@ -1,5 +1,6 @@
-// app/screens/Signup.tsx
+import Calender from "@/components/Calender";
 import InputField from "@/components/InputField";
+import { COLORS } from "@/constants/colors";
 import { SignupValues, validateField } from "@/utils/signUpValidation";
 import React, { useState } from "react";
 import {
@@ -13,7 +14,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Icon from "react-native-vector-icons/Feather";
 import { styles } from "./singup.styles";
 
 export default function Signup({ navigation }) {
@@ -49,13 +49,13 @@ export default function Signup({ navigation }) {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      // kalau aman semua navigate ke profilesignup
+      // navigate ke profilesignup
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#4285F4" />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -93,6 +93,7 @@ export default function Signup({ navigation }) {
                 onChangeText={(text) => handleChange("username", text)}
                 required
                 error={errors.username}
+                placeholderTextColor={COLORS.gray2}
               />
 
               <InputField
@@ -102,6 +103,7 @@ export default function Signup({ navigation }) {
                 onChangeText={(text) => handleChange("firstName", text)}
                 required
                 error={errors.firstName}
+                placeholderTextColor={COLORS.gray2}
               />
               <InputField
                 label="Last Name"
@@ -110,6 +112,7 @@ export default function Signup({ navigation }) {
                 onChangeText={(text) => handleChange("lastName", text)}
                 required
                 error={errors.lastName}
+                placeholderTextColor={COLORS.gray2}
               />
               <InputField
                 label="Email"
@@ -120,6 +123,7 @@ export default function Signup({ navigation }) {
                 autoCapitalize="none"
                 required
                 error={errors.email}
+                placeholderTextColor={COLORS.gray2}
               />
               <InputField
                 label="Password"
@@ -129,6 +133,7 @@ export default function Signup({ navigation }) {
                 secureTextEntry
                 required
                 error={errors.password}
+                placeholderTextColor={COLORS.gray2}
               />
               <InputField
                 label="Confirm Password"
@@ -138,6 +143,7 @@ export default function Signup({ navigation }) {
                 secureTextEntry
                 required
                 error={errors.confirmPassword}
+                placeholderTextColor={COLORS.gray2}
               />
               <InputField
                 label="Phone Number"
@@ -147,6 +153,7 @@ export default function Signup({ navigation }) {
                 keyboardType="phone-pad"
                 required
                 error={errors.phoneNumber}
+                placeholderTextColor={COLORS.gray2}
               />
               <View style={styles.dobWrapper}>
                 <InputField
@@ -155,14 +162,14 @@ export default function Signup({ navigation }) {
                   value={values.dateOfBirth}
                   onChangeText={(text) => handleChange("dateOfBirth", text)}
                   required
+                  editable={false}
                   error={errors.dateOfBirth}
+                  placeholderTextColor={COLORS.gray2}
                 />
-                <TouchableOpacity
-                  style={styles.calendarIcon}
-                  activeOpacity={0.7}
-                >
-                  <Icon name="calendar" size={20} color="#666" />
-                </TouchableOpacity>
+                <Calender
+                  value={values.dateOfBirth}
+                  onSelectDate={(date) => handleChange("dateOfBirth", date)}
+                />
               </View>
               <Text style={styles.label}>
                 Gender <Text style={styles.required}>*</Text>

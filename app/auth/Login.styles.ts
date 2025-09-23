@@ -1,13 +1,15 @@
 import { StyleSheet } from "react-native";
+import { COLORS } from "@/constants/colors";
+
 
 export const styles = StyleSheet.create({
   imageContainer: {
     flex: 1,
-    backgroundColor: "#4285F4",
+    backgroundColor: COLORS.primary,
   },
   container: {
     flex: 1,
-    backgroundColor: "#4285F4",
+    backgroundColor: COLORS.primary,
     alignItems: "center",
   },
   welcomeImage: {
@@ -19,13 +21,13 @@ export const styles = StyleSheet.create({
   },
   boxContainer: {
     width: "85%",
-    backgroundColor: "white",
+    backgroundColor: COLORS.white,
     borderRadius: 12,
     padding: 20,
     alignItems: "center",
   },
   continueButton: {
-    backgroundColor: "black",
+    backgroundColor: COLORS.black,
     width: "100%",
     paddingVertical: 12,
     borderRadius: 8,
@@ -33,13 +35,13 @@ export const styles = StyleSheet.create({
     marginTop: 10,
   },
   continueText: {
-    color: "white",
+    color: COLORS.white,
     fontSize: 16,
     fontWeight: 400,
   },
   signupText: {
     fontSize: 13,
-    color: "black",
+    color: COLORS.black,
     marginTop: 15,
   },
   signupLink: {
@@ -56,11 +58,11 @@ export const styles = StyleSheet.create({
   divider: {
     flex: 1,
     height: 1.5,
-    backgroundColor: "white",
+    backgroundColor: COLORS.white,
   },
   dividerText: {
     marginHorizontal: 10,
-    color: "white",
+    color: COLORS.white,
     fontSize: 14,
   },
   googleButton: {

@@ -4,6 +4,8 @@ import { TextInput } from "react-native-gesture-handler";
 import { styles } from "./login.styles";
 import { useAuth } from "@/hooks/useAuth";
 import InputField from "@/components/InputField";
+import { COLORS } from "@/constants/colors";
+
 
 export default function login() {
   const [email, setEmail] = useState("");
@@ -23,7 +25,7 @@ export default function login() {
           required
           onChangeText={setEmail}
           placeholder="johndoe@gmail.com"
-          placeholderTextColor="#999"
+          placeholderTextColor= {COLORS.gray2}
         />
         <InputField
           label="Password"
@@ -31,7 +33,7 @@ export default function login() {
           secureTextEntry
           onChangeText={setPassword}
           placeholder="********"
-          placeholderTextColor="#999"
+          placeholderTextColor={COLORS.gray2}
         />
 
         <TouchableOpacity
