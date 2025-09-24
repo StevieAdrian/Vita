@@ -5,8 +5,8 @@ export default function PopUpButton() {
   return (
     <View style={styles.triggerContainer}>
       <View style={styles.textContainer}>
-        <Text style={styles.titlePopUp}>Delete This Member?</Text>
-        <Text style={styles.descPopUp}>Confirmation Your Action</Text>
+        <Text style={styles.titlePopUp}>Confirmation Action</Text>
+        <Text style={styles.descPopUp}>Do you want to proceed?</Text>
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
