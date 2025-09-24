@@ -19,6 +19,9 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import { styles } from "./emergency.styles";
+import { useSignupContext } from "@/context/SignupContext";
+import { useSignup } from "@/hooks/useSignup";
+import { router } from "expo-router";
 
 export default function EmergencyContact() {
   const [name, setName] = useState("");
@@ -26,6 +29,9 @@ export default function EmergencyContact() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showRelationsDropdown, setShowRelationsDropdown] = useState(false);
   const [errors, setErrors] = useState<ValidationErrors>({});
+
+  const { data, setField } = useSignupContext();
+  const { signup, loading, error } = useSignup();
 
   const handleRelationsPress = () => {
     setShowRelationsDropdown(!showRelationsDropdown);
@@ -36,7 +42,7 @@ export default function EmergencyContact() {
     setShowRelationsDropdown(false);
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     const values: EmergencyValues = {
       name,
       phoneNumber,
@@ -46,7 +52,20 @@ export default function EmergencyContact() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      // save db
+      const finalContacts = [...(data.emergencyContacts || []), values];
+      setField("emergencyContacts", finalContacts);
+
+      try {
+        const uid = await signup({
+          ...data,
+          emergencyContacts: finalContacts,
+        } as any);
+  
+        console.log("debug uid:", uid);
+        router.replace("/");
+      } catch (err) {
+        console.error("Signup failed:", err);
+      }
     }
   };
 
@@ -64,7 +83,7 @@ export default function EmergencyContact() {
       >
         <View style={styles.header}>
           <Image
-            source={require("../../assets/images/Logo Vita.png")}
+            source={require("../../../assets/images/Logo Vita.png")}
             style={styles.logo}
           />
           <Text style={styles.title}>Add Emergency{"\n"}Contacts</Text>
@@ -156,9 +175,14 @@ export default function EmergencyContact() {
               style={styles.continueButton}
               activeOpacity={0.8}
               onPress={handleContinue}
+              disabled={loading}
             >
-              <Text style={styles.continueText}>Continue</Text>
+              <Text style={styles.continueText}>
+                {loading ? "Saving..." : "Finish & Save"}
+              </Text>
             </TouchableOpacity>
+
+            {error && <Text style={{ color: "red" }}>{error}</Text>}
           </View>
         </View>
       </ScrollView>

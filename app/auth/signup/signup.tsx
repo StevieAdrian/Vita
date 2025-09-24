@@ -1,7 +1,10 @@
 import Calender from "@/components/Calender";
 import InputField from "@/components/InputField";
 import { COLORS } from "@/constants/colors";
+import { useSignupContext } from "@/context/SignupContext";
+import { mapperSignupValues } from "@/utils/mapper";
 import { SignupValues, validateField } from "@/utils/signUpValidation";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   Image,
@@ -16,40 +19,40 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./singup.styles";
 
-export default function Signup({ navigation }) {
-  const [values, setValues] = useState<SignupValues>({
-    firstName: "",
-    lastName: "",
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    phoneNumber: "",
-    dateOfBirth: "",
-    gender: "",
-  });
-
+export default function Signup() {
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const { data, setField } = useSignupContext();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const handleChange = (field: keyof SignupValues, value: string) => {
-    setValues((prev) => ({ ...prev, [field]: value }));
-
-    const errMsg = validateField(field, value, { ...values, [field]: value });
-    setErrors((prev) => ({ ...prev, [field]: errMsg }));
+    if (field === "confirmPassword") {
+      setConfirmPassword(value);
+      const safeData = mapperSignupValues(data, value);
+      const errMsg = validateField(field, value, safeData);
+      setErrors((prev) => ({ ...prev, [field]: errMsg }));
+    } else {
+      setField(field as keyof typeof data, value);
+      const safeData = mapperSignupValues(data, confirmPassword);
+      const errMsg = validateField(field, value, safeData);
+      setErrors((prev) => ({ ...prev, [field]: errMsg }));
+    }
   };
 
   const handleContinue = () => {
+    const safeData = mapperSignupValues(data, confirmPassword);
+  
     let newErrors: { [key: string]: string } = {};
-    (Object.keys(values) as (keyof SignupValues)[]).forEach((field) => {
-      const errMsg = validateField(field, values[field], values);
+    (Object.keys(safeData) as (keyof SignupValues)[]).forEach((field) => {
+      const errMsg = validateField(field, safeData[field], safeData);
       if (errMsg) {
         newErrors[field] = errMsg;
       }
     });
+  
     setErrors(newErrors);
-
+  
     if (Object.keys(newErrors).length === 0) {
-      // navigate ke profilesignup
+      router.push("/auth/signup/profilesignup");
     }
   };
 
@@ -74,7 +77,7 @@ export default function Signup({ navigation }) {
         >
           <View style={styles.header}>
             <Image
-              source={require("../../assets/images/Logo Vita.png")}
+              source={require("../../../assets/images/Logo Vita.png")}
               style={styles.logo}
               resizeMode="contain"
             />
@@ -89,7 +92,7 @@ export default function Signup({ navigation }) {
               <InputField
                 label="Username"
                 placeholder="johndoe123"
-                value={values.username}
+                value={data.username}
                 onChangeText={(text) => handleChange("username", text)}
                 required
                 error={errors.username}
@@ -99,7 +102,7 @@ export default function Signup({ navigation }) {
               <InputField
                 label="First Name"
                 placeholder="John"
-                value={values.firstName}
+                value={data.firstName}
                 onChangeText={(text) => handleChange("firstName", text)}
                 required
                 error={errors.firstName}
@@ -108,7 +111,7 @@ export default function Signup({ navigation }) {
               <InputField
                 label="Last Name"
                 placeholder="Doe"
-                value={values.lastName}
+                value={data.lastName}
                 onChangeText={(text) => handleChange("lastName", text)}
                 required
                 error={errors.lastName}
@@ -117,7 +120,7 @@ export default function Signup({ navigation }) {
               <InputField
                 label="Email"
                 placeholder="johndoe@gmail.com"
-                value={values.email}
+                value={data.email}
                 onChangeText={(text) => handleChange("email", text)}
                 keyboardType="email-address"
                 autoCapitalize="none"
@@ -128,7 +131,7 @@ export default function Signup({ navigation }) {
               <InputField
                 label="Password"
                 placeholder="***********"
-                value={values.password}
+                value={data.password}
                 onChangeText={(text) => handleChange("password", text)}
                 secureTextEntry
                 required
@@ -138,7 +141,7 @@ export default function Signup({ navigation }) {
               <InputField
                 label="Confirm Password"
                 placeholder="***********"
-                value={values.confirmPassword}
+                value={confirmPassword}
                 onChangeText={(text) => handleChange("confirmPassword", text)}
                 secureTextEntry
                 required
@@ -148,7 +151,7 @@ export default function Signup({ navigation }) {
               <InputField
                 label="Phone Number"
                 placeholder="087223627139"
-                value={values.phoneNumber}
+                value={data.phoneNumber}
                 onChangeText={(text) => handleChange("phoneNumber", text)}
                 keyboardType="phone-pad"
                 required
@@ -159,7 +162,7 @@ export default function Signup({ navigation }) {
                 <InputField
                   label="Date of Birth"
                   placeholder="August 25, 2005"
-                  value={values.dateOfBirth}
+                  value={data.dateOfBirth}
                   onChangeText={(text) => handleChange("dateOfBirth", text)}
                   required
                   editable={false}
@@ -167,7 +170,7 @@ export default function Signup({ navigation }) {
                   placeholderTextColor={COLORS.gray2}
                 />
                 <Calender
-                  value={values.dateOfBirth}
+                  value={data.dateOfBirth}
                   onSelectDate={(date) => handleChange("dateOfBirth", date)}
                 />
               </View>
@@ -183,10 +186,10 @@ export default function Signup({ navigation }) {
                   <View
                     style={[
                       styles.radioButton,
-                      values.gender === "Male" && styles.radioButtonSelected,
+                      data.gender === "Male" && styles.radioButtonSelected,
                     ]}
                   >
-                    {values.gender === "Male" && (
+                    {data.gender === "Male" && (
                       <View style={styles.radioButtonInner} />
                     )}
                   </View>
@@ -200,10 +203,10 @@ export default function Signup({ navigation }) {
                   <View
                     style={[
                       styles.radioButton,
-                      values.gender === "Female" && styles.radioButtonSelected,
+                      data.gender === "Female" && styles.radioButtonSelected,
                     ]}
                   >
-                    {values.gender === "Female" && (
+                    {data.gender === "Female" && (
                       <View style={styles.radioButtonInner} />
                     )}
                   </View>
@@ -213,10 +216,10 @@ export default function Signup({ navigation }) {
               {errors.gender && (
                 <Text style={styles.errorText}>{errors.gender}</Text>
               )}
-              <TouchableOpacity
-                style={styles.continueButton}
-                activeOpacity={0.8}
-                onPress={handleContinue}
+              <TouchableOpacity 
+              style={styles.continueButton} 
+              activeOpacity={0.8} 
+              onPress={handleContinue}
               >
                 <Text style={styles.continueText}>Continue</Text>
               </TouchableOpacity>
@@ -224,7 +227,7 @@ export default function Signup({ navigation }) {
                 Already have an account?{" "}
                 <Text
                   style={styles.loginLink}
-                  onPress={() => navigation.navigate("Login")}
+                  onPress={() => router.replace("/auth/login")}
                 >
                   Log In
                 </Text>
@@ -238,7 +241,7 @@ export default function Signup({ navigation }) {
               </View>
               <TouchableOpacity style={styles.googleButton} activeOpacity={0.7}>
                 <Image
-                  source={require("../../assets/images/Logo Google.png")}
+                  source={require("../../../assets/images/Logo Google.png")}
                   style={styles.googleIcon}
                 />
                 <Text style={styles.googleText}>Google</Text>

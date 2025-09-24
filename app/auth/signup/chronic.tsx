@@ -12,6 +12,8 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./chronic.style";
 import { COLORS } from "@/constants/colors";
+import { useSignupContext } from "@/context/SignupContext";
+import { router } from "expo-router";
 
 const Chronic: React.FC = () => {
   const {
@@ -24,6 +26,17 @@ const Chronic: React.FC = () => {
     handleContinue,
   } = useChronic();
 
+  const { setField } = useSignupContext();
+  const onContinue = () => {
+    const chronicData = handleContinue();
+
+    const finalChronics = chronicData.otherCondition ? [...chronicData.selectedConditions, chronicData.otherCondition] : chronicData.selectedConditions;
+    setField("chronicConditions", finalChronics);
+
+    console.log("debug data:", finalChronics);
+    router.push("/auth/signup/emergency");
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor= {COLORS.primary} />
@@ -31,7 +44,7 @@ const Chronic: React.FC = () => {
       <View style={styles.content}>
         <View style={styles.logoContainer}>
           <Image
-            source={require("../../assets/images/Logo Vita.png")}
+            source={require("../../../assets/images/Logo Vita.png")}
             style={styles.logo}
             resizeMode="contain"
           />
@@ -74,7 +87,7 @@ const Chronic: React.FC = () => {
               styles.continueButton,
               !canContinue && styles.continueButtonDisabled,
             ]}
-            onPress={handleContinue}
+            onPress={onContinue}
             disabled={!canContinue}
             activeOpacity={0.8}
           >

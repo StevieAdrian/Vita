@@ -5,24 +5,19 @@ import React, { useState } from "react";
 import { Image, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { styles } from "./profilesignup.style";
+import { useSignupContext } from "@/context/SignupContext";
+import { router } from "expo-router";
 
 const ProfileSignup: React.FC = () => {
-  const { image, uploading, pickPhoto } = useAvatarPicker();
+  const { image, uploading, pickPhoto } = useAvatarPicker(undefined, (url) => {
+    setField("avatarUrl", url); 
+  });
   const [selectedAvatar, setSelectedAvatar] = useState<string>("");
-
-  const handleAvatarSelect = (avatarUri: string) => {
-    setSelectedAvatar(avatarUri);
-  };
-
+  const { data, setField } = useSignupContext();
   const handleContinue = () => {
-    const profileData = {
-      // username,
-      avatar: selectedAvatar,
-    };
-    // href
+    console.log("debug data:", data);
+    router.push("/auth/signup/bloodtype");
   };
-
-  // const canContinue = !!username;
 
   return (
     <View style={styles.container}>
@@ -32,7 +27,7 @@ const ProfileSignup: React.FC = () => {
         <View style={styles.mainWrapper}>
           <View style={styles.logoContainer}>
             <Image
-              source={require("../../assets/images/Logo Vita.png")}
+              source={require("../../../assets/images/Logo Vita.png")}
               style={styles.logo}
               resizeMode="contain"
             />
@@ -48,8 +43,7 @@ const ProfileSignup: React.FC = () => {
           <View style={styles.inputSection}>
             <TextInput
               placeholder="Doe Doe"
-              // value={username}
-              // value -> username ambil dr db / atau pindahin data dr signup
+              value={data.username || ""}
               editable={false}
               style={[
                 styles.inputBox,

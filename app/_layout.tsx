@@ -39,12 +39,12 @@ function RootContent() {
   return (
     <View style={{ flex: 1 }}>
       <Slot />
-      {user && (
-        <BottomNav
-          items={NAV_ITEMS}
-          activeId={activeTab}
-          onSelect={handleSelect}
-        />
+        {user && pathname !== "/" && !pathname.startsWith("/auth/signup") && (
+          <BottomNav
+            items={NAV_ITEMS}
+            activeId={activeTab}
+            onSelect={handleSelect}
+          />
       )}
     </View>
   );
