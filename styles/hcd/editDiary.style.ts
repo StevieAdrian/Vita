@@ -1,12 +1,7 @@
-import { StyleSheet } from "react-native";
 import { COLORS } from "@/constants/colors";
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  container: { flex: 1 },
-  headerContainer: {
-    width: "100%",
-    backgroundColor: COLORS.background2nd,
-  },
   safeArea: {
     flex: 1,
     backgroundColor: "#E9F3FF",
@@ -21,6 +16,24 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     backgroundColor: COLORS.background2nd,
+  },
+
+  mainContainer: {
+    flex: 1,
+  },
+
+  container: {
+    flex: 1,
+  },
+  headerContainer: {
+    width: "100%",
+    backgroundColor: COLORS.background2nd,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: COLORS.gray3,
+    width: "100%",
+    marginVertical: 12,
   },
   formContainer: {
     alignItems: "flex-start",
@@ -47,72 +60,22 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
   },
-  text: {
-    fontSize: 18,
-    textAlign: "left",
-    alignSelf: "flex-start",
-  },
-  divider: {
-    height: 1,
-    backgroundColor: COLORS.gray3,
-    width: "100%",
-    marginVertical: 12,
-  },
 
-  subformContainer: {
+  //   Form
+  containerForm: { gap: 25, width: "100%" },
+  flexInput: {
+    flexDirection: "row",
+    alignItems: "center",
     gap: 10,
   },
-
-  subtitle: {
-    color: COLORS.primary,
-    fontFamily: "Inter-SemiBold",
-    fontSize: 14,
-    textAlign: "left",
-  },
-
-  inputTitle: {
-    color: COLORS.black,
-    fontFamily: "Inter-Medium",
+  textTitle: {
     fontSize: 16,
-    textAlign: "left",
+    fontFamily: "Inter-SemiBold",
+    color: COLORS.black,
   },
-
-  shadowContent: {
-    color: COLORS.gray1,
-    fontFamily: "Inter-Regular",
-    fontSize: 14,
-  },
-
-  separatedInput: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  containerInput: {
     gap: 15,
   },
-
-  bottomInputCont: {
-    gap: 10,
-  },
-
-  halfInput: {
-    width: 155,
-    height: 44,
-    paddingHorizontal: 5,
-    paddingVertical: 5,
-    borderRadius: 4,
-    borderWidth: 0.497,
-    borderColor: COLORS.gray2,
-  },
-
-  fullInput: {
-    width: "100%",
-    height: 44,
-    paddingHorizontal: 5,
-    paddingVertical: 3,
-    borderRadius: 4,
-    borderWidth: 0.497,
-    borderColor: COLORS.gray2,
-  },
-
   descInput: {
     width: "100%",
     height: 78,
@@ -123,10 +86,5 @@ export const styles = StyleSheet.create({
     borderColor: COLORS.gray2,
     textAlignVertical: "top",
     minHeight: 78,
-  },
-
-  fullContainer: {
-    gap: 10,
-    width: "100%",
   },
 });
