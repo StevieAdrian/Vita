@@ -1,78 +1,88 @@
 import UpHeader from "@/components/hcd/UpHeader";
-import { useDashDatePickerStyles } from "@/hooks/useDashDatePickerStyles";
+import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
+import { NAV_ITEMS } from "@/styles/bottom-nav.styles";
 import { styles } from "@/styles/hcd/dashboard.style";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
-import DateTimePicker, {
-  DateType,
-  useDefaultStyles,
-} from "react-native-ui-datepicker";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
+import DateTimePicker, { DateType } from "react-native-ui-datepicker";
 
-const ALL_REMINDERS = [
-  {
-    id: 1,
-    type: "checkup",
-    title: "Dr. Veni Checkup...",
-    time: "Today, 13:00 PM",
-    icon: require("@/assets/mediTrack/medicalCheckUp.png"),
-    color: "#e6ffef",
-  },
-  {
-    id: 2,
-    type: "medication",
-    title: "Panadol 20mg",
-    time: "Today, 12:00 PM",
-    icon: require("@/assets/mediTrack/pill.png"),
-    color: "#edf7ff",
-  },
-  {
-    id: 3,
-    type: "medication",
-    title: "Panadol 20mg",
-    time: "Today, 20:00 PM",
-    icon: require("@/assets/mediTrack/pill.png"),
-    color: "#edf7ff",
-  },
-  {
-    id: 4,
-    type: "medication",
-    title: "Vitamin C 500mg",
-    time: "Today, 08:00 AM",
-    icon: require("@/assets/mediTrack/pill.png"),
-    color: "#fff0e5",
-  },
-  {
-    id: 5,
-    type: "medication",
-    title: "Minum Air 2L",
-    time: "Today, 10:00 AM",
-    icon: require("@/assets/mediTrack/pill.png"),
-    color: "#e6f7ff",
-  },
-];
+// const ALL_REMINDERS = [
+//   {
+//     id: 1,
+//     type: "checkup",
+//     title: "Dr. Veni Checkup...",
+//     time: "Today, 13:00 PM",
+//     icon: require("@/assets/mediTrack/medicalCheckUp.png"),
+//     color: "#e6ffef",
+//   },
+//   {
+//     id: 2,
+//     type: "medication",
+//     title: "Panadol 20mg",
+//     time: "Today, 12:00 PM",
+//     icon: require("@/assets/mediTrack/pill.png"),
+//     color: "#edf7ff",
+//   },
+//   {
+//     id: 3,
+//     type: "medication",
+//     title: "Panadol 20mg",
+//     time: "Today, 20:00 PM",
+//     icon: require("@/assets/mediTrack/pill.png"),
+//     color: "#edf7ff",
+//   },
+//   {
+//     id: 4,
+//     type: "medication",
+//     title: "Vitamin C 500mg",
+//     time: "Today, 08:00 AM",
+//     icon: require("@/assets/mediTrack/pill.png"),
+//     color: "#fff0e5",
+//   },
+//   {
+//     id: 5,
+//     type: "medication",
+//     title: "Minum Air 2L",
+//     time: "Today, 10:00 AM",
+//     icon: require("@/assets/mediTrack/pill.png"),
+//     color: "#e6f7ff",
+//   },
+// ];
 
 export default function DashboardHome() {
-  const defaultStyles = useDefaultStyles();
-  const datePickerStyle = useDashDatePickerStyles();
+  const insets = useSafeAreaInsets();
+  const datePickerStyle = useDatePickerStyles();
   const [selected, setSelected] = useState<DateType>();
 
   //Untuk Show Reminder
-  const [showAll, setShowAll] = useState(false);
-  const reminderToShow = useMemo(() => {
-    if (showAll) {
-      return ALL_REMINDERS;
-    }
-    return ALL_REMINDERS.slice(0, 3);
-  }, [showAll]);
+  // const [showAll, setShowAll] = useState(false);
+  // const reminderToShow = useMemo(() => {
+  //   if (showAll) {
+  //     return ALL_REMINDERS;
+  //   }
+  //   return ALL_REMINDERS.slice(0, 3);
+  // }, [showAll]);
 
   return (
     <SafeAreaView style={styles.dashboardContainer}>
-      <ScrollView>
+      <ScrollView
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingBottom: NAV_ITEMS + insets.bottom + 16 },
+        ]}
+        showsVerticalScrollIndicator={false}
+      >
         <UpHeader title="" showProfile={true} />
         <View>
-          <Text style={styles.greetings}>Hey! Alicia Felisha</Text>
+          <View style={styles.greetingsContainer}>
+            <Text style={styles.greetingsBlue}>Hey, </Text>
+            <Text style={styles.greetings}>Alicia Felisha!</Text>
+          </View>
 
           <View style={styles.dateBg}>
             <DateTimePicker
@@ -84,18 +94,17 @@ export default function DashboardHome() {
           </View>
 
           <View>
-            <View>
+            <View style={styles.containerReminder}>
               <View style={styles.captionSubtitle}>
                 <Text style={styles.subtitle}>Upcoming Reminder</Text>
-                <View style={styles.subtitleContainerText}>
+                <TouchableOpacity style={styles.subtitleContainerText}>
                   <Text style={styles.seeAllContainer}>See All</Text>
-                  <TouchableOpacity>
-                    <Image
-                      source={require("@/assets/utilsIcon/arrow-left.png")}
-                      style={styles.icon}
-                    />
-                  </TouchableOpacity>
-                </View>
+
+                  <Image
+                    source={require("@/assets/utilsIcon/arrow-left.png")}
+                    style={styles.icon}
+                  />
+                </TouchableOpacity>
               </View>
 
               <Text style={styles.reminderText}>2 Reminder</Text>
@@ -108,7 +117,127 @@ export default function DashboardHome() {
               ))}
             </View> */}
 
-            {/* Untuk Tampilin See All */}
+            {/* Digital Biomarker */}
+            <View style={styles.containerAllDigitBio}>
+              {/* Judul */}
+              <View style={styles.containerDigit}>
+                <Image source={require("@/assets/hcd/digitalBiomarker.png")} />
+                <View style={styles.containerTitle}>
+                  <Text style={styles.titleDigitBio}>Digital Biomarker</Text>
+                  <Text style={styles.captionDigitBio}>
+                    All indicators are in good condition
+                  </Text>
+                </View>
+              </View>
+
+              {/* Kotak */}
+              <View style={styles.squaresContainer}>
+                <View style={styles.subSquareContainer}>
+                  {/* Blood Pressure */}
+                  <View style={styles.containerStatus}>
+                    <View style={styles.bulletin}></View>
+                    <View>
+                      <Text style={styles.captionNumber}>120/80 mmHg</Text>
+                      <Text style={styles.captionName}>Blood Pressure</Text>
+                    </View>
+                  </View>
+
+                  {/* Blood Sugar */}
+                  <View style={styles.containerStatus}>
+                    <View style={styles.bulletin}></View>
+                    <View>
+                      <Text style={styles.captionNumber}>72 mg/dL</Text>
+                      <Text style={styles.captionName}>Blood Sugar</Text>
+                    </View>
+                  </View>
+                </View>
+                <View style={styles.subSquareContainer}>
+                  {/* Heart Rate */}
+                  <View style={styles.containerStatus}>
+                    <View style={styles.bulletin}></View>
+                    <View>
+                      <Text style={styles.captionNumber}>100 bpm</Text>
+                      <Text style={styles.captionName}>Heart Rate</Text>
+                    </View>
+                  </View>
+
+                  {/* Weight */}
+                  <View style={styles.containerStatus}>
+                    <View style={styles.bulletin}></View>
+                    <View>
+                      <Text style={styles.captionNumber}>60 kg</Text>
+                      <Text style={styles.captionName}>Weight</Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+
+              {/* Latest Update */}
+              <View style={styles.LatestContainer}>
+                <Text style={styles.latestText}>Latest update 15/09/2025</Text>
+
+                <TouchableOpacity style={styles.updateButton}>
+                  <Text style={styles.textUpdate}>Update Now</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {/* 2 Health Early Warning */}
+            <TouchableOpacity style={styles.containerHealthWarning}>
+              <View style={styles.titleHealth}>
+                <View style={styles.containerDigit}>
+                  <Image source={require("@/assets/hcd/healthWarning.png")} />
+                  <Text style={styles.titleDigitBio}>
+                    2 Health Early Warning
+                  </Text>
+                </View>
+
+                <Image
+                  source={require("@/assets/utilsIcon/arrow-right-red.png")}
+                />
+              </View>
+
+              <Text style={styles.descHealthWarning}>
+                Check the warning that you should take attention. Don’t be late.
+              </Text>
+            </TouchableOpacity>
+
+            {/* Family Mode */}
+            <TouchableOpacity style={styles.containerAllDigitBio}>
+              {/* Judul */}
+              <View style={styles.titleHealth}>
+                <View style={styles.containerDigit}>
+                  <Image source={require("@/assets/hcd/familyMode.png")} />
+                  <View style={styles.containerTitle}>
+                    <Text style={styles.titleDigitBio}>Family Mode</Text>
+                    <Text style={styles.captionDigitBio}>
+                      Monitor your family health.
+                    </Text>
+                  </View>
+                </View>
+                <Image
+                  source={require("@/assets/utilsIcon/arrow-left.png")}
+                  style={styles.icon}
+                />
+              </View>
+
+              {/* Kotak */}
+              <View style={styles.containerAmount}>
+                <View style={styles.containerHealthAmount}>
+                  <Text style={styles.amountNum}>1</Text>
+                  <Text style={styles.amountCat}>Healthy</Text>
+                </View>
+                <View style={styles.containerAlertAmount}>
+                  <Text style={styles.amountNum}>2</Text>
+                  <Text style={styles.amountCat}>Need Attention</Text>
+                </View>
+              </View>
+
+              <View style={styles.divider} />
+              <View>
+                <Text style={styles.membersNum}>3 Members Family</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>

@@ -10,8 +10,8 @@ export default function UpHeader({ title, showProfile = true }: UpHeaderProps) {
           <TouchableOpacity style={styles.profilePict}>
             <Image
               source={require("@/assets/images/Vita.png")}
-              style={{ width: 35, height: 35 }}
-              resizeMode="contain"
+              style={{ width: 40, height: 40, borderRadius: 45 / 2 }}
+              resizeMode="cover"
             />
           </TouchableOpacity>
         )}

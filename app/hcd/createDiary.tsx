@@ -59,19 +59,21 @@ export default function createDiary() {
               </TouchableOpacity>
             </View>
 
-            {showPicker && (
-              <DateTimePicker
-                mode="single"
-                date={selected ?? new Date()}
-                onChange={({ date }) => {
-                  if (date) {
-                    setSelected(date as Date);
-                  }
-                  setShowPicker(false);
-                }}
-                styles={datePickerStyles}
-              />
-            )}
+            <View style={styles.calenderContainer}>
+              {showPicker && (
+                <DateTimePicker
+                  mode="single"
+                  date={selected ?? new Date()}
+                  onChange={({ date }) => {
+                    if (date) {
+                      setSelected(date as Date);
+                    }
+                    setShowPicker(false);
+                  }}
+                  styles={datePickerStyles}
+                />
+              )}
+            </View>
             <View style={styles.divider} />
 
             {/* VitalSign */}
