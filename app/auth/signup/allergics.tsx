@@ -13,6 +13,8 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./allergics.style";
 import { COLORS } from "@/constants/colors";
+import { useSignupContext } from "@/context/SignupContext";
+import { router } from "expo-router";
 
 const Allergics: React.FC = () => {
   const {
@@ -24,6 +26,20 @@ const Allergics: React.FC = () => {
     handleContinue,
   } = useAllergics();
 
+  const { data, setField } = useSignupContext();
+  
+  const onContinue = () => {
+    const allergicsData = handleContinue(); 
+
+    const finalAllergics = allergicsData.otherAllergics
+      ? [...allergicsData.selectedAllergics, allergicsData.otherAllergics]
+      : allergicsData.selectedAllergics;
+
+    setField("allergies", finalAllergics);
+    console.log("debug data: ", data)
+    router.push("/auth/signup/chronic");
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor= {COLORS.primary} />
@@ -31,7 +47,7 @@ const Allergics: React.FC = () => {
       <View style={styles.content}>
         <View style={styles.logoContainer}>
           <Image
-            source={require("../../assets/images/Logo Vita.png")}
+            source={require("../../../assets/images/Logo Vita.png")}
             style={styles.logo}
             resizeMode="contain"
           />
@@ -74,7 +90,7 @@ const Allergics: React.FC = () => {
               styles.continueButton,
               !canContinue && styles.continueButtonDisabled,
             ]}
-            onPress={handleContinue}
+            onPress={onContinue}
             disabled={!canContinue}
             activeOpacity={0.8}
           >

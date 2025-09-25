@@ -4,15 +4,19 @@ import { Image, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./bloodtype.style";
 import { COLORS } from "@/constants/colors";
+import { useSignupContext } from "@/context/SignupContext";
+import { router } from "expo-router";
 
 const BloodType: React.FC = () => {
   const [selectedBloodType, setSelectedBloodType] = useState<bloodType | "">(
     ""
   );
   const [error, setError] = useState<string>("");
-
+  const { data, setField } = useSignupContext();
+  
   const handleBloodTypeSelect = (type: bloodType) => {
     setSelectedBloodType(type);
+    setField("bloodType", type);
     setError("");
   };
 
@@ -21,8 +25,8 @@ const BloodType: React.FC = () => {
       setError("Please select your blood type");
       return;
     }
-
-    // href kemana
+    console.log("debug data: ", data);
+    router.push("/auth/signup/allergics");
   };
 
   return (
@@ -32,7 +36,7 @@ const BloodType: React.FC = () => {
       <View style={styles.content}>
         <View style={styles.logoContainer}>
           <Image
-            source={require("../../assets/images/Logo Vita.png")}
+            source={require("../../../assets/images/Logo Vita.png")}
             style={styles.logo}
             resizeMode="contain"
           />

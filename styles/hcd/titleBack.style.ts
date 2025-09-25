@@ -14,6 +14,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
+    zIndex:1
   },
   icon: {
     width: 24,
