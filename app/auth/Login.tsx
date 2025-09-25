@@ -1,6 +1,7 @@
 import InputField from "@/components/InputField";
 import { COLORS } from "@/constants/colors";
 import { useAuth } from "@/hooks/useAuth";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./login.styles";
@@ -44,7 +45,12 @@ export default function login() {
 
         <Text style={styles.signupText}>
           Haven't create an account?{" "}
-          <Text style={styles.signupLink}>Sign Up</Text>
+          <Text
+            style={styles.signupLink}
+            onPress={() => router.replace("/auth/signup/signup")}
+          >
+            Sign Up
+          </Text>
         </Text>
       </View>
       <View style={styles.dividerWrapper}>
