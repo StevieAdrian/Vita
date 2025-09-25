@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   cardContainer: {
-    gap: 24, 
+    gap: 12, 
   },
   card: {
     flexDirection: "row",
@@ -44,6 +44,7 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.gray3,
     borderRadius: 8,
     padding: 12,
+    marginBottom: 12, 
   },
   cardTitle: {
     fontSize: 16,

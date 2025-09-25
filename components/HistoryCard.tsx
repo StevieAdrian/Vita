@@ -16,7 +16,9 @@ export const HistoryCard: React.FC<HistoryCardProps> = ({
     <View style={styles.card}>
       <View>
         <Text style={styles.cardTitle}>{appointment.title}</Text>
-        <Text style={styles.cardDate}>{appointment.dateLabel}</Text>
+        <Text style={styles.cardDate}>
+          {appointment.dateLabel} ({appointment.timeLabel})
+        </Text>
       </View>
       <TouchableOpacity
         style={styles.detailButton}

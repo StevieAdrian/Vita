@@ -1,12 +1,10 @@
 import { COLORS } from "@/constants/colors";
+import { toggleOptions } from "@/constants/HeaderOptions";
+import type { ReminderCategory } from "@/constants/reminder";
 import { styles } from "@/styles/headerMediTrack.styles";
 import { Ionicons } from "@expo/vector-icons";
 import type React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-
-import { toggleOptions } from "@/constants/HeaderOptions";
-
-import type { ReminderCategory } from "@/constants/reminder";
 
 type ReminderToggleProps = {
   selected: ReminderCategory;
@@ -17,33 +15,48 @@ export const ReminderToggle: React.FC<ReminderToggleProps> = ({
   selected,
   onSelect,
 }) => {
+  const handlePress = (optionId: ReminderCategory) => {
+    onSelect(optionId);
+
+    // if (optionId === "appointment") {
+    //   navigation.navigate("AppointmentFormPage");
+    // } else if (optionId === "drug") {
+    //   navigation.navigate("DrugFormPage");
+    // }
+  };
+
   return (
     <View style={styles.container}>
       {toggleOptions.map((option) => {
         const isActive = option.id === selected;
+
         return (
           <TouchableOpacity
             key={option.id}
             style={[
               styles.button,
-              isActive && { backgroundColor: COLORS.primary },
+              {
+                backgroundColor:
+                  option.id === "appointment" ? COLORS.primary : COLORS.white,
+              },
             ]}
-            onPress={() => onSelect(option.id)}
+            onPress={() => handlePress(option.id)} 
             activeOpacity={0.82}
           >
             <Ionicons
               name={option.icon}
               size={24}
-              color={isActive ? COLORS.white : COLORS.black}
+              color={option.id === "appointment" ? COLORS.white : COLORS.black} 
             />
-
-            {/* Label reminder (selalu satu baris, ikon + teks) */}
-            <Text style={[styles.label, isActive && { color: COLORS.white }]}>
+            <Text
+              style={[
+                styles.label,
+                option.id === "appointment" && { color: COLORS.white },
+              ]}
+            >
               {option.label}
             </Text>
           </TouchableOpacity>
-
-          // TODO: nanti formnya muncul di sini kalau dipencet
         );
       })}
     </View>
