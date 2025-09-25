@@ -2,6 +2,8 @@ import { AvatarPickerProps } from "@/types/avatar";
 import { Ionicons } from "@expo/vector-icons";
 import { Image, TouchableOpacity, View } from "react-native";
 import { styles } from "../styles/avatar.styles";
+import { COLORS } from "@/constants/colors";
+
 
 export default function AvatarPicker({ imageUrl, onChangeImage, size = 120 }: AvatarPickerProps) {
     const choosePhoto = () => { onChangeImage?.(""); };
@@ -10,7 +12,7 @@ export default function AvatarPicker({ imageUrl, onChangeImage, size = 120 }: Av
         <View style={[styles.container, { width: size, height: size }]}>
             <Image source={ imageUrl ? { uri: imageUrl } : require("@/assets/images/default-avatar.png") } style={[styles.avatar, { width: size, height: size, borderRadius: size / 2 }]}/>
             <TouchableOpacity style={styles.cameraButton} onPress={choosePhoto}>
-                <Ionicons name="camera" size={size * 0.15} color="white" />
+                <Ionicons name="camera" size={size * 0.15} color= {COLORS.white} />
             </TouchableOpacity>
         </View>
     );

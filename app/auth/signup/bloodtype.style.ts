@@ -1,4 +1,5 @@
 import { Dimensions, StyleSheet } from "react-native";
+import { COLORS } from "@/constants/colors";
 
 const { width, height } = Dimensions.get("window");
 
@@ -10,7 +11,7 @@ const moderateScale = (size: number, factor: number = 0.5): number =>
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#4A90E2",
+    backgroundColor: COLORS.primary,
   },
   content: {
     flex: 1,
@@ -29,13 +30,13 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: moderateScale(32),
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: COLORS.white,
     textAlign: "center",
     marginBottom: scaleHeight(40),
     lineHeight: moderateScale(38),
   },
   progressBarContainer: {
-    marginBottom: scaleHeight(20),
+    marginBottom: scaleHeight(30),
     paddingHorizontal: scaleWidth(20),
   },
   progressBar: {
@@ -46,31 +47,53 @@ export const styles = StyleSheet.create({
   },
   progressFill: {
     height: "100%",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     borderRadius: scaleHeight(4),
-  },
-  subtitle: {
-    fontSize: moderateScale(16),
-    color: "rgba(255, 255, 255, 0.85)",
-    textAlign: "left",
-    marginBottom: scaleHeight(20),
-    opacity: 0.9,
   },
   selectionContainer: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: "center",
+    gap: scaleHeight(16),
   },
   optionsContainer: {
     gap: scaleHeight(12),
   },
-  continueButton: {
-    backgroundColor: "#000",
+  optionButton: {
+    backgroundColor: COLORS.white,
     paddingVertical: scaleHeight(18),
     paddingHorizontal: scaleWidth(24),
     borderRadius: scaleWidth(12),
     alignItems: "center",
-    marginTop: scaleHeight(20),
-    shadowColor: "#000",
+    shadowColor: COLORS.black,
+    shadowOffset: {
+      width: 0,
+      height: scaleHeight(2),
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: scaleWidth(4),
+    elevation: 3,
+  },
+  selectedOption: {
+    backgroundColor: COLORS.primary2nd,
+    shadowColor: COLORS.primary2nd,
+    shadowOpacity: 0.3,
+    elevation: 6,
+  },
+  optionText: {
+    fontSize: moderateScale(20),
+    fontWeight: "600",
+    color: COLORS.black,
+  },
+  selectedOptionText: {
+    color: COLORS.white,
+  },
+  continueButton: {
+    backgroundColor: COLORS.black,
+    paddingVertical: scaleHeight(18),
+    paddingHorizontal: scaleWidth(24),
+    borderRadius: scaleWidth(12),
+    alignItems: "center",
+    shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
       height: scaleHeight(4),
@@ -80,27 +103,19 @@ export const styles = StyleSheet.create({
     elevation: 8,
   },
   continueButtonDisabled: {
-    backgroundColor: "#000",
+    backgroundColor: COLORS.black,
     shadowOpacity: 0.1,
     elevation: 2,
   },
   continueButtonText: {
     fontSize: moderateScale(18),
     fontWeight: "600",
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
-  otherInput: {
-    backgroundColor: "rgba(255, 255, 255, 0.85)",
-    borderRadius: scaleWidth(12),
-    paddingVertical: scaleHeight(14),
-    paddingHorizontal: scaleWidth(16),
-    fontSize: moderateScale(16),
-    color: "#000",
-    shadowColor: "#fff",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.6,
-    shadowRadius: 6,
-    elevation: 4,
-    minHeight: scaleHeight(60),
+  errorText: {
+    color: COLORS.red,
+    fontSize: 14,
+    marginTop: 8,
+    textAlign: "center",
   },
 });

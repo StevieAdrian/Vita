@@ -1,3 +1,4 @@
+import { COLORS } from "@/constants/colors";
 import { Dimensions, StyleSheet } from "react-native";
 
 const { width, height } = Dimensions.get("window");
@@ -10,7 +11,7 @@ const moderateScale = (size: number, factor: number = 0.5): number =>
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#4A90E2", 
+    backgroundColor: COLORS.primary,
   },
   content: {
     flex: 1,
@@ -43,12 +44,12 @@ export const styles = StyleSheet.create({
     marginBottom: scaleHeight(25),
   },
   inputBox: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     borderRadius: scaleWidth(10),
     paddingVertical: scaleHeight(14),
     paddingHorizontal: scaleWidth(16),
     fontSize: moderateScale(16),
-    color: "#000",
+    color: COLORS.black,
     borderWidth: 1,
   },
 
@@ -56,12 +57,12 @@ export const styles = StyleSheet.create({
     width: "100%",
   },
   continueButton: {
-    backgroundColor: "#000",
+    backgroundColor: COLORS.black,
     paddingVertical: scaleHeight(18),
     paddingHorizontal: scaleWidth(24),
     borderRadius: scaleWidth(12),
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
       height: scaleHeight(4),
@@ -71,13 +72,13 @@ export const styles = StyleSheet.create({
     elevation: 8,
   },
   continueButtonDisabled: {
-    backgroundColor: "#000",
+    backgroundColor: COLORS.black,
     shadowOpacity: 0.1,
     elevation: 2,
   },
   continueButtonText: {
     fontSize: moderateScale(18),
     fontWeight: "600",
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
 });

@@ -1,5 +1,7 @@
 import OptionField from "@/components/OptionField";
-import React, { useState } from "react";
+import { ALLERGIC_OPTIONS } from "@/constants/allergic";
+import { useAllergics } from "@/utils/allergicValidation";
+import React from "react";
 import {
   Image,
   StatusBar,
@@ -10,63 +12,42 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./allergics.style";
+import { COLORS } from "@/constants/colors";
+import { useSignupContext } from "@/context/SignupContext";
+import { router } from "expo-router";
 
-interface AllergicsProps {}
+const Allergics: React.FC = () => {
+  const {
+    otherAllergics,
+    setOtherAllergics,
+    handleAllergicSelect,
+    isSelected,
+    canContinue,
+    handleContinue,
+  } = useAllergics();
 
-const Allergics: React.FC<AllergicsProps> = () => {
-  const [selectedAllergics, setSelectedAllergics] = useState<string[]>([]);
-  const [otherAllergics, setOtherAllergics] = useState<string>("");
+  const { data, setField } = useSignupContext();
+  
+  const onContinue = () => {
+    const allergicsData = handleContinue(); 
 
-  const allergicOptions = [
-    "There is no Allergics",
-    "Peanuts",
-    "Seafood",
-    "Tree Nuts",
-    "Milk",
-  ];
+    const finalAllergics = allergicsData.otherAllergics
+      ? [...allergicsData.selectedAllergics, allergicsData.otherAllergics]
+      : allergicsData.selectedAllergics;
 
-  const handleAllergicSelect = (allergic: string) => {
-    if (allergic === "There is no Allergics") {
-      setSelectedAllergics(
-        selectedAllergics.includes(allergic) ? [] : [allergic]
-      );
-    } else {
-      const filteredAllergics = selectedAllergics.filter(
-        (item) => item !== "There is no Allergics"
-      );
-
-      if (selectedAllergics.includes(allergic)) {
-        setSelectedAllergics(
-          filteredAllergics.filter((item) => item !== allergic)
-        );
-      } else {
-        setSelectedAllergics([...filteredAllergics, allergic]);
-      }
-    }
+    setField("allergies", finalAllergics);
+    console.log("debug data: ", data)
+    router.push("/auth/signup/chronic");
   };
-
-  const isSelected = (allergic: string) => selectedAllergics.includes(allergic);
-
-  const handleContinue = () => {
-    const allergicsData = {
-      selectedAllergics,
-      otherAllergics: otherAllergics.trim(),
-    };
-
-    console.log("Allergics data:", allergicsData);
-    // href kemana dan simpan kemana
-  };
-
-  const canContinue = selectedAllergics.length > 0;
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#4A90E2" />
+      <StatusBar barStyle="light-content" backgroundColor= {COLORS.primary} />
 
       <View style={styles.content}>
         <View style={styles.logoContainer}>
           <Image
-            source={require("../../assets/images/Logo Vita.png")}
+            source={require("../../../assets/images/Logo Vita.png")}
             style={styles.logo}
             resizeMode="contain"
           />
@@ -84,7 +65,7 @@ const Allergics: React.FC<AllergicsProps> = () => {
 
         <View style={styles.selectionContainer}>
           <View style={styles.optionsContainer}>
-            {allergicOptions.map((allergic) => (
+            {ALLERGIC_OPTIONS.map((allergic) => (
               <OptionField
                 key={allergic}
                 label={allergic}
@@ -97,7 +78,7 @@ const Allergics: React.FC<AllergicsProps> = () => {
             <TextInput
               style={styles.otherInput}
               placeholder="Other Allergics..."
-              placeholderTextColor="#666"
+              placeholderTextColor= {COLORS.gray2}
               value={otherAllergics}
               onChangeText={setOtherAllergics}
               multiline
@@ -109,7 +90,7 @@ const Allergics: React.FC<AllergicsProps> = () => {
               styles.continueButton,
               !canContinue && styles.continueButtonDisabled,
             ]}
-            onPress={handleContinue}
+            onPress={onContinue}
             disabled={!canContinue}
             activeOpacity={0.8}
           >

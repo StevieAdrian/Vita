@@ -1,3 +1,4 @@
+import { COLORS } from "@/constants/colors";
 import { Dimensions, StyleSheet } from "react-native";
 
 const { width, height } = Dimensions.get("window");
@@ -10,7 +11,7 @@ const moderateScale = (size: number, factor: number = 0.5): number =>
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#4A90E2",
+    backgroundColor: COLORS.primary,
   },
   content: {
     flex: 1,
@@ -29,7 +30,7 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: moderateScale(32),
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: COLORS.white,
     textAlign: "center",
     marginBottom: scaleHeight(40),
     lineHeight: moderateScale(38),
@@ -46,7 +47,7 @@ export const styles = StyleSheet.create({
   },
   progressFill: {
     height: "100%",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     borderRadius: scaleHeight(4),
   },
   subtitle: {
@@ -64,13 +65,13 @@ export const styles = StyleSheet.create({
     gap: scaleHeight(12),
   },
   continueButton: {
-    backgroundColor: "#000",
+    backgroundColor: COLORS.black,
     paddingVertical: scaleHeight(18),
     paddingHorizontal: scaleWidth(24),
     borderRadius: scaleWidth(12),
     alignItems: "center",
     marginTop: scaleHeight(20),
-    shadowColor: "#000",
+    shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
       height: scaleHeight(4),
@@ -80,14 +81,14 @@ export const styles = StyleSheet.create({
     elevation: 8,
   },
   continueButtonDisabled: {
-    backgroundColor: "#000",
+    backgroundColor: COLORS.black,
     shadowOpacity: 0.1,
     elevation: 2,
   },
   continueButtonText: {
     fontSize: moderateScale(18),
     fontWeight: "600",
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
   otherInput: {
     backgroundColor: "rgba(255, 255, 255, 0.85)",
@@ -95,8 +96,8 @@ export const styles = StyleSheet.create({
     paddingVertical: scaleHeight(14),
     paddingHorizontal: scaleWidth(16),
     fontSize: moderateScale(16),
-    color: "#000",
-    shadowColor: "#fff",
+    color: COLORS.black,
+    shadowColor: COLORS.white,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.6,
     shadowRadius: 6,

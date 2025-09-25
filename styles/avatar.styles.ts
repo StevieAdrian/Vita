@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { COLORS } from "@/constants/colors";
 
 export const styles = StyleSheet.create({
     container: {
@@ -7,7 +8,7 @@ export const styles = StyleSheet.create({
         marginVertical: 16,
     },
     avatar: {
-        backgroundColor: "#E0E0E0",
+        backgroundColor: COLORS.background2nd,
     },
     cameraButton: {
         position: "absolute",
@@ -19,7 +20,7 @@ export const styles = StyleSheet.create({
         borderRadius: 16,
         alignItems: "center",
         justifyContent: "center",
-        shadowColor: "#000",
+        shadowColor: COLORS.black,
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.2,
         shadowRadius: 2,

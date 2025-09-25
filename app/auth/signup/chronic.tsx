@@ -1,5 +1,6 @@
 import OptionField from "@/components/OptionField";
-import React, { useState } from "react";
+import { useChronic } from "@/utils/chronicValidation";
+import React from "react";
 import {
   Image,
   StatusBar,
@@ -10,54 +11,40 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./chronic.style";
+import { COLORS } from "@/constants/colors";
+import { useSignupContext } from "@/context/SignupContext";
+import { router } from "expo-router";
 
-interface ChronicProps {}
+const Chronic: React.FC = () => {
+  const {
+    CHRONIC_OPTIONS,
+    otherCondition,
+    setOtherCondition,
+    handleConditionSelect,
+    isSelected,
+    canContinue,
+    handleContinue,
+  } = useChronic();
 
-const Chronic: React.FC<ChronicProps> = () => {
-  const [selectedConditions, setSelectedConditions] = useState<string[]>([]);
-  const [otherCondition, setOtherCondition] = useState<string>("");
+  const { setField } = useSignupContext();
+  const onContinue = () => {
+    const chronicData = handleContinue();
 
-  const chronicOptions = [
-    "Hypertension",
-    "Asthma",
-    "Diabetes",
-    "Obesity",
-    "Osteoporosis",
-  ];
+    const finalChronics = chronicData.otherCondition ? [...chronicData.selectedConditions, chronicData.otherCondition] : chronicData.selectedConditions;
+    setField("chronicConditions", finalChronics);
 
-  const handleConditionSelect = (condition: string) => {
-    if (selectedConditions.includes(condition)) {
-      setSelectedConditions(
-        selectedConditions.filter((item) => item !== condition)
-      );
-    } else {
-      setSelectedConditions([...selectedConditions, condition]);
-    }
+    console.log("debug data:", finalChronics);
+    router.push("/auth/signup/emergency");
   };
-
-  const isSelected = (condition: string) =>
-    selectedConditions.includes(condition);
-
-  const handleContinue = () => {
-    const chronicData = {
-      selectedConditions,
-      otherCondition: otherCondition.trim(),
-    };
-
-    // href
-  };
-
-  const canContinue =
-    selectedConditions.length > 0 || otherCondition.trim().length > 0;
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#4A90E2" />
+      <StatusBar barStyle="light-content" backgroundColor= {COLORS.primary} />
 
       <View style={styles.content}>
         <View style={styles.logoContainer}>
           <Image
-            source={require("../../assets/images/Logo Vita.png")}
+            source={require("../../../assets/images/Logo Vita.png")}
             style={styles.logo}
             resizeMode="contain"
           />
@@ -75,7 +62,7 @@ const Chronic: React.FC<ChronicProps> = () => {
 
         <View style={styles.selectionContainer}>
           <View style={styles.optionsContainer}>
-            {chronicOptions.map((condition) => (
+            {CHRONIC_OPTIONS.map((condition) => (
               <OptionField
                 key={condition}
                 label={condition}
@@ -88,7 +75,7 @@ const Chronic: React.FC<ChronicProps> = () => {
             <TextInput
               style={styles.otherInput}
               placeholder="Other Chronic Conditions...."
-              placeholderTextColor="#666"
+              placeholderTextColor= {COLORS.gray2}
               value={otherCondition}
               onChangeText={setOtherCondition}
               multiline
@@ -100,7 +87,7 @@ const Chronic: React.FC<ChronicProps> = () => {
               styles.continueButton,
               !canContinue && styles.continueButtonDisabled,
             ]}
-            onPress={handleContinue}
+            onPress={onContinue}
             disabled={!canContinue}
             activeOpacity={0.8}
           >

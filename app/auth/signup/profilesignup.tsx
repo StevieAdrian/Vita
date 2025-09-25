@@ -1,40 +1,33 @@
 import AvatarPicker from "@/components/AvatarPicker";
+import { COLORS } from "@/constants/colors";
 import { useAvatarPicker } from "@/hooks/useAvatarPicker";
 import React, { useState } from "react";
 import { Image, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { styles } from "./profilesignup.style";
+import { useSignupContext } from "@/context/SignupContext";
+import { router } from "expo-router";
 
-interface ProfileSignupProps {}
-
-const ProfileSignup: React.FC<ProfileSignupProps> = () => {
-  const { image, uploading, pickPhoto } = useAvatarPicker();
-  const [fullName, setFullName] = useState<string>("");
+const ProfileSignup: React.FC = () => {
+  const { image, uploading, pickPhoto } = useAvatarPicker(undefined, (url) => {
+    setField("avatarUrl", url); 
+  });
   const [selectedAvatar, setSelectedAvatar] = useState<string>("");
-
-  const handleAvatarSelect = (avatarUri: string) => {
-    setSelectedAvatar(avatarUri);
-  };
-
+  const { data, setField } = useSignupContext();
   const handleContinue = () => {
-    const profileData = {
-      fullName: fullName.trim(),
-      avatar: selectedAvatar,
-    };
-    // href
+    console.log("debug data:", data);
+    router.push("/auth/signup/bloodtype");
   };
-
-  const canContinue = fullName.trim().length > 0;
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#4A90E2" />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
 
       <View style={styles.content}>
         <View style={styles.mainWrapper}>
           <View style={styles.logoContainer}>
             <Image
-              source={require("../../assets/images/Logo Vita.png")}
+              source={require("../../../assets/images/Logo Vita.png")}
               style={styles.logo}
               resizeMode="contain"
             />
@@ -50,10 +43,12 @@ const ProfileSignup: React.FC<ProfileSignupProps> = () => {
           <View style={styles.inputSection}>
             <TextInput
               placeholder="Doe Doe"
-              value={fullName}
-              onChangeText={setFullName}
-              autoCapitalize="words"
-              style={styles.inputBox}
+              value={data.username || ""}
+              editable={false}
+              style={[
+                styles.inputBox,
+                { backgroundColor: COLORS.background2nd },
+              ]}
             />
           </View>
 
@@ -61,10 +56,10 @@ const ProfileSignup: React.FC<ProfileSignupProps> = () => {
             <TouchableOpacity
               style={[
                 styles.continueButton,
-                !canContinue && styles.continueButtonDisabled,
+                // !canContinue && styles.continueButtonDisabled,
               ]}
               onPress={handleContinue}
-              disabled={!canContinue}
+              // disabled={!canContinue}
               activeOpacity={0.8}
             >
               <Text style={styles.continueButtonText}>Continue</Text>

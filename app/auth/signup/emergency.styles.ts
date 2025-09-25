@@ -1,3 +1,4 @@
+import { COLORS } from "@/constants/colors";
 import { Dimensions, StyleSheet } from "react-native";
 
 const { width, height } = Dimensions.get("window");
@@ -10,14 +11,14 @@ const moderateScale = (size, factor = 0.5) =>
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#4285F4",
+    backgroundColor: COLORS.primary,
   },
   scrollContainer: {
     flexGrow: 1,
     paddingBottom: scaleHeight(20),
   },
   header: {
-    backgroundColor: "#4285F4",
+    backgroundColor: COLORS.primary,
     paddingTop: scaleHeight(50),
     paddingHorizontal: scaleWidth(25),
     paddingBottom: scaleHeight(30),
@@ -29,13 +30,13 @@ export const styles = StyleSheet.create({
     width: scaleWidth(35),
     height: scaleWidth(35),
     marginBottom: scaleHeight(20),
-    tintColor: "white",
+    tintColor: COLORS.white,
     alignSelf: "center",
   },
   title: {
     fontSize: width < 375 ? scaleWidth(28) : scaleWidth(32),
     fontWeight: "bold",
-    color: "white",
+    color: COLORS.white,
     marginBottom: scaleHeight(20),
     textAlign: "center",
     width: "100%",
@@ -56,7 +57,7 @@ export const styles = StyleSheet.create({
   },
   progressFill: {
     height: "100%",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     borderRadius: scaleHeight(4),
     width: "80%",
   },
@@ -65,13 +66,13 @@ export const styles = StyleSheet.create({
     width: "100%",
   },
   formContainer: {
-    backgroundColor: "white",
+    backgroundColor: COLORS.white,
     paddingHorizontal: scaleWidth(20),
     paddingVertical: scaleHeight(24),
     width: width - scaleWidth(40),
     marginHorizontal: scaleWidth(20),
     borderRadius: scaleWidth(12),
-    shadowColor: "#000",
+    shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
       height: scaleHeight(2),
@@ -83,19 +84,25 @@ export const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: moderateScale(18),
     fontWeight: "600",
-    color: "#333",
-    marginBottom: scaleHeight(20),
+    color: COLORS.black,
     textAlign: "left",
+  },
+  underline: {
+    height: 0.1,
+    backgroundColor: COLORS.gray1,
+    width: "100%",
+    marginTop: scaleHeight(12), 
+    marginBottom: scaleHeight(12),
   },
   label: {
     alignSelf: "flex-start",
     fontSize: 14,
-    color: "#333",
+    color: COLORS.black,
     marginBottom: 5,
     fontWeight: "500",
   },
   required: {
-    color: "red",
+    color: COLORS.red,
   },
   dropdownWrapper: {
     width: "100%",
@@ -105,17 +112,17 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: COLORS.gray1,
     paddingHorizontal: 10,
     paddingVertical: scaleHeight(12),
     minHeight: scaleHeight(48),
     borderRadius: scaleWidth(8),
   },
   dropdownButtonActive: {
-    borderColor: "#4285F4",
-    shadowColor: "#000",
+    borderColor: COLORS.primary,
+    shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -123,18 +130,18 @@ export const styles = StyleSheet.create({
   },
   dropdownText: {
     fontSize: moderateScale(15),
-    color: "#333",
+    color: COLORS.black,
   },
   placeholderText: {
-    color: "#999",
+    color: COLORS.black,
   },
   dropdownMenu: {
     marginTop: scaleHeight(6),
-    backgroundColor: "white",
+    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: COLORS.gray1,
     borderRadius: 8,
-    shadowColor: "#000",
+    shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 6,
@@ -147,15 +154,15 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scaleWidth(10),
     paddingVertical: scaleHeight(12),
     borderBottomWidth: 1,
-    borderBottomColor: "#eee",
+    borderBottomColor: COLORS.primary5th,
   },
   dropdownOptionLast: {
     borderBottomWidth: 0,
   },
   dropdownOptionActive: {
-    backgroundColor: "#F0F4FF",
+    backgroundColor: COLORS.primary4th,
     borderRadius: 6,
-    shadowColor: "#000",
+    shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
@@ -163,10 +170,10 @@ export const styles = StyleSheet.create({
   },
   dropdownOptionText: {
     fontSize: moderateScale(15),
-    color: "#333",
+    color: COLORS.black,
   },
   continueButton: {
-    backgroundColor: "#000",
+    backgroundColor: COLORS.black,
     paddingVertical: scaleHeight(14),
     borderRadius: scaleWidth(6),
     alignItems: "center",
@@ -175,8 +182,14 @@ export const styles = StyleSheet.create({
     width: "100%",
   },
   continueText: {
-    color: "white",
+    color: COLORS.white,
     fontSize: moderateScale(15),
     fontWeight: "600",
+  },
+  errorText: {
+    color: COLORS.red,
+    fontSize: 14,
+    marginTop: 8,
+    textAlign: "left",
   },
 });
