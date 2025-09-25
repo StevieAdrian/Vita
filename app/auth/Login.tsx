@@ -1,11 +1,9 @@
-import React, { useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-import { styles } from "./login.styles";
-import { useAuth } from "@/hooks/useAuth";
 import InputField from "@/components/InputField";
 import { COLORS } from "@/constants/colors";
-
+import { useAuth } from "@/hooks/useAuth";
+import React, { useState } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import { styles } from "./login.styles";
 
 export default function login() {
   const [email, setEmail] = useState("");
@@ -25,7 +23,7 @@ export default function login() {
           required
           onChangeText={setEmail}
           placeholder="johndoe@gmail.com"
-          placeholderTextColor= {COLORS.gray2}
+          placeholderTextColor={COLORS.gray2}
         />
         <InputField
           label="Password"
