@@ -17,19 +17,13 @@ export const ReminderToggle: React.FC<ReminderToggleProps> = ({
 }) => {
   const handlePress = (optionId: ReminderCategory) => {
     onSelect(optionId);
-
-    // if (optionId === "appointment") {
-    //   navigation.navigate("AppointmentFormPage");
-    // } else if (optionId === "drug") {
-    //   navigation.navigate("DrugFormPage");
-    // }
   };
 
   return (
     <View style={styles.container}>
+      
       {toggleOptions.map((option) => {
         const isActive = option.id === selected;
-
         return (
           <TouchableOpacity
             key={option.id}
@@ -40,13 +34,13 @@ export const ReminderToggle: React.FC<ReminderToggleProps> = ({
                   option.id === "appointment" ? COLORS.primary : COLORS.white,
               },
             ]}
-            onPress={() => handlePress(option.id)} 
+            onPress={() => handlePress(option.id)}
             activeOpacity={0.82}
           >
             <Ionicons
               name={option.icon}
               size={24}
-              color={option.id === "appointment" ? COLORS.white : COLORS.black} 
+              color={option.id === "appointment" ? COLORS.white : COLORS.black}
             />
             <Text
               style={[

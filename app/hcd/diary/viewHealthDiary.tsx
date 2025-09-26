@@ -127,12 +127,10 @@ export default function healthDiary() {
                 </TouchableOpacity>
               </View>
             </View>
-            
-            {/* Schedule Timeline Bar */}
-            <View>
 
-            </View>
-            
+            {/* Schedule Timeline Bar */}
+            <View></View>
+
             {/* --- Map Reminder Max 3--- */}
             <View style={styles.containerReminder}>
               {/* {reminders.map((reminder) => (
@@ -314,7 +312,7 @@ export default function healthDiary() {
                         style={[
                           styles.descInput,
                           {
-                            backgroundColor: "EAEAEA",
+                            backgroundColor: "#EAEAEA",
                           },
                         ]}
                         value={notes}
