@@ -28,6 +28,11 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 20,
   },
+  dobWrapper: {
+    width: "100%",
+    position: "relative",
+    marginBottom: 15,
+  },
   input: {
     borderWidth: 1,
     borderColor: "#ddd",

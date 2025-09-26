@@ -35,4 +35,5 @@ export interface UserProfile {
     hasAllergics: string;
     allergics?: string;
     allergies: string[]; 
+    avatarUrl?: string;
 }

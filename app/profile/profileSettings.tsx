@@ -11,6 +11,7 @@ import { COLORS } from "@/constants/colors";
 import { useAllergics } from "@/utils/allergicValidation";
 import FormLabel from "@/components/FormLabel";
 import { useUserProfile } from "@/hooks/useUserProfile"
+import Calender from "@/components/Calender";
 
 export default function ProfileSettings() {
   const { image, pickPhoto } = useAvatarPicker();
@@ -42,19 +43,25 @@ export default function ProfileSettings() {
 
           <View style={styles.avatarContainer}>
             <AvatarPicker
-              imageUrl={image ?? undefined}
+              imageUrl={image || data.avatarUrl || undefined}
               onChangeImage={() => pickPhoto("gallery")}
               size={100}
             />
           </View>
 
           <View>
-            <InputField label="Username" value={data.username}/>
-            <InputField label="First Name" value={data.firstName} required />
-            <InputField label="Last Name" value={data.lastName} required />
-            <InputField label="Email" value={data.email} keyboardType="email-address" required />
-            <InputField label="Phone Number" value={data.phoneNumber} keyboardType="phone-pad" required />
-            <InputField label="Date of Birth" value={data.dateOfBirth} required />
+            <InputField label="Username" value={data.username} />
+            <InputField label="First Name" value={data.firstName} required onChangeText={(text) => handleChange("firstName", text)} />
+            <InputField label="Last Name" value={data.lastName} required onChangeText={(text) => handleChange("lastName", text)}/>
+            <InputField label="Phone Number" value={data.phoneNumber} keyboardType="phone-pad" required onChangeText={(text) => handleChange("phoneNumber", text)} />
+            
+            <View style={styles.dobWrapper}>
+              <InputField label="Date of Birth" value={data.dateOfBirth} required onChangeText={(text) => handleChange("dateOfBirth", text)} />
+              <Calender
+                value={data.dateOfBirth}
+                onSelectDate={(date) => handleChange("dateOfBirth", date)}
+              />
+            </View>
 
             <View style={styles.radioGroup}>
               <FormLabel label="Gender" required />
@@ -123,7 +130,7 @@ export default function ProfileSettings() {
             )}
           </View>
 
-          <TouchableOpacity style={styles.saveBtn}>
+          <TouchableOpacity style={styles.saveBtn} onPress={saveProfile}>
             <Text style={styles.saveBtnText}>Save Changes</Text>
           </TouchableOpacity>
         </ScrollView>

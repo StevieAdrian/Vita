@@ -30,9 +30,17 @@ export function useUserProfile() {
 
     const saveProfile = async () => {
         try {
+            let allergies: string[] = [];
+
+            if (data.hasAllergics === "Yes" && data.allergics) {
+                allergies = data.allergics.split(",").map((a) => a.trim());
+            } else {
+                allergies = [];
+            }
+
             await updateUserProfile({
                 ...data,
-                allergies: data.allergics ? data.allergics.split(",").map((a) => a.trim()) : [],
+                allergies,
             });
         } catch (err: any) {
             setError(err.message);

@@ -28,5 +28,6 @@ export function mapperUserProfile(data: Partial<UserProfile>): UserProfile {
         hasAllergics:(data.allergies) && data.allergies.length > 0 ? "Yes" : "No",
         allergics: Array.isArray(data.allergies) ? data.allergies.join(", ") : (data.allergics ?? ""),
         allergies: Array.isArray(data.allergies) ? data.allergies : [],
+        avatarUrl: data.avatarUrl ?? "",
     };
 }
