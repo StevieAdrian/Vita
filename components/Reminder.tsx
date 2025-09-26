@@ -19,7 +19,9 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
     reminder.category === "drug" ? COLORS.primary3rd : COLORS.secondary3rd;
 
   return (
-    <View style={[styles.container, { backgroundColor: cardBackground }]}>
+    <TouchableOpacity
+      style={[styles.container, { backgroundColor: cardBackground }]}
+    >
       <View style={styles.leftColumn}>
         <View>
           <Image
@@ -47,6 +49,6 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
           style={styles.icon}
         />
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 };
