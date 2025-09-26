@@ -83,7 +83,7 @@ export default function Profile() {
             <ListItem
               title="Emergency Contact"
               leftIcon={require("@/assets/images/emergency-icon.png")}
-              onPress={() => {}}
+              onPress={() => router.replace("/profile/emergencyContact")}
             />
             <ListItem
               title="Log Out"
