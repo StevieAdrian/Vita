@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
   },
   greetingsContainer: {
     flexDirection: "row",
-    alignItems: "flex-end"
+    alignItems: "flex-end",
   },
   greetingsBlue: {
     color: COLORS.primary,
@@ -74,9 +74,12 @@ export const styles = StyleSheet.create({
     gap: 12, // Jarak antar item
   },
   containerReminder: {
+    marginTop: 20,
+    gap: 5,
+  },
+  containerContent: {
     marginVertical: 20,
     gap: 5,
-    paddingHorizontal: 10,
   },
   reminderItem: {
     flexDirection: "row",
