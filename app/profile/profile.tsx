@@ -8,6 +8,7 @@ import ListItem from "@/components/ListItem";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { NAV_ITEMS } from "@/styles/bottom-nav.styles";
+import { router } from "expo-router";
 export default function Profile() {
   const { image, pickPhoto } = useAvatarPicker();
   const insets = useSafeAreaInsets();
@@ -66,7 +67,7 @@ export default function Profile() {
             <ListItem
               title="Profile Settings"
               leftIcon={require("@/assets/images/settings-icon.png")}
-              onPress={() => {}}
+              onPress={() => router.replace("/profile/profileSettings")}
             />
             <ListItem
               title="Digital Biomarker"
