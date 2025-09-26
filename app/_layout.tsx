@@ -9,6 +9,15 @@ import { useEffect, useState } from "react";
 import { View } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
+
+function shouldShowBottomNav(user: any, pathname: string): boolean {
+  if (!user) return false;
+
+  const hiddenPatterns = [/^\/auth/, /^\/hcd\/diary/];
+
+  return !hiddenPatterns.some((regex) => regex.test(pathname));
+}
+
 function RootContent() {
   const { user, initializing } = useAuthState();
   const router = useRouter();
@@ -39,7 +48,7 @@ function RootContent() {
   return (
     <View style={{ flex: 1 }}>
       <Slot />
-      {user && pathname == "/" && !pathname.startsWith("/auth/signup") && (
+      {shouldShowBottomNav(user, pathname) && (
         <BottomNav
           items={NAV_ITEMS}
           activeId={activeTab}
