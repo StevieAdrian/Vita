@@ -10,7 +10,7 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
-export default function editDiary() {
+export default function EditDiary() {
   const [hasInput, setHasInput] = useState(false);
   const insets = useSafeAreaInsets();
   const handleInputChange = (text: string) => {

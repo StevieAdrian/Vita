@@ -12,7 +12,7 @@ import {
 } from "react-native-safe-area-context";
 import DateTimePicker from "react-native-ui-datepicker";
 
-export default function createDiary() {
+export default function CreateDiary() {
   const insets = useSafeAreaInsets();
   const [selected, setSelected] = useState<Date | undefined>(new Date());
   const [showPicker, setShowPicker] = useState(false);

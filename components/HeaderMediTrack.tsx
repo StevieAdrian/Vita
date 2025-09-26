@@ -21,9 +21,9 @@ export const ReminderToggle: React.FC<ReminderToggleProps> = ({
 
   return (
     <View style={styles.container}>
-      
       {toggleOptions.map((option) => {
         const isActive = option.id === selected;
+
         return (
           <TouchableOpacity
             key={option.id}
