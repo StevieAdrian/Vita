@@ -29,5 +29,6 @@ export function mapperUserProfile(data: Partial<UserProfile>): UserProfile {
         allergics: Array.isArray(data.allergies) ? data.allergies.join(", ") : (data.allergics ?? ""),
         allergies: Array.isArray(data.allergies) ? data.allergies : [],
         avatarUrl: data.avatarUrl ?? "",
+        emergencyContacts: Array.isArray(data.emergencyContacts) ? data.emergencyContacts : [],
     };
 }

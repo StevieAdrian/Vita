@@ -23,6 +23,12 @@ export interface SignupData {
     avatarUrl?: string
 }
 
+export interface EmergencyContact {
+    name: string;
+    phoneNumber: string;
+    relation: string;
+}
+
 export interface UserProfile {
     username: string;
     firstName: string;
@@ -36,4 +42,5 @@ export interface UserProfile {
     allergics?: string;
     allergies: string[]; 
     avatarUrl?: string;
+    emergencyContacts: EmergencyContact[];
 }
