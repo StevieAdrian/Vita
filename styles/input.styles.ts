@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 4,
     paddingHorizontal: 10,
+    backgroundColor: COLORS.white,
   },
   label: {
     alignSelf: "flex-start",
