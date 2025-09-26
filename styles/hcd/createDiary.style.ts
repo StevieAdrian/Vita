@@ -1,5 +1,5 @@
-import { StyleSheet } from "react-native";
 import { COLORS } from "@/constants/colors";
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: { flex: 1 },
@@ -35,11 +35,18 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 17,
     paddingVertical: 25,
   },
+  calenderContainer: {
+    marginTop: 10,
+    borderColor: COLORS.gray3,
+    borderWidth: 1,
+    borderRadius: 10,
+  },
   titleForm: {
     width: "80%",
     fontSize: 20,
     fontFamily: "Inter-SemiBold",
     textAlign: "left",
+    color: COLORS.black,
   },
   formHeaderContainer: {
     flexDirection: "row",
@@ -61,6 +68,7 @@ export const styles = StyleSheet.create({
 
   subformContainer: {
     gap: 10,
+    marginTop: 10,
   },
 
   subtitle: {

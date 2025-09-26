@@ -1,9 +1,5 @@
-import { Text, View } from "react-native";
+import DashboardHome from "@/app/hcd/dashboardHome";
 
 export default function Index() {
-  return (
-    <View>
-      <Text>Hi</Text>
-    </View>
-  );
+  return <DashboardHome />;
 }

@@ -156,7 +156,7 @@ export const styles = StyleSheet.create({
     width: "100%",
   },
   loginLink: {
-    color: COLORS.primary,
+    color: "blue",
     fontWeight: "500",
   },
   dividerContainer: {

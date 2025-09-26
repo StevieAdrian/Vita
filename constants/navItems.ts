@@ -20,14 +20,14 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Notes",
     icon: require("@/assets/activeIcon/notesActiveIcon.png"),
     activeIcon: require("@/assets/activeIcon/notesActiveIcon.png"),
-    route: "/hcd/createDiary",
+    route: "/hcd/diary/createDiary",
   },
   {
     id: "schedule",
     label: "Schedule",
     icon: require("@/assets/passiveIconNavBottom/passiveScheduleIcon.png"),
     activeIcon: require("@/assets/activeIcon/scheduleActiveIcon.png"),
-    route: "/schedule",
+    route: "/meditrack/MediTrack",
   },
   {
     id: "family",

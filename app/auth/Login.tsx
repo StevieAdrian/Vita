@@ -1,13 +1,12 @@
-import React, { useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-import { styles } from "./login.styles";
-import { useAuth } from "@/hooks/useAuth";
 import InputField from "@/components/InputField";
 import { COLORS } from "@/constants/colors";
+import { useAuth } from "@/hooks/useAuth";
+import { router } from "expo-router";
+import React, { useState } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import { styles } from "./login.styles";
 
-
-export default function login() {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { signIn, loading } = useAuth();
@@ -25,7 +24,7 @@ export default function login() {
           required
           onChangeText={setEmail}
           placeholder="johndoe@gmail.com"
-          placeholderTextColor= {COLORS.gray2}
+          placeholderTextColor={COLORS.gray2}
         />
         <InputField
           label="Password"
@@ -46,7 +45,12 @@ export default function login() {
 
         <Text style={styles.signupText}>
           Haven't create an account?{" "}
-          <Text style={styles.signupLink}>Sign Up</Text>
+          <Text
+            style={styles.signupLink}
+            onPress={() => router.replace("/auth/signup/signup")}
+          >
+            Sign Up
+          </Text>
         </Text>
       </View>
       <View style={styles.dividerWrapper}>

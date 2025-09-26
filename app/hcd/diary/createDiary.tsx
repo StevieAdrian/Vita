@@ -1,5 +1,5 @@
-import TitleBack from "@/components/TitleBack";
 import PrimaryButtonColorForm from "@/components/utils/PrimaryButtonColorForm";
+import TitleBack from "@/components/utils/TitleBack";
 import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
 import { NAV_ITEMS } from "@/styles/bottom-nav.styles";
 import { styles } from "@/styles/hcd/createDiary.style";
@@ -12,7 +12,7 @@ import {
 } from "react-native-safe-area-context";
 import DateTimePicker from "react-native-ui-datepicker";
 
-export default function createDiary() {
+export default function CreateDiary() {
   const insets = useSafeAreaInsets();
   const [selected, setSelected] = useState<Date | undefined>(new Date());
   const [showPicker, setShowPicker] = useState(false);
@@ -59,19 +59,21 @@ export default function createDiary() {
               </TouchableOpacity>
             </View>
 
-            {showPicker && (
-              <DateTimePicker
-                mode="single"
-                date={selected ?? new Date()}
-                onChange={({ date }) => {
-                  if (date) {
-                    setSelected(date as Date);
-                  }
-                  setShowPicker(false);
-                }}
-                styles={datePickerStyles}
-              />
-            )}
+            <View style={styles.calenderContainer}>
+              {showPicker && (
+                <DateTimePicker
+                  mode="single"
+                  date={selected ?? new Date()}
+                  onChange={({ date }) => {
+                    if (date) {
+                      setSelected(date as Date);
+                    }
+                    setShowPicker(false);
+                  }}
+                  styles={datePickerStyles}
+                />
+              )}
+            </View>
             <View style={styles.divider} />
 
             {/* VitalSign */}
