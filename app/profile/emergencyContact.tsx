@@ -2,7 +2,7 @@ import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-nativ
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { styles } from "./emergencyContact.styles"
 import { NAV_ITEMS } from "@/styles/bottom-nav.styles";
-import TitleBack from "@/components/TitleBack";
+import TitleBack from "@/components/utils/TitleBack";
 import InputField from "@/components/InputField";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import React, { useState } from "react";
@@ -31,8 +31,7 @@ export default function EmergencyContact() {
         }));
         setShowRelationsDropdown(false);
     };
-
-
+    
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.scrollWrapper}>

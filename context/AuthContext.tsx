@@ -22,7 +22,7 @@ export function AuthContext({ children }: { children: React.ReactNode}) {
             // temp
             return;
         } else if (!user && !inAuthGroup) {
-            router.replace("/auth/login" as any);
+            router.push("/auth/login" as any);
         }  
     }, [user, initializing, segments])
     

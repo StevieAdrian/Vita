@@ -11,7 +11,7 @@ export function useAuth() {
         setLoading(true);
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            router.replace("/");
+            router.push("/");
         } catch (e) {
             const err = e as FirebaseError;
             alert("Sign in failed: " + err.message);

@@ -227,7 +227,7 @@ export default function Signup() {
                 Already have an account?{" "}
                 <Text
                   style={styles.loginLink}
-                  onPress={() => router.replace("/auth/login")}
+                  onPress={() => router.push("/auth/login")}
                 >
                   Log In
                 </Text>

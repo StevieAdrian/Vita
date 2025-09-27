@@ -16,6 +16,9 @@ export const styles = StyleSheet.create({
     paddingBottom: 24,
     flexGrow: 1,
   },
+  header: {
+    width: "100%",
+  },
   container: {
     flex: 1,
   },

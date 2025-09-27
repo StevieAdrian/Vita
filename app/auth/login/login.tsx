@@ -47,7 +47,7 @@ export default function Login() {
           Haven't create an account?{" "}
           <Text
             style={styles.signupLink}
-            onPress={() => router.replace("/auth/signup/signup")}
+            onPress={() => router.push("/auth/signup/signup")}
           >
             Sign Up
           </Text>

@@ -5,7 +5,7 @@ import { useAvatarPicker } from "@/hooks/useAvatarPicker";
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { styles } from "./profileSettings.style";
-import TitleBack from "@/components/TitleBack";
+import TitleBack from "@/components/utils/TitleBack";
 import { BLOODTYPE_OPTIONS, bloodType } from "@/constants/bloodType";
 import { COLORS } from "@/constants/colors";
 import { useAllergics } from "@/utils/allergicValidation";

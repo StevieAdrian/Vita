@@ -1,5 +1,6 @@
 import { styles } from "@/styles/component/upheader";
 import { UpHeaderProps } from "@/types/titlenav";
+import { router } from "expo-router";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
 export default function UpHeader({ title, showProfile = true }: UpHeaderProps) {
@@ -7,7 +8,7 @@ export default function UpHeader({ title, showProfile = true }: UpHeaderProps) {
     <View style={styles.container}>
       <View style={styles.leftSide}>
         {showProfile && (
-          <TouchableOpacity style={styles.profilePict}>
+          <TouchableOpacity style={styles.profilePict} onPress={() => router.push("/profile/profile")}>
             <Image
               source={require("@/assets/images/Vita.png")}
               style={{ width: 40, height: 40, borderRadius: 45 / 2 }}

@@ -1,14 +1,14 @@
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { styles } from "./profile.style";
-import { useAvatarPicker } from "@/hooks/useAvatarPicker";
 import AvatarPicker from "@/components/AvatarPicker";
+import ListItem from "@/components/ListItem";
 import SectionCard from "@/components/SectionCard";
 import StatsRow from "@/components/StatsRow";
-import ListItem from "@/components/ListItem";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import TitleBack from "@/components/utils/TitleBack";
+import { useAvatarPicker } from "@/hooks/useAvatarPicker";
 import { NAV_ITEMS } from "@/styles/bottom-nav.styles";
 import { router } from "expo-router";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { styles } from "./profile.style";
 export default function Profile() {
   const { image, pickPhoto } = useAvatarPicker();
   const insets = useSafeAreaInsets();
@@ -22,14 +22,8 @@ export default function Profile() {
         ]}
       >
         <View style={styles.container}>
-          <View style={styles.titleContainer}>
-            <TouchableOpacity style={styles.arrowButton}>
-              <Image
-                source={require("@/assets/utilsIcon/arrow-left.png")}
-                style={styles.arrowImage}
-              />
-            </TouchableOpacity>
-            <Text style={styles.title}>My Profile</Text>
+          <View style={styles.header}>
+            <TitleBack title="Profile" />
           </View>
 
           <View style={styles.center}>
@@ -67,13 +61,13 @@ export default function Profile() {
             <ListItem
               title="Profile Settings"
               leftIcon={require("@/assets/images/settings-icon.png")}
-              onPress={() => router.replace("/profile/profileSettings")}
+              onPress={() => router.push("/profile/profileSettings")}
             />
             <ListItem
               title="Digital Biomarker"
               subtitle="Last sync 15/09/2025"
               leftIcon={require("@/assets/images/digital-bio-icon.png")}
-              onPress={() => {}}
+              onPress={() => router.push("/profile/digitalBiomarker")}
             />
             <ListItem
               title="Family Mode"
@@ -83,7 +77,7 @@ export default function Profile() {
             <ListItem
               title="Emergency Contact"
               leftIcon={require("@/assets/images/emergency-icon.png")}
-              onPress={() => router.replace("/profile/emergencyContact")}
+              onPress={() => router.push("/profile/emergencyContact")}
             />
             <ListItem
               title="Log Out"
