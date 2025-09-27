@@ -8,11 +8,13 @@ import { router } from "expo-router";
 import { styles } from "@/styles/profile/general-form.styles";
 import { useAvatarPicker } from "@/hooks/useAvatarPicker";
 import { useUserProfile } from "@/hooks/useUserProfile";
+import { useAuth } from "@/hooks/useAuth";
 
 
 export default function GeneralForm() {
     const { image, pickPhoto } = useAvatarPicker();
     const { data } = useUserProfile();
+    const { logout } = useAuth();
 
     return (
         <>
@@ -72,7 +74,7 @@ export default function GeneralForm() {
             <ListItem
               title="Log Out"
               leftIcon={require("@/assets/images/logout-icon.png")}
-              onPress={() => {}}
+              onPress={logout}
               danger
             />
           </View>
