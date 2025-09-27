@@ -2,8 +2,10 @@ import { StyleSheet } from "react-native";
 import { COLORS } from "@/constants/colors";
 
 export const styles = StyleSheet.create({
-  innerContainer: {
+  innerContainer: { 
+    flexDirection: "row",
     width: "100%",
+    alignItems: "center",
     borderWidth: 1,
     borderColor: COLORS.gray1,
     borderRadius: 8,
@@ -19,6 +21,7 @@ export const styles = StyleSheet.create({
     fontWeight: 500,
   },
   input: {
+    flex: 1,
     height: 45,
     fontSize: 14,
     color: COLORS.black,
