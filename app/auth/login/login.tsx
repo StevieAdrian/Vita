@@ -14,7 +14,7 @@ export default function Login() {
   return (
     <View style={styles.container}>
       <Image
-        source={require("../../assets/images/welcome-logo.png")}
+        source={require("@/assets/images/welcome-logo.png")}
         style={styles.welcomeImage}
       />
 
@@ -61,7 +61,7 @@ export default function Login() {
 
       <TouchableOpacity style={styles.googleButton} activeOpacity={0.7}>
         <Image
-          source={require("../../assets/images/google.png")}
+          source={require("@/assets/images/google.png")}
           style={styles.googleLogo}
         />
       </TouchableOpacity>
