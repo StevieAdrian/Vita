@@ -12,15 +12,42 @@ import { useAllergics } from "@/utils/allergicValidation";
 import FormLabel from "@/components/FormLabel";
 import { useUserProfile } from "@/hooks/useUserProfile"
 import Calender from "@/components/Calender";
+import PrimaryButtonColorForm from "@/components/utils/PrimaryButtonColorForm";
+import { useEffect, useState } from "react";
 
 export default function ProfileSettings() {
   const { image, pickPhoto } = useAvatarPicker();
   const insets = useSafeAreaInsets();
   const { data, setData, loading, saveProfile } = useUserProfile();
-  const { otherAllergics, setOtherAllergics } = useAllergics();
+  const [originalData, setOriginalData] = useState<any>(null);
+  const [hasInput, setHasInput] = useState(false);
 
   const handleChange = (field: string, value: string) => {
     setData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  useEffect(() => {
+    if (!loading && data && !originalData) {
+      setOriginalData({ ...data });
+    }
+  }, [loading, data, originalData]);
+
+  useEffect(() => {
+    if (originalData) {
+      const changed = isProfileChanged(data, originalData, image);
+      setHasInput(changed);
+    }
+  }, [data, originalData, image]);
+
+  useEffect(() => {
+    if (image) {
+      handleChange("avatarUrl", image);
+    }
+  }, [image]);
+  const handleSave = async () => {
+    await saveProfile();
+    setOriginalData({ ...data });
+    setHasInput(false);
   };
 
   if (loading) {
@@ -130,12 +157,31 @@ export default function ProfileSettings() {
             )}
           </View>
 
-          <TouchableOpacity style={styles.saveBtn} onPress={saveProfile}>
-            <Text style={styles.saveBtnText}>Save Changes</Text>
-          </TouchableOpacity>
+          <PrimaryButtonColorForm text="Save Changes" active={hasInput} onPress={handleSave} />
         </ScrollView>
 
       </View>
     </SafeAreaView>
   );
+}
+
+function isProfileChanged(current: any, original: any, currImage?: string | null) {
+  if (!current || !original) return false;
+
+  const fieldsToCheck = [
+    "firstName",
+    "lastName",
+    "phoneNumber",
+    "dateOfBirth",
+    "gender",
+    "bloodType",
+    "hasAllergics",
+    "allergics",
+    "avatarUrl",
+  ];
+
+  const formChanged = fieldsToCheck.some( (i) => current[i] !== original[i])
+  const avatarChanged = currImage !== null && currImage != original.avatarUrl;
+
+  return formChanged || avatarChanged;
 }
