@@ -1,0 +1,76 @@
+import { StyleSheet } from "react-native";
+import { COLORS } from "../constants/colors";
+
+export const styles = StyleSheet.create({
+  container: {
+    paddingVertical: 16,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: COLORS.black,
+    marginBottom: 12,
+  },
+  timesWrapper: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: 12,
+  },
+  timeInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: COLORS.white,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: COLORS.gray2,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    minWidth: 120,
+    maxWidth: 140,
+    position: "relative",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  timeInputField: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: "500",
+    color: COLORS.black,
+    paddingRight: 30,
+    textAlign: "left",
+  },
+  clockIcon: {
+    position: "absolute",
+    right: 16,
+  },
+  removeTimeButton: {
+    position: "absolute",
+    right: -8,
+    top: -8,
+    backgroundColor: COLORS.red,
+    borderRadius: 12,
+    width: 24,
+    height: 24,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  addTimeButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "white",
+    width: 50,
+    height: 50,
+  },
+  addIcon: {
+    color: COLORS.primary,
+  },
+});

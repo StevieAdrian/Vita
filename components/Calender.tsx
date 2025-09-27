@@ -92,7 +92,7 @@ export default function Calender({ value, onSelectDate }: CalenderProps) {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Select Date of Birth</Text>
+              <Text style={styles.modalTitle}>Select Date</Text>
               <TouchableOpacity
                 onPress={() => {
                   setShowCalendar(false);
