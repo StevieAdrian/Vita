@@ -1,8 +1,11 @@
 import { COLORS } from "@/constants/colors";
-import { styles, timePickerStyles } from "@/styles/meditrack/drug-time.styles";
+import {
+  styles,
+  timePickerStyles,
+} from "@/styles/meditrack/appoinment-time.styles";
 import { formatTime } from "@/utils/appointment-cartegoryValidation";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, Modal, Text, TouchableOpacity, View } from "react-native";
 
 interface TimePickerProps {
@@ -23,7 +26,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
   const [selectedHour, setSelectedHour] = useState(12);
   const [selectedMinute, setSelectedMinute] = useState(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (value) {
       const [hours, minutes] = value.split(":");
       setSelectedHour(parseInt(hours, 10));
@@ -124,93 +127,78 @@ const TimePicker: React.FC<TimePickerProps> = ({
   );
 };
 
-interface TimeDrugProps {
-  onTimesChange?: (times: string[]) => void;
-  initialTimes?: string[];
+interface AppointmentTimeRangeProps {
+  onTimeRangeChange: (startTime: string, endTime: string) => void;
+  initialStartTime?: string;
+  initialEndTime?: string;
 }
 
-const TimeDrug: React.FC<TimeDrugProps> = ({
-  onTimesChange,
-  initialTimes = ["12:00"],
+const AppointmentTimeRange: React.FC<AppointmentTimeRangeProps> = ({
+  onTimeRangeChange,
+  initialStartTime = "12:00",
+  initialEndTime = "13:00",
 }) => {
-  const [times, setTimes] = useState<string[]>(initialTimes);
-  const [showTimePickers, setShowTimePickers] = useState<boolean[]>(
-    initialTimes.map(() => false)
-  );
+  const [startTime, setStartTime] = useState(initialStartTime);
+  const [endTime, setEndTime] = useState(initialEndTime);
+  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
 
-  const handleTimeChange = (time: string, index: number) => {
-    const newTimes = [...times];
-    newTimes[index] = time;
-    setTimes(newTimes);
-    onTimesChange?.(newTimes);
+  useEffect(() => {
+    onTimeRangeChange(startTime, endTime);
+  }, [startTime, endTime, onTimeRangeChange]);
+
+  const handleStartTimeChange = (time: string) => {
+    setStartTime(time);
+    setShowStartTimePicker(false);
   };
 
-  const handleShowTimePicker = (index: number, show: boolean) => {
-    const newShowTimePickers = [...showTimePickers];
-    newShowTimePickers[index] = show;
-    setShowTimePickers(newShowTimePickers);
-  };
-
-  const handleAddMoreTime = () => {
-    const newTimes = [...times, "12:00"];
-    setTimes(newTimes);
-    setShowTimePickers([...showTimePickers, false]);
-    onTimesChange?.(newTimes);
-  };
-
-  const handleRemoveTime = (index: number) => {
-    if (times.length > 1) {
-      const newTimes = times.filter((_, i) => i !== index);
-      const newShowTimePickers = showTimePickers.filter((_, i) => i !== index);
-      setTimes(newTimes);
-      setShowTimePickers(newShowTimePickers);
-      onTimesChange?.(newTimes);
-    }
+  const handleEndTimeChange = (time: string) => {
+    setEndTime(time);
+    setShowEndTimePicker(false);
   };
 
   return (
-    <View style={styles.container}>
+    <View>
       <Text style={styles.label}>What Time?</Text>
+      <View style={styles.timeRangeContainer}>
+        <TouchableOpacity
+          style={styles.timeButton}
+          onPress={() => setShowStartTimePicker(true)}
+        >
+          <Text style={styles.timeText}>{formatTime(startTime)}</Text>
+          <Ionicons name="time-outline" size={20} color={COLORS.black} />
+        </TouchableOpacity>
 
-      <View style={styles.timesWrapper}>
-        {times.map((time, index) => (
-          <View key={index} style={styles.timeInputContainer}>
-            <TouchableOpacity
-              style={styles.timeButton}
-              onPress={() => handleShowTimePicker(index, true)}
-            >
-              <Text style={styles.timeText}>{formatTime(time)}</Text>
-              <Ionicons name="time-outline" size={20} color={COLORS.black} />
-            </TouchableOpacity>
-
-            {times.length > 1 && (
-              <TouchableOpacity
-                style={styles.removeTimeButton}
-                onPress={() => handleRemoveTime(index)}
-              >
-                <Ionicons name="close" size={14} color="white" />
-              </TouchableOpacity>
-            )}
-
-            <TimePicker
-              value={time}
-              onTimeChange={(newTime) => handleTimeChange(newTime, index)}
-              isVisible={showTimePickers[index]}
-              onClose={() => handleShowTimePicker(index, false)}
-              title={`Select Time ${index + 1}`}
-            />
-          </View>
-        ))}
+        <View style={styles.timeSeparator}>
+          <View style={styles.separatorLine} />
+        </View>
 
         <TouchableOpacity
-          style={styles.addTimeButton}
-          onPress={handleAddMoreTime}
+          style={styles.timeButton}
+          onPress={() => setShowEndTimePicker(true)}
         >
-          <Ionicons name="add" size={24} style={styles.addIcon} />
+          <Text style={styles.timeText}>{formatTime(endTime)}</Text>
+          <Ionicons name="time-outline" size={20} color={COLORS.black} />
         </TouchableOpacity>
       </View>
+
+      <TimePicker
+        value={startTime}
+        onTimeChange={handleStartTimeChange}
+        isVisible={showStartTimePicker}
+        onClose={() => setShowStartTimePicker(false)}
+        title="Select Start Time"
+      />
+
+      <TimePicker
+        value={endTime}
+        onTimeChange={handleEndTimeChange}
+        isVisible={showEndTimePicker}
+        onClose={() => setShowEndTimePicker(false)}
+        title="Select End Time"
+      />
     </View>
   );
 };
 
-export default TimeDrug;
+export default AppointmentTimeRange;

@@ -1,4 +1,4 @@
-import { styles } from "@/styles/popup-form.styles";
+import { styles } from "@/styles/meditrack/popup-form.styles";
 import React from "react";
 import { Ionicons } from "react-native-vector-icons";
 import { Modal, Text, TouchableOpacity, View } from "react-native";
