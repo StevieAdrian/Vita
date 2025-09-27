@@ -1,6 +1,6 @@
+import type { DrugReminder } from "@/constants/drugs";
 import type React from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import type { DrugReminder } from "@/constants/drugs";
 
 interface MedicineReminderCardProps {
   isVisible: boolean;
@@ -18,7 +18,6 @@ const MedicineReminderCard: React.FC<MedicineReminderCardProps> = ({
   reminder,
 }) => {
   const getCategoryIcon = (category: string) => {
-    // Placeholder for actual icons. In a real app, you'd use a library like react-native-vector-icons
     switch (category) {
       case "pills-tablet":
         return "💊";
@@ -151,7 +150,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: "#E0F2F7", // Light blue background
+    backgroundColor: "#E0F2F7",
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 10,
@@ -165,7 +164,7 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
   },
   card: {
-    backgroundColor: "#F0F4F7", // Light gray background
+    backgroundColor: "#F0F4F7",
     borderRadius: 10,
     padding: 15,
     width: "100%",
@@ -186,7 +185,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   timeBubble: {
-    backgroundColor: "#D0E0F0", // Slightly darker blue
+    backgroundColor: "#D0E0F0",
     borderRadius: 8,
     paddingVertical: 5,
     paddingHorizontal: 10,
