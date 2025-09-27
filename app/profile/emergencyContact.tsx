@@ -5,15 +5,18 @@ import { NAV_ITEMS } from "@/styles/bottom-nav.styles";
 import TitleBack from "@/components/utils/TitleBack";
 import InputField from "@/components/InputField";
 import { useUserProfile } from "@/hooks/useUserProfile";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Relation, RELATION_OPTIONS } from "@/constants/relations";
 import { COLORS } from "@/constants/colors";
 import Icon from "react-native-vector-icons/Feather";
+import PrimaryButtonColorForm from "@/components/utils/PrimaryButtonColorForm";
 
 export default function EmergencyContact() {
     const insets = useSafeAreaInsets();
     const { data, setData, loading, saveProfile } = useUserProfile();
     const [showRelationsDropdown, setShowRelationsDropdown] = useState(false);
+    const [hasInput, setHasInput] = useState(false);
+    const [originalData, setOriginalData] = useState<any>(null);
 
     const contact = data.emergencyContacts[0] || { name: "", phoneNumber: "", relation: "" };
     const handleChange = (field: keyof typeof contact, value: string) => {
@@ -30,6 +33,25 @@ export default function EmergencyContact() {
             emergencyContacts: [{ ...contact, relation }],
         }));
         setShowRelationsDropdown(false);
+    };
+
+    useEffect(() => {
+        if (!loading && data && !originalData) {
+            setOriginalData({ ...data });
+        }   
+    }, [loading, data, originalData]);
+
+    useEffect(() => {
+        if (originalData) {
+            const changed = isProfileChanged(data, originalData);
+            setHasInput(changed);
+        }
+    }, [data, originalData]);
+
+    const handleSave = async () => {
+        await saveProfile();
+        setOriginalData({ ...data });
+        setHasInput(false);
     };
     
     return (
@@ -78,11 +100,22 @@ export default function EmergencyContact() {
                     </View>
 
                     <InputField label="Phone Number" value={contact.phoneNumber} keyboardType="phone-pad" required onChangeText={(text) => handleChange("phoneNumber", text)} />
-                    <TouchableOpacity style={styles.saveBtn} onPress={saveProfile}>
-                        <Text style={styles.saveBtnText}>Save Changes</Text>
-                    </TouchableOpacity>
+                    <PrimaryButtonColorForm text="Save Changes" active={hasInput} onPress={handleSave} />
                 </ScrollView>
             </View>
         </SafeAreaView>
     )
+}
+
+function isProfileChanged(current: any, original: any) {
+  if (!current || !original) return false;
+
+    const currContact = current.emergencyContacts?.[0] || {};
+    const originalContact = original.emergencyContacts?.[0] || {};
+
+    const fieldsToCheck = ["name", "phoneNumber", "relation"];
+
+    return fieldsToCheck.some(
+        (field) => currContact[field] !== originalContact[field]
+    );
 }
