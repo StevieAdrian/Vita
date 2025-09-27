@@ -9,8 +9,11 @@ import { router } from "expo-router";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { styles } from "./profile.style";
+import { useUserProfile } from "@/hooks/useUserProfile";
+
 export default function Profile() {
   const { image, pickPhoto } = useAvatarPicker();
+  const { data } = useUserProfile();
   const insets = useSafeAreaInsets();
 
   return (
@@ -28,12 +31,12 @@ export default function Profile() {
 
           <View style={styles.center}>
             <AvatarPicker
-              imageUrl={image ?? undefined}
+              imageUrl={image || data.avatarUrl || undefined}
               onChangeImage={() => pickPhoto("gallery")}
               size={120}
             />
-            <Text style={styles.name}>Alicia Felisha</Text>
-            <Text style={styles.username}>aliciafelishaa</Text>
+            <Text style={styles.name}>{data.firstName} {data.lastName}</Text>
+            <Text style={styles.username}>{data.username}</Text>
           </View>
 
           <SectionCard
