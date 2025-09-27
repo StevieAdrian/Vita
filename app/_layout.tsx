@@ -1,14 +1,23 @@
-import { Slot, SplashScreen, Stack, usePathname, useRouter } from "expo-router";
-import { AuthContext } from "@/context/AuthContext";
-import { useEffect, useState } from "react";
-import { NAV_ITEMS } from "@/constants/navItems";
-import { View } from "react-native";
-import { useFonts } from "expo-font";
 import BottomNav from "@/components/BottomNav";
-import { useAuthState } from "@/hooks/useAuthState";
 import { Fonts } from "@/constants/fonts";
+import { NAV_ITEMS } from "@/constants/navItems";
+import { AuthContext } from "@/context/AuthContext";
+import { useAuthState } from "@/hooks/useAuthState";
+import { useFonts } from "expo-font";
+import { Slot, SplashScreen, usePathname, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import { View } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
+
+function shouldShowBottomNav(user: any, pathname: string): boolean {
+  if (!user) return false;
+
+  const hiddenPatterns = [/^\/auth/, /^\/hcd\/diary/];
+
+  return !hiddenPatterns.some((regex) => regex.test(pathname));
+}
+
 function RootContent() {
   const { user, initializing } = useAuthState();
   const router = useRouter();
@@ -39,12 +48,12 @@ function RootContent() {
   return (
     <View style={{ flex: 1 }}>
       <Slot />
-        {user && pathname !== "/" && !pathname.startsWith("/auth/signup") && (
-          <BottomNav
-            items={NAV_ITEMS}
-            activeId={activeTab}
-            onSelect={handleSelect}
-          />
+      {shouldShowBottomNav(user, pathname) && (
+        <BottomNav
+          items={NAV_ITEMS}
+          activeId={activeTab}
+          onSelect={handleSelect}
+        />
       )}
     </View>
   );

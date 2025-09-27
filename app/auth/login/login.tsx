@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./login.styles";
 
-export default function login() {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { signIn, loading } = useAuth();
@@ -14,7 +14,7 @@ export default function login() {
   return (
     <View style={styles.container}>
       <Image
-        source={require("../../assets/images/welcome-logo.png")}
+        source={require("@/assets/images/welcome-logo.png")}
         style={styles.welcomeImage}
       />
 
@@ -47,7 +47,7 @@ export default function login() {
           Haven't create an account?{" "}
           <Text
             style={styles.signupLink}
-            onPress={() => router.replace("/auth/signup/signup")}
+            onPress={() => router.push("/auth/signup/signup")}
           >
             Sign Up
           </Text>
@@ -61,7 +61,7 @@ export default function login() {
 
       <TouchableOpacity style={styles.googleButton} activeOpacity={0.7}>
         <Image
-          source={require("../../assets/images/google.png")}
+          source={require("@/assets/images/google.png")}
           style={styles.googleLogo}
         />
       </TouchableOpacity>

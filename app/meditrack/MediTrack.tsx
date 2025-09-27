@@ -5,6 +5,10 @@ import { ReminderCard } from "@/components/Reminder";
 import { SectionHeader } from "@/components/meditrack-forms/TextMediTrack";
 import type { Appointment } from "@/constants/appointment";
 
+import {
+  initialAppointments,
+  initialReminders,
+} from "@/./constants/initialData";
 import type { Reminder, ReminderCategory } from "@/constants/reminder";
 import type React from "react";
 import { useCallback, useMemo, useState } from "react";
@@ -20,73 +24,6 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { COLORS } from "../../constants/colors";
 import { styles } from "./medistrack.style";
-
-// Initial Data
-const initialReminders: Reminder[] = [
-  {
-    id: "rem-1",
-    title: "Panadol 20mg",
-    description: "Pain relief",
-    timeLabel: "Today, 12:00 PM",
-    completed: false,
-    category: "drug",
-  },
-  {
-    id: "rem-2",
-    title: "Panadol 20mg",
-    description: "Pain relief",
-    timeLabel: "Today, 20:00 PM",
-    completed: false,
-    category: "drug",
-  },
-  {
-    id: "rem-3",
-    title: "Control Checkup",
-    description: "Dr. Veni",
-    timeLabel: "Tomorrow, 13:00 PM",
-    completed: false,
-    category: "appointment",
-  },
-];
-
-const initialAppointments: Appointment[] = [
-  {
-    id: "app-1",
-    title: "Control Checkup",
-    provider: "Dr. Veni",
-    location: "RS Brawijaya",
-    dateLabel: "Sept, 16",
-    timeLabel: "13:00 PM",
-    status: "upcoming",
-  },
-  {
-    id: "app-2",
-    title: "Control Checkup",
-    provider: "Dr. Veni",
-    location: "RS Brawijaya",
-    dateLabel: "Sept, 16",
-    timeLabel: "13:00 PM",
-    status: "upcoming",
-  },
-  {
-    id: "app-3",
-    title: "Control Checkup",
-    provider: "Sept, 10 (13:00 PM)",
-    location: "RS Brawijaya",
-    dateLabel: "Sept, 1",
-    timeLabel: "15:00 PM",
-    status: "history",
-  },
-  {
-    id: "app-4",
-    title: "Consultation",
-    provider: "Sept, 9 (13:00 PM)",
-    location: "RS Brawijaya",
-    dateLabel: "Sept, 1",
-    timeLabel: "15:00 PM",
-    status: "history",
-  },
-];
 
 const ScheduleScreen: React.FC = () => {
   const insets = useSafeAreaInsets();

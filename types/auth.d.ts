@@ -23,14 +23,31 @@ export interface SignupData {
     avatarUrl?: string
 }
 
+export interface EmergencyContact {
+    name: string;
+    phoneNumber: string;
+    relation: string;
+}
+
 export interface UserProfile {
-    uid: string;
+    username: string;
     firstName: string;
     lastName: string;
-    username: string;
     email: string;
     phoneNumber: string;
     dateOfBirth: string;
     gender: string;
-    createdAt: Date;
+    bloodType: bloodType | "";
+    hasAllergics: string;
+    allergics?: string;
+    allergies: string[]; 
+    avatarUrl?: string;
+    emergencyContacts: EmergencyContact[];
 }
+
+export interface ChangePasswordValues {
+  oldPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
+export type PasswordErrors = Partial<Record<keyof ChangePasswordValues, string>>;

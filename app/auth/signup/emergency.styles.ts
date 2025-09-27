@@ -3,9 +3,9 @@ import { Dimensions, StyleSheet } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
-const scaleWidth = (size) => (width / 375) * size;
-const scaleHeight = (size) => (height / 812) * size;
-const moderateScale = (size, factor = 0.5) =>
+const scaleWidth = (size: number) => (width / 375) * size;
+const scaleHeight = (size: number) => (height / 812) * size;
+const moderateScale = (size: number, factor = 0.5) =>
   size + (scaleWidth(size) - size) * factor;
 
 export const styles = StyleSheet.create({

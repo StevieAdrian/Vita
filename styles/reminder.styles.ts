@@ -3,40 +3,40 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
-    borderRadius: 16,
-    padding: 16,
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 12,
+    marginBottom: 5,
   },
   leftColumn: {
     flexDirection: "row",
-    alignItems: "flex-start",
+    alignItems: "center",
     gap: 12,
     flex: 1,
   } as const,
-  iconWrapper: {
-    backgroundColor: COLORS.white,
-    borderRadius: 12,
-    padding: 8,
-  },
+
   title: {
     color: COLORS.black,
-    fontSize: 15,
-    fontFamily: "Inter-SemiBold",
+    fontSize: 16,
+    fontFamily: "Inter-Medium",
   },
   subtitle: {
-    color: "rgba(31, 41, 55, 0.7)",
-    fontSize: 13,
+    color: COLORS.black,
+    fontSize: 12,
     marginTop: 2,
     fontFamily: "Inter-Regular",
   },
   time: {
     color: COLORS.black,
-    fontSize: 13,
+    fontSize: 12,
     fontFamily: "Inter-Medium",
-    marginTop: 6,
+    marginTop: 2,
+  },
+  icon: {
+    transform: [{ rotate: "180deg" }],
   },
   checkbox: {
     width: 32,
