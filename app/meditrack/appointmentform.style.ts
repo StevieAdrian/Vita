@@ -75,13 +75,6 @@ export const styles = StyleSheet.create({
     marginBottom: 8,
     fontFamily: "Inter-Medium",
   },
-  inputLabel: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: COLORS.black,
-    marginBottom: 8,
-    fontFamily: "Inter-Medium",
-  },
   dobWrapper: {
     width: "100%",
     position: "relative",
@@ -96,6 +89,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 14,
     backgroundColor: COLORS.white,
+    minHeight: 48,
   },
   inputText: {
     fontSize: 14,
@@ -103,7 +97,7 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   placeholderText: {
-    color: "COLORS.gray2",
+    color: COLORS.gray2,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -162,5 +156,68 @@ export const styles = StyleSheet.create({
     color: COLORS.black,
     textAlignVertical: "top",
     minHeight: 60,
+  },
+  locationContainer: {
+    borderWidth: 1,
+    borderColor: COLORS.gray2,
+    borderRadius: 12,
+    backgroundColor: COLORS.white,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    minHeight: 60,
+  },
+  locationInput: {
+    fontSize: 14,
+    color: COLORS.black,
+    textAlignVertical: "top",
+    minHeight: 40,
+  },
+  keyboardAvoid: {
+    flex: 1,
+  },
+  errorContainer: {
+    backgroundColor: "#FFEBEE",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+    borderLeftWidth: 4,
+    borderLeftColor: COLORS.red,
+  },
+  errorText: {
+    color: COLORS.red,
+    fontWeight: "600",
+    marginBottom: 4,
+  },
+  errorItem: {
+    color: COLORS.red,
+    fontSize: 12,
+    marginLeft: 8,
+  },
+  inputError: {
+    borderColor: COLORS.red,
+    borderWidth: 1,
+  },
+  submitButtonActive: {
+    backgroundColor: COLORS.primary,
+  },
+  submitButtonDisabled: {
+    backgroundColor: COLORS.primary3rd,
+  },
+  scrollView: {
+    position: "absolute",
+    top: 60,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    paddingBottom: 200,
+    paddingHorizontal: 16,
+  },
+  categoryText: {
+    fontSize: 14, 
+    color: COLORS.black,
+    flex: 1,
   },
 });

@@ -1,6 +1,6 @@
 import type { Appointment } from "@/constants/appointment";
 import { COLORS } from "@/constants/colors";
-import { styles } from "@/styles/appointment-card.styles";
+import { styles } from "@/styles/meditrack/appointment-card.styles";
 import { Ionicons } from "@expo/vector-icons";
 import type React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
