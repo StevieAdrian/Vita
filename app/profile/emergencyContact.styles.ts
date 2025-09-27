@@ -101,16 +101,4 @@ export const styles = StyleSheet.create({
         fontSize: moderateScale(15),
         color: COLORS.black,
     },
-    saveBtn: {
-        marginTop: 30,
-        backgroundColor: "#4a90e2", 
-        paddingVertical: 14,
-        borderRadius: 8,
-        alignItems: "center",
-    },
-    saveBtnText: {
-        color: "#fff",
-        fontWeight: "600",
-        fontSize: 16,
-    },
 })
