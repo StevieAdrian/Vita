@@ -1,4 +1,4 @@
-import { styles } from "@/styles/text-meditrack.styles";
+import { styles } from "@/styles/meditrack/text-meditrack.styles";
 import type React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
