@@ -1,5 +1,5 @@
 import { REPEAT_DAYS } from "@/constants/drugs";
-import { styles } from "@/styles/drug-repeat.styles";
+import { styles } from "@/styles/meditrack/drug-repeat.styles";
 import { toggleDaySelection } from "@/utils/drug-repeatValidation";
 import type React from "react";
 import { useEffect, useState } from "react";

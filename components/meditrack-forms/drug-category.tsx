@@ -1,5 +1,5 @@
 import { DRUG_CATEGORIES } from "@/constants/drugs";
-import { styles } from "@/styles/drug-category.styles";
+import { styles } from "@/styles/meditrack/drug-category.styles";
 import { toggleCategorySelection } from "@/utils/drug-categoryValidation";
 import type React from "react";
 import { useEffect, useState } from "react";

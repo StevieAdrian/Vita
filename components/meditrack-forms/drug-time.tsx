@@ -1,7 +1,128 @@
-import { styles } from "@/styles/drug-time.styles";
+import { COLORS } from "@/constants/colors";
+import { styles, timePickerStyles } from "@/styles/meditrack/drug-time.styles";
+import { formatTime } from "@/utils/appointment-cartegoryValidation";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { FlatList, Modal, Text, TouchableOpacity, View } from "react-native";
+
+interface TimePickerProps {
+  value: string;
+  onTimeChange: (time: string) => void;
+  isVisible: boolean;
+  onClose: () => void;
+  title: string;
+}
+
+const TimePicker: React.FC<TimePickerProps> = ({
+  value,
+  onTimeChange,
+  isVisible,
+  onClose,
+  title,
+}) => {
+  const [selectedHour, setSelectedHour] = useState(12);
+  const [selectedMinute, setSelectedMinute] = useState(0);
+
+  React.useEffect(() => {
+    if (value) {
+      const [hours, minutes] = value.split(":");
+      setSelectedHour(parseInt(hours, 10));
+      setSelectedMinute(parseInt(minutes, 10));
+    }
+  }, [value, isVisible]);
+
+  const handleConfirm = () => {
+    const timeString = `${selectedHour
+      .toString()
+      .padStart(2, "0")}:${selectedMinute.toString().padStart(2, "0")}`;
+    onTimeChange(timeString);
+    onClose();
+  };
+
+  const hours = Array.from({ length: 24 }, (_, i) => i);
+  const minutes = Array.from({ length: 60 }, (_, i) => i);
+
+  return (
+    <Modal visible={isVisible} transparent animationType="slide">
+      <View style={timePickerStyles.overlay}>
+        <View style={timePickerStyles.container}>
+          <View style={timePickerStyles.header}>
+            <Text style={timePickerStyles.title}>{title}</Text>
+            <TouchableOpacity onPress={onClose}>
+              <Ionicons name="close" size={24} color={COLORS.black} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={timePickerStyles.pickerContainer}>
+            <View style={timePickerStyles.picker}>
+              <Text style={timePickerStyles.pickerLabel}>Hour</Text>
+              <FlatList
+                data={hours}
+                keyExtractor={(item) => item.toString()}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={[
+                      timePickerStyles.pickerItem,
+                      selectedHour === item && timePickerStyles.selectedItem,
+                    ]}
+                    onPress={() => setSelectedHour(item)}
+                  >
+                    <Text
+                      style={[
+                        timePickerStyles.pickerText,
+                        selectedHour === item && timePickerStyles.selectedText,
+                      ]}
+                    >
+                      {item.toString().padStart(2, "0")}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+                style={timePickerStyles.scrollableList}
+                showsVerticalScrollIndicator={false}
+              />
+            </View>
+
+            <View style={timePickerStyles.picker}>
+              <Text style={timePickerStyles.pickerLabel}>Minute</Text>
+              <FlatList
+                data={minutes.filter((m) => m % 5 === 0)}
+                keyExtractor={(item) => item.toString()}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={[
+                      timePickerStyles.pickerItem,
+                      selectedMinute === item && timePickerStyles.selectedItem,
+                    ]}
+                    onPress={() => setSelectedMinute(item)}
+                  >
+                    <Text
+                      style={[
+                        timePickerStyles.pickerText,
+                        selectedMinute === item &&
+                          timePickerStyles.selectedText,
+                      ]}
+                    >
+                      {item.toString().padStart(2, "0")}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+                style={timePickerStyles.scrollableList}
+                showsVerticalScrollIndicator={false}
+              />
+            </View>
+          </View>
+
+          <TouchableOpacity
+            style={timePickerStyles.confirmButton}
+            onPress={handleConfirm}
+          >
+            <Text style={timePickerStyles.confirmText}>Confirm</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  );
+};
 
 interface TimeDrugProps {
   onTimesChange?: (times: string[]) => void;
@@ -13,62 +134,36 @@ const TimeDrug: React.FC<TimeDrugProps> = ({
   initialTimes = ["12:00"],
 }) => {
   const [times, setTimes] = useState<string[]>(initialTimes);
+  const [showTimePickers, setShowTimePickers] = useState<boolean[]>(
+    initialTimes.map(() => false)
+  );
 
-  const handleTimeChange = (text: string, index: number) => {
-    // Remove any non-digit characters except colon
-    const cleanedText = text.replace(/[^\d:]/g, "");
-
-    // Auto-format: add colon after 2 digits
-    let formattedText = cleanedText;
-
-    if (cleanedText.length === 2 && !cleanedText.includes(":")) {
-      formattedText = cleanedText + ":";
-    }
-
-    // Prevent invalid formats (more than one colon, more than 5 chars total)
-    if (formattedText.split(":").length > 2 || formattedText.length > 5) {
-      return;
-    }
-
-    // Validate hours and minutes if complete
-    if (formattedText.includes(":")) {
-      const parts = formattedText.split(":");
-      const hours = parseInt(parts[0]);
-      const minutes = parts[1] ? parseInt(parts[1]) : 0;
-
-      // Check if hours are valid (0-23)
-      if (parts[0].length > 0 && (hours > 23 || hours < 0)) {
-        return;
-      }
-
-      // Check if minutes are valid (0-59) - only if minutes part has content
-      if (parts[1] && parts[1].length > 0 && (minutes > 59 || minutes < 0)) {
-        return;
-      }
-
-      // Don't allow minutes to have more than 2 digits
-      if (parts[1] && parts[1].length > 2) {
-        return;
-      }
-    }
-
-    // Update state
+  const handleTimeChange = (time: string, index: number) => {
     const newTimes = [...times];
-    newTimes[index] = formattedText;
+    newTimes[index] = time;
     setTimes(newTimes);
     onTimesChange?.(newTimes);
+  };
+
+  const handleShowTimePicker = (index: number, show: boolean) => {
+    const newShowTimePickers = [...showTimePickers];
+    newShowTimePickers[index] = show;
+    setShowTimePickers(newShowTimePickers);
   };
 
   const handleAddMoreTime = () => {
     const newTimes = [...times, "12:00"];
     setTimes(newTimes);
+    setShowTimePickers([...showTimePickers, false]);
     onTimesChange?.(newTimes);
   };
 
   const handleRemoveTime = (index: number) => {
     if (times.length > 1) {
       const newTimes = times.filter((_, i) => i !== index);
+      const newShowTimePickers = showTimePickers.filter((_, i) => i !== index);
       setTimes(newTimes);
+      setShowTimePickers(newShowTimePickers);
       onTimesChange?.(newTimes);
     }
   };
@@ -80,20 +175,14 @@ const TimeDrug: React.FC<TimeDrugProps> = ({
       <View style={styles.timesWrapper}>
         {times.map((time, index) => (
           <View key={index} style={styles.timeInputContainer}>
-            <TextInput
-              style={styles.timeInputField}
-              value={time}
-              onChangeText={(text) => handleTimeChange(text, index)}
-              placeholder="12:00"
-              keyboardType="numeric"
-              maxLength={5}
-            />
-            <Ionicons
-              name="time-outline"
-              size={18}
-              color="#8E8E93"
-              style={styles.clockIcon}
-            />
+            <TouchableOpacity
+              style={styles.timeButton}
+              onPress={() => handleShowTimePicker(index, true)}
+            >
+              <Text style={styles.timeText}>{formatTime(time)}</Text>
+              <Ionicons name="time-outline" size={20} color={COLORS.black} />
+            </TouchableOpacity>
+
             {times.length > 1 && (
               <TouchableOpacity
                 style={styles.removeTimeButton}
@@ -102,6 +191,14 @@ const TimeDrug: React.FC<TimeDrugProps> = ({
                 <Ionicons name="close" size={14} color="white" />
               </TouchableOpacity>
             )}
+
+            <TimePicker
+              value={time}
+              onTimeChange={(newTime) => handleTimeChange(newTime, index)}
+              isVisible={showTimePickers[index]}
+              onClose={() => handleShowTimePicker(index, false)}
+              title={`Select Time ${index + 1}`}
+            />
           </View>
         ))}
 
