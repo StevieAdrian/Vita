@@ -44,3 +44,10 @@ export interface UserProfile {
     avatarUrl?: string;
     emergencyContacts: EmergencyContact[];
 }
+
+export interface ChangePasswordValues {
+  oldPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
+export type PasswordErrors = Partial<Record<keyof ChangePasswordValues, string>>;
