@@ -9,7 +9,6 @@ import GeneralForm from "@/components/profile/GeneralForm";
 import PasswordForm from "@/components/profile/PasswordForm";
 
 export default function Profile() {
-
   const [activeTab, setActiveTab] = useState<"general" | "password">("general");
   const insets = useSafeAreaInsets();
 
