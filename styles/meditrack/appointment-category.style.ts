@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { COLORS } from "../constants/colors";
+import { COLORS } from "../../constants/colors";
 
 export const styles = StyleSheet.create({
   optionsContainer: {
@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     height: 24,
     width: 24,
-    borderRadius: 4, 
+    borderRadius: 4,
     borderColor: COLORS.gray2,
   },
   checkmark: {
