@@ -138,6 +138,7 @@ const DrugForm: React.FC<DrugFormProps> = ({
                 onChangeText={setDate}
                 editable={false}
                 placeholderTextColor={COLORS.gray2}
+                style={styles.inputLabel}
               />
               <Calender value={date} onSelectDate={setDate} />
             </View>
@@ -193,7 +194,6 @@ const DrugForm: React.FC<DrugFormProps> = ({
             </TouchableOpacity>
           </View>
 
-          {/* INI KALAU DH MASUK DB -> BARU BUAT MANGGIL EDIT DATA FORM */}
           <View style={styles.buttonContainer}>
             {isEditMode && onDelete && (
               <TouchableOpacity

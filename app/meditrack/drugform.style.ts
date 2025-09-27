@@ -75,6 +75,13 @@ export const styles = StyleSheet.create({
     marginBottom: 8,
     fontFamily: "Inter-Medium",
   },
+  inputLabel: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: COLORS.black,
+    marginBottom: 8,
+    fontFamily: "Inter-Medium",
+  },
   dobWrapper: {
     width: "100%",
     position: "relative",
