@@ -44,6 +44,7 @@ export default function ProfileSettings() {
       handleChange("avatarUrl", image);
     }
   }, [image]);
+  
   const handleSave = async () => {
     await saveProfile();
     setOriginalData({ ...data });

@@ -3,6 +3,7 @@ import UpHeader from "@/components/hcd/UpHeader";
 import { ReminderCard } from "@/components/Reminder";
 import { Reminder } from "@/constants/reminder";
 import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
+import { useUserProfile } from "@/hooks/useUserProfile";
 import { NAV_ITEMS } from "@/styles/bottom-nav.styles";
 import { styles } from "@/styles/hcd/dashboard.style";
 import { useCallback, useState } from "react";
@@ -19,6 +20,7 @@ export default function DashboardHome() {
   const datePickerStyle = useDatePickerStyles();
   const [selected, setSelected] = useState<DateType>();
   const [reminders, setReminders] = useState<Reminder[]>(initialReminders);
+  const { data } = useUserProfile();
 
   const handleToggleReminder = useCallback((id: string) => {
     setReminders((prev) =>
@@ -43,7 +45,7 @@ export default function DashboardHome() {
         <View>
           <View style={styles.greetingsContainer}>
             <Text style={styles.greetingsBlue}>Hey, </Text>
-            <Text style={styles.greetings}>Alicia Felisha!</Text>
+            <Text style={styles.greetings}>{data.firstName} {data.lastName}!</Text>
           </View>
 
           <View style={styles.dateBg}>
