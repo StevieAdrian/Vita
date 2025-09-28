@@ -5,10 +5,12 @@ import { styles } from "./familyMode.styles";
 import UpHeader from "@/components/hcd/UpHeader";
 import { router } from "expo-router";
 import { useFamilyMembers } from "@/hooks/useFamilyMembers";
+import { useIncomingRequests } from "@/hooks/useIncomingRequest";
 
 export default function FamilyMode() {
     const insets = useSafeAreaInsets();
     const { members, loading } = useFamilyMembers();
+    const { count } = useIncomingRequests();
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -23,7 +25,7 @@ export default function FamilyMode() {
                 <TouchableOpacity style={styles.requestContainer} onPress={() => router.push("/family-mode/requestList")}>
                     <View>
                         <Text style={styles.requestTitle}>Request List</Text>
-                        <Text style={styles.requestSubtitle}>2 Request</Text>
+                        <Text style={styles.requestSubtitle}>{count} Request(s)</Text>
                     </View>
                     <Image source={require("@/assets/utilsIcon/chevron-right-black.png")} style={styles.chevron} />
                 </TouchableOpacity>
