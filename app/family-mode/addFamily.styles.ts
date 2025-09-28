@@ -82,8 +82,8 @@ export const styles = StyleSheet.create({
         maxHeight: scaleHeight(200),
     },
     dropdownOption: {
-        paddingHorizontal: scaleWidth(10),
-        paddingVertical: scaleHeight(12),
+        paddingHorizontal: 10,
+        paddingVertical: 12,
         borderBottomWidth: 1,
         borderBottomColor: COLORS.primary5th,
     },

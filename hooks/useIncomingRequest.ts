@@ -1,13 +1,14 @@
+import { collection, DocumentData, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../config/firebaseConfig";
-import { collection, query, where, onSnapshot, DocumentData } from "firebase/firestore";
-import { FamilyRequest } from "../types/family";
 import { useAuthState } from "../hooks/useAuthState";
+import { FamilyRequest } from "../types/family";
 
 export function useIncomingRequests() {
   const { user } = useAuthState();
   const [requests, setRequests] = useState<FamilyRequest[]>([]);
   const [loading, setLoading] = useState(true);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     if (!user) return;
@@ -24,11 +25,12 @@ export function useIncomingRequests() {
         list.push({ id: doc.id, ...(doc.data() as DocumentData) } as FamilyRequest)
       );
       setRequests(list);
+      setCount(snap.size); 
       setLoading(false);
     });
 
     return () => unsub();
   }, [user]);
 
-  return { requests, loading };
+  return { requests, loading, count };
 }
