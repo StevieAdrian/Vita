@@ -1,5 +1,5 @@
 import type { Appointment } from "@/constants/appointment";
-import { styles } from "@/styles/history-card.styles";
+import { styles } from "@/styles/history-card.styles"
 import type React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 

@@ -5,12 +5,14 @@ interface InputFieldProps extends TextInputProps {
   label: string;
   required?: boolean;
   error?: string;
+  rightIcon?: React.ReactNode; 
 }
 
 export default function InputField({
   label,
   required,
   error,
+  rightIcon,
   ...props
 }: InputFieldProps) {
   return (
@@ -20,6 +22,7 @@ export default function InputField({
       </Text>
       <View style={styles.innerContainer}>
         <TextInput {...props} style={styles.input} />
+        {rightIcon && <View style={{ marginLeft: 8 }}>{rightIcon}</View>}
       </View>
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
     </>

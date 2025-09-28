@@ -1,8 +1,8 @@
-import { AppointmentCard } from "@/components/AppointmentCard";
-import { ReminderToggle } from "@/components/HeaderMediTrack";
+import { AppointmentCard } from "@/components/meditrack-forms/AppointmentCard";
+import { ReminderToggle } from "@/components/meditrack-forms/HeaderMediTrack";
 import { HistoryCard } from "@/components/HistoryCard";
 import { ReminderCard } from "@/components/Reminder";
-import { SectionHeader } from "@/components/TextMediTrack";
+import { SectionHeader } from "@/components/meditrack-forms/TextMediTrack";
 import type { Appointment } from "@/constants/appointment";
 
 import {

@@ -34,6 +34,6 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Family",
     icon: require("@/assets/passiveIconNavBottom/passiveFamilyIcon.png"),
     activeIcon: require("@/assets/activeIcon/familyActiveIcon.png"),
-    route: "/family",
+    route: "/family-mode/familyMode",
   },
 ] as const;

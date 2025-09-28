@@ -1,7 +1,7 @@
 import { auth } from "@/config/firebaseConfig";
 import { router } from "expo-router";
 import { FirebaseError } from "firebase/app";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useState } from "react";
 
 export function useAuth() {
@@ -11,7 +11,7 @@ export function useAuth() {
         setLoading(true);
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            router.replace("/");
+            router.push("/");
         } catch (e) {
             const err = e as FirebaseError;
             alert("Sign in failed: " + err.message);
@@ -20,5 +20,18 @@ export function useAuth() {
         }
     };
 
-    return { signIn, loading };
+    const logout = async () => {
+        setLoading(true);
+        try {
+            await signOut(auth);
+            router.push("/auth/login/login"); 
+        } catch (e) {
+            const err = e as FirebaseError;
+            alert("Logout failed: " + err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return { signIn, loading, logout };
 }

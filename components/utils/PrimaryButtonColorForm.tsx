@@ -5,12 +5,13 @@ import { PrimaryButtonColorFormProps } from "@/types/button";
 export default function PrimaryButtonColorForm({
   text,
   active = false,
+  onPress,
 }: PrimaryButtonColorFormProps & { active?: boolean }) {
   return (
     <View style={styles.containerButton}>
       <TouchableOpacity
         style={[styles.buttonStyle, active && styles.buttonActive]}
-        onPress={() => console.log("Save pressed")}
+        onPress={onPress}
         disabled={!active}
       >
         <Text style={styles.textButton}>{text}</Text>
