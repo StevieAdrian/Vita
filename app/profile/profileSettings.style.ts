@@ -61,8 +61,8 @@ export const styles = StyleSheet.create({
     marginRight: scaleWidth(30),
   },
   radioButton: {
-    width: scaleWidth(18),
-    height: scaleWidth(18),
+    width: 18,
+    height: 18,
     borderRadius: scaleWidth(9),
     borderWidth: 2,
     borderColor: "#D0D0D0",
