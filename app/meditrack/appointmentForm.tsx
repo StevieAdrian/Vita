@@ -2,7 +2,7 @@ import Calender from "@/components/Calender";
 import InputField from "@/components/InputField";
 import AppointmentTimeRange from "@/components/meditrack-forms/appointTime";
 import AppointmentCategoryModal from "@/components/meditrack-forms/appointment-popup";
-import { AppointmentReminder } from "@/constants/appointmentType";
+import { AppointmentReminder } from "@/types/appointment";
 import { COLORS } from "@/constants/colors";
 import {
   validateAppointmentForm,
@@ -23,10 +23,13 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { styles } from "./appointmentform.style";
+import { useAppointments } from "@/hooks/useAppointment";
+import ModalSuccess from "@/components/utils/ModalSuccess";
+import ModalError from "@/components/utils/ModalError";
 
 interface AppointmentFormProps {
   initialData?: AppointmentReminder;
-  onSubmit: (data: AppointmentReminder) => void;
+  onSubmit?: (data: AppointmentReminder) => void; 
   onDelete?: (id: string) => void;
   isEditMode?: boolean;
   onBack?: () => void;
@@ -50,6 +53,10 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
 
   const [isCategoryModalVisible, setIsCategoryModalVisible] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
+  const { add, update, remove } = useAppointments();
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const validation = validateAppointmentForm({
     title,
@@ -63,7 +70,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
 
   const isFormValid = validation.isValid;
 
-  const handleAddAppointment = () => {
+  const handleAddAppointment = async () => {
     const timeValidationError = validateTimeRange(startTime, endTime);
     if (timeValidationError) {
       setErrors([timeValidationError]);
@@ -72,11 +79,11 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
 
     if (!isFormValid) {
       setErrors(validation.errors);
-      Alert.alert(
-        "Missing Information",
+      setErrorMessage(
         "Please fill in all required fields correctly.\n\n" +
           validation.errors.join("\n• ")
       );
+      setShowError(true);
       return;
     }
 
@@ -90,12 +97,29 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       location: location.trim(),
       startTime,
       endTime,
-      isCompleted: initialData?.isCompleted || false,
+      isCompleted: initialData?.isCompleted ?? false,
       createdAt: initialData?.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      userId: "",
     };
 
-    onSubmit(newAppointment);
+    if (isEditMode && initialData?.id) {
+      await update(initialData.id, newAppointment);
+    } else {
+      await add(newAppointment);
+    }
+      
+    onSubmit?.(newAppointment);
+    setShowSuccess(true);
+
+    setTitle("");
+    setDescription("");
+    setDate("");
+    setCategory("");
+    setMedicalStaff("");
+    setLocation("");
+    setStartTime("09:00");
+    setEndTime("10:00");
   };
 
   const handleTimeRangeChange = (start: string, end: string) => {
@@ -198,7 +222,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                   onChangeText={setDate}
                   editable={false}
                   placeholderTextColor={COLORS.gray2}
-                  error={errors.some((e) => e.includes("Date"))}
                 />
                 <Calender
                   value={date}
@@ -287,9 +310,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                 onTimeRangeChange={handleTimeRangeChange}
                 initialStartTime={startTime}
                 initialEndTime={endTime}
-                error={errors.some(
-                  (e) => e.includes("time") || e.includes("Time")
-                )}
               />
             </View>
 
@@ -299,6 +319,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                   style={styles.deleteButton}
                   accessibilityLabel="Delete appointment"
                   accessibilityRole="button"
+                  onPress={() => initialData?.id && remove(initialData.id)}
                 >
                   <Ionicons
                     name="trash-outline"
@@ -334,6 +355,22 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
           onClose={() => setIsCategoryModalVisible(false)}
           onApply={handleCategoryApply}
           initialCategory={category}
+        />
+
+        <ModalError
+          visible={showError}
+          title="Missing Information"
+          description={errorMessage}
+          buttonText="OK"
+          onClose={() => setShowError(false)}
+        />
+        
+        <ModalSuccess
+          visible={showSuccess}
+          title={isEditMode ? "Appointment Updated!" : "Appointment Added!"}
+          description="Your appointment has been saved successfully."
+          buttonText="Continue"
+          onClose={() => setShowSuccess(false)}
         />
       </KeyboardAvoidingView>
     </SafeAreaView>
