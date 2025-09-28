@@ -64,7 +64,7 @@ export default function GeneralForm() {
             <ListItem
               title="Family Mode"
               leftIcon={require("@/assets/images/family-mode-icon.png")}
-              onPress={() => {}}
+              onPress={() => router.push("/family-mode/familyMode")}
             />
             <ListItem
               title="Emergency Contact"
