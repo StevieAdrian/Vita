@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DrugReminder } from "../constants/drugs";
 
 const useDrugForm = (initialData?: DrugReminder) => {
-  const [name, setName] = useState(initialData?.name || "");
+  const [drugName, setdrugName] = useState(initialData?.drugName || "");
   const [description, setDescription] = useState(
     initialData?.description || ""
   );
@@ -16,7 +16,7 @@ const useDrugForm = (initialData?: DrugReminder) => {
   const handleAddReminder = () => {
     const newReminder: DrugReminder = {
       id: initialData?.id || Date.now().toString(),
-      name,
+      drugName,
       description,
       date,
       category,
@@ -37,8 +37,8 @@ const useDrugForm = (initialData?: DrugReminder) => {
   };
 
   return {
-    name,
-    setName,
+    drugName,
+    setdrugName,
     description,
     setDescription,
     date,
