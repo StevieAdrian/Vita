@@ -1,8 +1,7 @@
 import { ScrollView, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { styles } from "../../styles/analysis/analysis.styles";
-import { NAV_ITEMS } from "@/styles/bottom-nav.styles";
-import TitleBack from "@/components/utils/TitleBack";
+import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
 import UpHeader from "@/components/hcd/UpHeader";
 
 export default function Analysis() {
