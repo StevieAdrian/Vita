@@ -47,9 +47,9 @@ export const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: COLORS.gray1,
         paddingHorizontal: 10,
-        paddingVertical: scaleHeight(12),
-        minHeight: scaleHeight(48),
-        borderRadius: scaleWidth(8),
+        paddingVertical: 12,
+        minHeight: 48,
+        borderRadius: 8,
     },
     dropdownButtonActive: {
         borderColor: COLORS.primary,
