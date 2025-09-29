@@ -21,7 +21,7 @@ import {
   View,
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
-import { styles } from "./emergency.styles";
+import { styles } from "../../../styles/auth/signup/emergency.styles";
 
 export default function EmergencyContact() {
   const [name, setName] = useState("");

@@ -152,7 +152,10 @@ export default function DashboardHome() {
               <View style={styles.LatestContainer}>
                 <Text style={styles.latestText}>Latest update 15/09/2025</Text>
 
-                <TouchableOpacity style={styles.updateButton}>
+                <TouchableOpacity
+                  style={styles.updateButton}
+                  onPress={() => router.push("/profile/digitalBiomarker")}
+                >
                   <Text style={styles.textUpdate}>Update Now</Text>
                 </TouchableOpacity>
               </View>
@@ -191,10 +194,14 @@ export default function DashboardHome() {
                     </Text>
                   </View>
                 </View>
-                <Image
-                  source={require("@/assets/utilsIcon/arrow-left.png")}
-                  style={styles.icon}
-                />
+                <TouchableOpacity
+                  onPress={() => router.push("/family-mode/familyMode")}
+                >
+                  <Image
+                    source={require("@/assets/utilsIcon/arrow-left.png")}
+                    style={styles.icon}
+                  />
+                </TouchableOpacity>
               </View>
 
               {/* Kotak */}

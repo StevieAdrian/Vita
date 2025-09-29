@@ -14,7 +14,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { styles } from "./allergics.style";
+import { styles } from "../../../styles/auth/signup/allergics.style";
 
 const Allergics: React.FC = () => {
   const {

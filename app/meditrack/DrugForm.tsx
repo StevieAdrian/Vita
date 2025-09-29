@@ -1,7 +1,7 @@
 import Calender from "@/components/hcd/Calender";
-import DrugsCategoryModal from "@/components/meditrack-forms/drug-category";
-import DrugRepeatModal from "@/components/meditrack-forms/drug-repeat";
-import TimeDrug from "@/components/meditrack-forms/drug-time";
+import DrugsCategoryModal from "@/components/meditrack-forms/DrugCategory";
+import DrugRepeatModal from "@/components/meditrack-forms/DrugRepeat";
+import TimeDrug from "@/components/meditrack-forms/DrugTime";
 import InputField from "@/components/utils/InputField";
 import { COLORS } from "@/constants/colors";
 import { DrugReminder } from "@/constants/drugs";
@@ -17,7 +17,7 @@ import {
   View,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { styles } from "./drugform.style";
+import { styles } from "../../styles/meditrack/drugform.style";
 
 interface DrugFormProps {
   initialData?: DrugReminder;

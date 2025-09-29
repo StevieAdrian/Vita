@@ -1,6 +1,6 @@
 import Calender from "@/components/hcd/Calender";
-import AppointmentCategoryModal from "@/components/meditrack-forms/appointment-popup";
-import AppointmentTimeRange from "@/components/meditrack-forms/appointTime";
+import AppointmentCategoryModal from "@/components/meditrack-forms/AppointmentPopUp";
+import AppointmentTimeRange from "@/components/meditrack-forms/AppointTime";
 import InputField from "@/components/utils/InputField";
 import ModalError from "@/components/utils/ModalError";
 import ModalSuccess from "@/components/utils/ModalSuccess";
@@ -24,7 +24,7 @@ import {
   View,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { styles } from "./appointmentform.style";
+import { styles } from "../../styles/meditrack/appointmentform.style";
 
 interface AppointmentFormProps {
   initialData?: AppointmentReminder;

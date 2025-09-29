@@ -21,7 +21,7 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import { styles } from "./profileSettings.style";
+import { styles } from "../../styles/profile/profileSettings.style";
 
 export default function ProfileSettings() {
   const { image, pickPhoto } = useAvatarPicker();

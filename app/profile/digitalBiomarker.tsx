@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import { styles } from "./digitalBiomarker.styles";
+import { styles } from "../../styles/profile/digitalBiomarker.styles";
 
 export default function DigitalBiomarker() {
   const insets = useSafeAreaInsets();

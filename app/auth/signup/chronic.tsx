@@ -13,7 +13,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { styles } from "./chronic.style";
+import { styles } from "../../../styles/auth/signup/chronic.style";
 
 const Chronic: React.FC = () => {
   const {

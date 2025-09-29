@@ -21,7 +21,7 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Feather";
-import { styles } from "./addFamily.styles";
+import { styles } from "../../styles/family-mode/addFamily.styles";
 
 export default function AddFamily() {
   const insets = useSafeAreaInsets();

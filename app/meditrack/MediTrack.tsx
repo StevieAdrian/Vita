@@ -23,7 +23,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { COLORS } from "../../constants/colors";
-import { styles } from "./medistrack.style";
+import { styles } from "../../styles/meditrack/medistrack.style";
 
 const ScheduleScreen: React.FC = () => {
   const insets = useSafeAreaInsets();

@@ -4,7 +4,7 @@ import { toggleDaySelection } from "@/utils/drug-repeatValidation";
 import type React from "react";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import PopUpForm from "./popup-form";
+import PopUpForm from "./PopUpForm";
 
 interface DrugRepeatModalProps {
   isVisible: boolean;

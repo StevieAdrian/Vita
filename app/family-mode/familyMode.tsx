@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import { styles } from "./familyMode.styles";
+import { styles } from "../../styles/family-mode/familyMode.styles";
 
 export default function FamilyMode() {
   const insets = useSafeAreaInsets();

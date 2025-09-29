@@ -6,7 +6,7 @@ import { router } from "expo-router";
 import React, { useState } from "react";
 import { Image, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { styles } from "./profilesignup.style";
+import { styles } from "../../../styles/auth/signup/profilesignup.style";
 
 const ProfileSignup: React.FC = () => {
   const { image, uploading, pickPhoto } = useAvatarPicker(undefined, (url) => {

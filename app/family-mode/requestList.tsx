@@ -16,7 +16,7 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import { styles } from "./requestList.styles";
+import { styles } from "../../styles/family-mode/requestList.styles";
 
 export default function RequestList() {
   const { user } = useAuthState();

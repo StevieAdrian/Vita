@@ -12,7 +12,7 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Feather";
-import { styles } from "./emergencyContact.styles";
+import { styles } from "../../styles/profile/emergencyContact.styles";
 
 export default function EmergencyContact() {
   const insets = useSafeAreaInsets();

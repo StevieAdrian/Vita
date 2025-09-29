@@ -4,7 +4,7 @@ import { toggleCategorySelection } from "@/utils/drug-categoryValidation";
 import type React from "react";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import PopUpForm from "./popup-form";
+import PopUpForm from "./PopUpForm";
 
 interface DrugsCategoryModalProps {
   isVisible: boolean;

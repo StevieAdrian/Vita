@@ -9,7 +9,7 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import { styles } from "./profile.style";
+import { styles } from "../../styles/profile/profile.style";
 
 export default function Profile() {
   const [activeTab, setActiveTab] = useState<"general" | "password">("general");

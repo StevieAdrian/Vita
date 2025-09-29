@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import { styles } from "./login.styles";
+import { styles } from "../../../styles/auth/login/login.styles";
 
 export default function Login() {
   const [email, setEmail] = useState("");

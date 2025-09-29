@@ -17,7 +17,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { styles } from "./singup.styles";
+import { styles } from "../../../styles/auth/signup/singup.styles";
 
 export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
