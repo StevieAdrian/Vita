@@ -13,7 +13,7 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Analysis",
     icon: require("@/assets/passiveIconNavBottom/passiveAnalysisIcon.png"),
     activeIcon: require("@/assets/activeIcon/analysisActiveIcon.png"),
-    route: "/analysis",
+    route: "/analysis/analysis",
   },
   {
     id: "notes",

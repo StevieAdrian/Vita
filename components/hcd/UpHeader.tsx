@@ -25,7 +25,7 @@ export default function UpHeader({ title, showProfile = true }: UpHeaderProps) {
         <View style={styles.amountNotif}>
           <Text style={styles.textNotif}>1</Text>
         </View>
-        <TouchableOpacity style={styles.notifications}>
+        <TouchableOpacity style={styles.notifications} onPress={() => router.push("/profile/notifications")}>
           <Image
             source={require("@/assets/utilsIcon/notification.png")}
             style={{ width: 41, height: 41 }}
