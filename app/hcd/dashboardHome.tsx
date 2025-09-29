@@ -6,6 +6,7 @@ import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { NAV_ITEMS } from "@/styles/bottom-nav.styles";
 import { styles } from "@/styles/hcd/dashboard.style";
+import { router } from "expo-router";
 import { useCallback, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
@@ -45,7 +46,9 @@ export default function DashboardHome() {
         <View>
           <View style={styles.greetingsContainer}>
             <Text style={styles.greetingsBlue}>Hey, </Text>
-            <Text style={styles.greetings}>{data.firstName} {data.lastName}!</Text>
+            <Text style={styles.greetings}>
+              {data.firstName} {data.lastName}!
+            </Text>
           </View>
 
           <View style={styles.dateBg}>
@@ -62,8 +65,12 @@ export default function DashboardHome() {
               <View style={styles.captionSubtitle}>
                 <Text style={styles.subtitle}>Upcoming Reminder</Text>
                 <TouchableOpacity style={styles.subtitleContainerText}>
-                  <Text style={styles.seeAllContainer}>See All</Text>
-
+                  <Text
+                    style={styles.seeAllContainer}
+                    onPress={() => router.push("/meditrack/MediTrack")}
+                  >
+                    See All
+                  </Text>
                   <Image
                     source={require("@/assets/utilsIcon/arrow-left.png")}
                     style={styles.icon}

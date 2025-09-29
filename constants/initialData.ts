@@ -1,7 +1,5 @@
-// constants/appointmentsData.ts
 import { Appointment } from "./appointment";
 import { Reminder } from "./reminder";
-
 export const initialAppointments: Appointment[] = [
   {
     id: "app-1",
@@ -24,7 +22,7 @@ export const initialAppointments: Appointment[] = [
   {
     id: "app-3",
     title: "Control Checkup",
-    provider: "Sept, 10 (13:00 PM)",
+    provider: "Sept, 10 (13:00 PM)", // ⚠️ ini sebaiknya "Dr. Veni"
     location: "RS Brawijaya",
     dateLabel: "Sept, 1",
     timeLabel: "15:00 PM",
@@ -33,7 +31,7 @@ export const initialAppointments: Appointment[] = [
   {
     id: "app-4",
     title: "Consultation",
-    provider: "Sept, 9 (13:00 PM)",
+    provider: "Sept, 9 (13:00 PM)", // ⚠️ ini juga sebaiknya "Dr. Budi" / nama dokter lain
     location: "RS Brawijaya",
     dateLabel: "Sept, 1",
     timeLabel: "15:00 PM",
