@@ -1,11 +1,11 @@
 import { BLOODTYPE_OPTIONS, bloodType } from "@/constants/bloodType";
-import React, { useState } from "react";
-import { Image, StatusBar, Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { styles } from "./bloodtype.style";
 import { COLORS } from "@/constants/colors";
 import { useSignupContext } from "@/context/SignupContext";
 import { router } from "expo-router";
+import React, { useState } from "react";
+import { Image, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { styles } from "../../../styles/auth/signup/bloodtype.style";
 
 const BloodType: React.FC = () => {
   const [selectedBloodType, setSelectedBloodType] = useState<bloodType | "">(
@@ -13,7 +13,7 @@ const BloodType: React.FC = () => {
   );
   const [error, setError] = useState<string>("");
   const { data, setField } = useSignupContext();
-  
+
   const handleBloodTypeSelect = (type: bloodType) => {
     setSelectedBloodType(type);
     setField("bloodType", type);
@@ -31,7 +31,7 @@ const BloodType: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor= {COLORS.primary} />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
 
       <View style={styles.content}>
         <View style={styles.logoContainer}>

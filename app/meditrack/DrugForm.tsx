@@ -1,8 +1,8 @@
-import Calender from "@/components/Calender";
-import InputField from "@/components/InputField";
-import DrugsCategoryModal from "@/components/meditrack-forms/drug-category";
-import DrugRepeatModal from "@/components/meditrack-forms/drug-repeat";
-import TimeDrug from "@/components/meditrack-forms/drug-time";
+import Calender from "@/components/hcd/Calender";
+import DrugsCategoryModal from "@/components/meditrack-forms/DrugCategory";
+import DrugRepeatModal from "@/components/meditrack-forms/DrugRepeat";
+import TimeDrug from "@/components/meditrack-forms/DrugTime";
+import InputField from "@/components/utils/InputField";
 import { COLORS } from "@/constants/colors";
 import { DrugReminder } from "@/constants/drugs";
 import { getCategoryLabel, getRepeatLabel } from "@/utils/drugformValidation";
@@ -10,14 +10,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import {
   Image,
-  SafeAreaView,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { styles } from "./drugform.style";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { styles } from "../../styles/meditrack/drugform.style";
 
 interface DrugFormProps {
   initialData?: DrugReminder;
@@ -34,7 +34,7 @@ const DrugForm: React.FC<DrugFormProps> = ({
   isEditMode = false,
   onBack,
 }) => {
-  const [title, setTitle] = useState(initialData?.title || "");
+  const [drugName, setDrugName] = useState(initialData?.drugName || "");
   const [description, setDescription] = useState(
     initialData?.description || ""
   );
@@ -51,7 +51,7 @@ const DrugForm: React.FC<DrugFormProps> = ({
   const [isRepeatModalVisible, setIsRepeatModalVisible] = useState(false);
 
   const isFormValid =
-    title.trim() !== "" &&
+    drugName.trim() !== "" &&
     date.trim() !== "" &&
     category.length > 0 &&
     times.length > 0 &&
@@ -60,7 +60,7 @@ const DrugForm: React.FC<DrugFormProps> = ({
   const handleAddReminder = () => {
     const newReminder: DrugReminder = {
       id: initialData?.id || Date.now().toString(),
-      title,
+      drugName,
       description,
       date,
       category: category[0] || "",
@@ -109,8 +109,8 @@ const DrugForm: React.FC<DrugFormProps> = ({
           <TextInput
             style={styles.titleInput}
             placeholder="What's Reminder?"
-            value={title}
-            onChangeText={setTitle}
+            value={drugName}
+            onChangeText={setDrugName}
             editable={true}
           />
           <View style={styles.separator} />

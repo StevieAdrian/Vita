@@ -1,6 +1,6 @@
 export interface DrugReminder {
   id: string;
-  name: string;
+  drugName: string;
   description: string;
   date: string;
   category: string;

@@ -1,8 +1,8 @@
 import PrimaryButtonColorForm from "@/components/utils/PrimaryButtonColorForm";
 import TitleBack from "@/components/utils/TitleBack";
 import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
-import { NAV_ITEMS } from "@/styles/bottom-nav.styles";
 import { styles } from "@/styles/hcd/createDiary.style";
+import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
 import { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { ScrollView, TextInput } from "react-native-gesture-handler";

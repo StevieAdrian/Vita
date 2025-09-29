@@ -1,9 +1,12 @@
-import Calender from "@/components/Calender";
-import InputField from "@/components/InputField";
-import AppointmentTimeRange from "@/components/meditrack-forms/appointTime";
-import AppointmentCategoryModal from "@/components/meditrack-forms/appointment-popup";
-import { AppointmentReminder } from "@/types/appointment";
+import Calender from "@/components/hcd/Calender";
+import AppointmentCategoryModal from "@/components/meditrack-forms/AppointmentPopUp";
+import AppointmentTimeRange from "@/components/meditrack-forms/AppointTime";
+import InputField from "@/components/utils/InputField";
+import ModalError from "@/components/utils/ModalError";
+import ModalSuccess from "@/components/utils/ModalSuccess";
 import { COLORS } from "@/constants/colors";
+import { useAppointments } from "@/hooks/useAppointment";
+import { AppointmentReminder } from "@/types/appointment";
 import {
   validateAppointmentForm,
   validateTimeRange,
@@ -11,7 +14,6 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
-  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -22,14 +24,11 @@ import {
   View,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { styles } from "./appointmentform.style";
-import { useAppointments } from "@/hooks/useAppointment";
-import ModalSuccess from "@/components/utils/ModalSuccess";
-import ModalError from "@/components/utils/ModalError";
+import { styles } from "../../styles/meditrack/appointmentform.style";
 
 interface AppointmentFormProps {
   initialData?: AppointmentReminder;
-  onSubmit?: (data: AppointmentReminder) => void; 
+  onSubmit?: (data: AppointmentReminder) => void;
   onDelete?: (id: string) => void;
   isEditMode?: boolean;
   onBack?: () => void;
@@ -108,7 +107,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
     } else {
       await add(newAppointment);
     }
-      
+
     onSubmit?.(newAppointment);
     setShowSuccess(true);
 
@@ -364,7 +363,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
           buttonText="OK"
           onClose={() => setShowError(false)}
         />
-        
+
         <ModalSuccess
           visible={showSuccess}
           title={isEditMode ? "Appointment Updated!" : "Appointment Added!"}

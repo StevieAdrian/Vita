@@ -1,12 +1,22 @@
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
-import { ScrollView, View, Text, Image, TouchableOpacity, Modal } from "react-native";
-import { styles } from "./requestList.styles";
 import TitleBack from "@/components/utils/TitleBack";
-import { NAV_ITEMS } from "@/styles/bottom-nav.styles";
-import { useIncomingRequests } from "@/hooks/useIncomingRequest"
-import { useState } from "react";
-import { useFamilyRequests } from "@/hooks/useFamilyRequests"
 import { useAuthState } from "@/hooks/useAuthState";
+import { useFamilyRequests } from "@/hooks/useFamilyRequests";
+import { useIncomingRequests } from "@/hooks/useIncomingRequest";
+import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
+import { useState } from "react";
+import {
+  Image,
+  Modal,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
+import { styles } from "../../styles/family-mode/requestList.styles";
 
 export default function RequestList() {
   const { user } = useAuthState();
@@ -31,7 +41,12 @@ export default function RequestList() {
 
   const handleYes = async () => {
     if (modalType === "accept") {
-      await acceptRequest(selectedRequest.id, selectedRequest.fromUid, user!.uid, selectedRequest.relation);
+      await acceptRequest(
+        selectedRequest.id,
+        selectedRequest.fromUid,
+        user!.uid,
+        selectedRequest.relation
+      );
     } else if (modalType === "decline") {
       await declineRequest(selectedRequest.id);
     }
@@ -48,21 +63,25 @@ export default function RequestList() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: NAV_ITEMS + insets.bottom + 30, }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+          paddingBottom: NAV_ITEMS + insets.bottom + 30,
+        }}
+      >
         <View style={styles.header}>
           <TitleBack title="Request List" />
         </View>
 
         {loading && <Text>Loading...</Text>}
 
-        {!loading && requests.length === 0 && (
-          <Text>No requests found</Text>
-        )}
+        {!loading && requests.length === 0 && <Text>No requests found</Text>}
 
         {requests.map((r) => (
           <View key={r.id} style={styles.card}>
             <View style={styles.headerRow}>
-              <Image source={{ uri: r.avatarUrl }} style={styles.avatar}/>
+              <Image source={{ uri: r.avatarUrl }} style={styles.avatar} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.name}>{r.displayName}</Text>
               </View>
@@ -81,7 +100,10 @@ export default function RequestList() {
             </View>
 
             <View style={styles.actionRow}>
-              <TouchableOpacity style={styles.acceptBtn} onPress={() => handleAccept(r)}>
+              <TouchableOpacity
+                style={styles.acceptBtn}
+                onPress={() => handleAccept(r)}
+              >
                 <View style={styles.actionContent}>
                   <Image
                     source={require("@/assets/family/accept-icon.png")}
@@ -91,7 +113,10 @@ export default function RequestList() {
                 </View>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.declineBtn} onPress={() => handleDecline(r)}>
+              <TouchableOpacity
+                style={styles.declineBtn}
+                onPress={() => handleDecline(r)}
+              >
                 <View style={styles.actionContent}>
                   <Image
                     source={require("@/assets/family/decline-icon.png")}
@@ -101,7 +126,6 @@ export default function RequestList() {
                 </View>
               </TouchableOpacity>
             </View>
-
           </View>
         ))}
 

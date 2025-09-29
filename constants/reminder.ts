@@ -1,4 +1,4 @@
-export type ReminderCategory = "drug" | "appointment";
+export type ReminderCategory = "drug" | "appointment" | "other";
 
 export type Reminder = {
   id: string;

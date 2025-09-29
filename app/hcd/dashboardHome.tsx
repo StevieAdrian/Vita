@@ -1,11 +1,12 @@
 import { initialReminders } from "@/./constants/initialData";
 import UpHeader from "@/components/hcd/UpHeader";
-import { ReminderCard } from "@/components/Reminder";
+import { ReminderCard } from "@/components/meditrack-forms/Reminder";
 import { Reminder } from "@/constants/reminder";
 import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
 import { useUserProfile } from "@/hooks/useUserProfile";
-import { NAV_ITEMS } from "@/styles/bottom-nav.styles";
 import { styles } from "@/styles/hcd/dashboard.style";
+import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
+import { router } from "expo-router";
 import { useCallback, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
@@ -45,7 +46,9 @@ export default function DashboardHome() {
         <View>
           <View style={styles.greetingsContainer}>
             <Text style={styles.greetingsBlue}>Hey, </Text>
-            <Text style={styles.greetings}>{data.firstName} {data.lastName}!</Text>
+            <Text style={styles.greetings}>
+              {data.firstName} {data.lastName}!
+            </Text>
           </View>
 
           <View style={styles.dateBg}>
@@ -62,8 +65,12 @@ export default function DashboardHome() {
               <View style={styles.captionSubtitle}>
                 <Text style={styles.subtitle}>Upcoming Reminder</Text>
                 <TouchableOpacity style={styles.subtitleContainerText}>
-                  <Text style={styles.seeAllContainer}>See All</Text>
-
+                  <Text
+                    style={styles.seeAllContainer}
+                    onPress={() => router.push("/meditrack/MediTrack")}
+                  >
+                    See All
+                  </Text>
                   <Image
                     source={require("@/assets/utilsIcon/arrow-left.png")}
                     style={styles.icon}
@@ -145,7 +152,10 @@ export default function DashboardHome() {
               <View style={styles.LatestContainer}>
                 <Text style={styles.latestText}>Latest update 15/09/2025</Text>
 
-                <TouchableOpacity style={styles.updateButton}>
+                <TouchableOpacity
+                  style={styles.updateButton}
+                  onPress={() => router.push("/profile/digitalBiomarker")}
+                >
                   <Text style={styles.textUpdate}>Update Now</Text>
                 </TouchableOpacity>
               </View>
@@ -184,10 +194,14 @@ export default function DashboardHome() {
                     </Text>
                   </View>
                 </View>
-                <Image
-                  source={require("@/assets/utilsIcon/arrow-left.png")}
-                  style={styles.icon}
-                />
+                <TouchableOpacity
+                  onPress={() => router.push("/family-mode/familyMode")}
+                >
+                  <Image
+                    source={require("@/assets/utilsIcon/arrow-left.png")}
+                    style={styles.icon}
+                  />
+                </TouchableOpacity>
               </View>
 
               {/* Kotak */}

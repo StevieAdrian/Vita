@@ -1,5 +1,5 @@
-import Calender from "@/components/Calender";
-import InputField from "@/components/InputField";
+import Calender from "@/components/hcd/Calender";
+import InputField from "@/components/utils/InputField";
 import { COLORS } from "@/constants/colors";
 import { useSignupContext } from "@/context/SignupContext";
 import { mapperSignupValues } from "@/utils/mapper";
@@ -17,7 +17,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { styles } from "./singup.styles";
+import { styles } from "../../../styles/auth/signup/singup.styles";
 
 export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -40,7 +40,7 @@ export default function Signup() {
 
   const handleContinue = () => {
     const safeData = mapperSignupValues(data, confirmPassword);
-  
+
     let newErrors: { [key: string]: string } = {};
     (Object.keys(safeData) as (keyof SignupValues)[]).forEach((field) => {
       const errMsg = validateField(field, safeData[field], safeData);
@@ -48,9 +48,9 @@ export default function Signup() {
         newErrors[field] = errMsg;
       }
     });
-  
+
     setErrors(newErrors);
-  
+
     if (Object.keys(newErrors).length === 0) {
       router.push("/auth/signup/profilesignup");
     }
@@ -216,10 +216,10 @@ export default function Signup() {
               {errors.gender && (
                 <Text style={styles.errorText}>{errors.gender}</Text>
               )}
-              <TouchableOpacity 
-              style={styles.continueButton} 
-              activeOpacity={0.8} 
-              onPress={handleContinue}
+              <TouchableOpacity
+                style={styles.continueButton}
+                activeOpacity={0.8}
+                onPress={handleContinue}
               >
                 <Text style={styles.continueText}>Continue</Text>
               </TouchableOpacity>
