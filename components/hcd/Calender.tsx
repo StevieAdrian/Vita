@@ -1,5 +1,5 @@
 import { COLORS } from "@/constants/colors";
-import { styles } from "@/styles/calender.styles";
+import { styles } from "@/styles/hcd/calender.styles";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";

@@ -1,6 +1,9 @@
-import OptionField from "@/components/OptionField";
+import OptionField from "@/components/utils/OptionField";
 import { ALLERGIC_OPTIONS } from "@/constants/allergic";
+import { COLORS } from "@/constants/colors";
+import { useSignupContext } from "@/context/SignupContext";
 import { useAllergics } from "@/utils/allergicValidation";
+import { router } from "expo-router";
 import React from "react";
 import {
   Image,
@@ -11,10 +14,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { styles } from "./allergics.style";
-import { COLORS } from "@/constants/colors";
-import { useSignupContext } from "@/context/SignupContext";
-import { router } from "expo-router";
+import { styles } from "../../../styles/auth/signup/allergics.style";
 
 const Allergics: React.FC = () => {
   const {
@@ -27,22 +27,22 @@ const Allergics: React.FC = () => {
   } = useAllergics();
 
   const { data, setField } = useSignupContext();
-  
+
   const onContinue = () => {
-    const allergicsData = handleContinue(); 
+    const allergicsData = handleContinue();
 
     const finalAllergics = allergicsData.otherAllergics
       ? [...allergicsData.selectedAllergics, allergicsData.otherAllergics]
       : allergicsData.selectedAllergics;
 
     setField("allergies", finalAllergics);
-    console.log("debug data: ", data)
+    console.log("debug data: ", data);
     router.push("/auth/signup/chronic");
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor= {COLORS.primary} />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
 
       <View style={styles.content}>
         <View style={styles.logoContainer}>
@@ -78,7 +78,7 @@ const Allergics: React.FC = () => {
             <TextInput
               style={styles.otherInput}
               placeholder="Other Allergics..."
-              placeholderTextColor= {COLORS.gray2}
+              placeholderTextColor={COLORS.gray2}
               value={otherAllergics}
               onChangeText={setOtherAllergics}
               multiline

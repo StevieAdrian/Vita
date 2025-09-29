@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { allergicOptionStyles as styles } from "../styles/options.style";
+import { allergicOptionStyles as styles } from "../../styles/utils/options.style";
 
 interface OptionFieldProps {
   label: string;

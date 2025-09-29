@@ -27,7 +27,7 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Schedule",
     icon: require("@/assets/passiveIconNavBottom/passiveScheduleIcon.png"),
     activeIcon: require("@/assets/activeIcon/scheduleActiveIcon.png"),
-    route: "/meditrack/MediTrack",
+    route: "/meditrack/mediTrack",
   },
   {
     id: "family",

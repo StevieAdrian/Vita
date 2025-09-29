@@ -1,7 +1,5 @@
-// constants/appointmentsData.ts
 import { Appointment } from "./appointment";
 import { Reminder } from "./reminder";
-
 export const initialAppointments: Appointment[] = [
   {
     id: "app-1",

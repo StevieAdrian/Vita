@@ -1,7 +1,7 @@
 import { AppointmentCard } from "@/components/meditrack-forms/AppointmentCard";
 import { ReminderToggle } from "@/components/meditrack-forms/HeaderMediTrack";
-import { HistoryCard } from "@/components/HistoryCard";
-import { ReminderCard } from "@/components/Reminder";
+import { HistoryCard } from "@/components/meditrack-forms/HistoryCard";
+import { ReminderCard } from "@/components/meditrack-forms/Reminder";
 import { SectionHeader } from "@/components/meditrack-forms/TextMediTrack";
 import type { Appointment } from "@/constants/appointment";
 
@@ -23,7 +23,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { COLORS } from "../../constants/colors";
-import { styles } from "./medistrack.style";
+import { styles } from "../../styles/meditrack/medistrack.style";
 
 const ScheduleScreen: React.FC = () => {
   const insets = useSafeAreaInsets();

@@ -1,5 +1,5 @@
-import { StyleSheet } from "react-native";
 import { COLORS } from "@/constants/colors";
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   containerButton: { paddingTop: 20 },

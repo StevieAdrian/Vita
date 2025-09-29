@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 5,
+    gap:10
   },
   leftColumn: {
     flexDirection: "row",
