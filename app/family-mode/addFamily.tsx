@@ -22,6 +22,8 @@ import {
 } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Feather";
 import { styles } from "../../styles/family-mode/addFamily.styles";
+import ModalError from "@/components/utils/ModalError";
+import ModalSuccess from "@/components/utils/ModalSuccess";
 
 export default function AddFamily() {
   const insets = useSafeAreaInsets();
@@ -30,6 +32,9 @@ export default function AddFamily() {
   const { exists, isChecking, verifyUsername } = useCheckUsername();
   const { requestFamily } = useFamilyRequests();
   const { user } = useAuthState();
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [form, setForm] = useState({
     name: "",
@@ -70,8 +75,10 @@ export default function AddFamily() {
 
     if (result.success) {
       setForm({ name: "", relation: "", username: "", notes: "" });
+      setShowSuccess(true);
     } else {
-      console.log("debug err: " + result.message);
+      setErrorMessage(result.message || "Failed to send request.");
+      setShowError(true);
     }
   };
 
@@ -183,6 +190,22 @@ export default function AddFamily() {
             text={loading ? "Sending..." : "Send Request"}
             active={!!form.username && !!form.relation && !!form.name}
             onPress={handleSend}
+          />
+
+          <ModalSuccess
+            visible={showSuccess}
+            title="Success"
+            description="Your family request has been sent successfully."
+            buttonText="Continue"
+            onClose={() => setShowSuccess(false)}
+          />
+
+          <ModalError
+            visible={showError}
+            title="Error"
+            description={errorMessage}
+            buttonText="Close"
+            onClose={() => setShowError(false)}
           />
         </ScrollView>
       </View>
