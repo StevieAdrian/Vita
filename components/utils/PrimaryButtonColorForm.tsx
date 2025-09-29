@@ -1,6 +1,6 @@
-import { Text, TouchableOpacity, View } from "react-native";
-import { styles } from "@/styles/buttonColor.style";
+import { styles } from "@/styles/utils/buttonColor.style";
 import { PrimaryButtonColorFormProps } from "@/types/button";
+import { Text, TouchableOpacity, View } from "react-native";
 
 export default function PrimaryButtonColorForm({
   text,

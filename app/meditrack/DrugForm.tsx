@@ -1,8 +1,8 @@
-import Calender from "@/components/Calender";
-import InputField from "@/components/InputField";
+import Calender from "@/components/hcd/Calender";
 import DrugsCategoryModal from "@/components/meditrack-forms/drug-category";
 import DrugRepeatModal from "@/components/meditrack-forms/drug-repeat";
 import TimeDrug from "@/components/meditrack-forms/drug-time";
+import InputField from "@/components/utils/InputField";
 import { COLORS } from "@/constants/colors";
 import { DrugReminder } from "@/constants/drugs";
 import { getCategoryLabel, getRepeatLabel } from "@/utils/drugformValidation";

@@ -1,5 +1,8 @@
-import OptionField from "@/components/OptionField";
+import OptionField from "@/components/utils/OptionField";
+import { COLORS } from "@/constants/colors";
+import { useSignupContext } from "@/context/SignupContext";
 import { useChronic } from "@/utils/chronicValidation";
+import { router } from "expo-router";
 import React from "react";
 import {
   Image,
@@ -11,9 +14,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./chronic.style";
-import { COLORS } from "@/constants/colors";
-import { useSignupContext } from "@/context/SignupContext";
-import { router } from "expo-router";
 
 const Chronic: React.FC = () => {
   const {
@@ -30,7 +30,9 @@ const Chronic: React.FC = () => {
   const onContinue = () => {
     const chronicData = handleContinue();
 
-    const finalChronics = chronicData.otherCondition ? [...chronicData.selectedConditions, chronicData.otherCondition] : chronicData.selectedConditions;
+    const finalChronics = chronicData.otherCondition
+      ? [...chronicData.selectedConditions, chronicData.otherCondition]
+      : chronicData.selectedConditions;
     setField("chronicConditions", finalChronics);
 
     console.log("debug data:", finalChronics);
@@ -39,7 +41,7 @@ const Chronic: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor= {COLORS.primary} />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
 
       <View style={styles.content}>
         <View style={styles.logoContainer}>
@@ -75,7 +77,7 @@ const Chronic: React.FC = () => {
             <TextInput
               style={styles.otherInput}
               placeholder="Other Chronic Conditions...."
-              placeholderTextColor= {COLORS.gray2}
+              placeholderTextColor={COLORS.gray2}
               value={otherCondition}
               onChangeText={setOtherCondition}
               multiline

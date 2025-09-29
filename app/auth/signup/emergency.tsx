@@ -1,4 +1,4 @@
-import InputField from "@/components/InputField";
+import InputField from "@/components/utils/InputField";
 import { COLORS } from "@/constants/colors";
 import { Relation, RELATION_OPTIONS } from "@/constants/relations";
 import { useSignupContext } from "@/context/SignupContext";
@@ -60,7 +60,7 @@ export default function EmergencyContact() {
           ...data,
           emergencyContacts: finalContacts,
         } as any);
-  
+
         console.log("debug uid:", uid);
         router.push("/");
       } catch (err) {

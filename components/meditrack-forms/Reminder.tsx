@@ -1,6 +1,6 @@
 import { COLORS } from "@/constants/colors";
 import type { Reminder } from "@/constants/reminder";
-import { styles } from "@/styles/reminder.styles";
+import { styles } from "@/styles/meditrack/reminder.styles";
 import type React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
@@ -44,7 +44,7 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
         </View>
         <View>
           <Text
-            style={[styles.title, { maxWidth: 100 }]}
+            style={[styles.title, { maxWidth: 120 }]}
             numberOfLines={1}
             ellipsizeMode="tail"
           >
@@ -52,7 +52,7 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
           </Text>
           {showDescription && (
             <Text style={styles.subtitle}>
-              {truncateText(reminder.description, 10)}
+              {truncateText(reminder.description, 15)}
             </Text>
           )}
           <Text style={styles.time}>{reminder.timeLabel}</Text>

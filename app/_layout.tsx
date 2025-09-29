@@ -1,4 +1,4 @@
-import BottomNav from "@/components/BottomNav";
+import BottomNav from "@/components/utils/BottomNav";
 import { Fonts } from "@/constants/fonts";
 import { NAV_ITEMS } from "@/constants/navItems";
 import { AuthContext } from "@/context/AuthContext";

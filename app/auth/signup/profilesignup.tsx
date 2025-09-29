@@ -1,16 +1,16 @@
-import AvatarPicker from "@/components/AvatarPicker";
+import AvatarPicker from "@/components/profile/AvatarPicker";
 import { COLORS } from "@/constants/colors";
+import { useSignupContext } from "@/context/SignupContext";
 import { useAvatarPicker } from "@/hooks/useAvatarPicker";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { Image, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { styles } from "./profilesignup.style";
-import { useSignupContext } from "@/context/SignupContext";
-import { router } from "expo-router";
 
 const ProfileSignup: React.FC = () => {
   const { image, uploading, pickPhoto } = useAvatarPicker(undefined, (url) => {
-    setField("avatarUrl", url); 
+    setField("avatarUrl", url);
   });
   const [selectedAvatar, setSelectedAvatar] = useState<string>("");
   const { data, setField } = useSignupContext();

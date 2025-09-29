@@ -1,11 +1,11 @@
 import { Text, TextInput, TextInputProps, View } from "react-native";
-import { styles } from "../styles/input.styles";
+import { styles } from "../../styles/utils/input.styles";
 
 interface InputFieldProps extends TextInputProps {
   label: string;
   required?: boolean;
   error?: string;
-  rightIcon?: React.ReactNode; 
+  rightIcon?: React.ReactNode;
 }
 
 export default function InputField({

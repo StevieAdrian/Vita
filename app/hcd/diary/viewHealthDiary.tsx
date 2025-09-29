@@ -1,10 +1,10 @@
-import { ReminderCard } from "@/components/Reminder";
+import { ReminderCard } from "@/components/meditrack-forms/Reminder";
 import TitleBack from "@/components/utils/TitleBack";
 import { COLORS } from "@/constants/colors";
 import { initialReminders } from "@/constants/initialData";
 import { Reminder } from "@/constants/reminder";
 import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
-import { NAV_ITEMS } from "@/styles/bottom-nav.styles";
+import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
 import { styles } from "@/styles/hcd/viewHealthDiary.style";
 import { router } from "expo-router";
 import { useCallback, useState } from "react";
@@ -52,6 +52,14 @@ export default function HealthDiary() {
         category: "drug",
         completed: false,
       },
+      {
+        id: "4",
+        title: "Panadol 200mg",
+        timeLabel: "13:00",
+        description: "Take after lunch",
+        category: "drug",
+        completed: false,
+      },
     ],
     "2025-09-02": [
       {
@@ -73,7 +81,6 @@ export default function HealthDiary() {
     ],
   };
 
-  // Today SelectedDate
   function formatDateLocal(date: Date) {
     return date.toLocaleDateString("en-CA");
   }
@@ -103,7 +110,6 @@ export default function HealthDiary() {
       setReminders((prev) => {
         const existed = prev.find((r) => r.id === id);
         if (existed) {
-          // toggle existing
           return prev.map((r) =>
             r.id === id ? { ...r, completed: !r.completed } : r
           );
@@ -125,11 +131,7 @@ export default function HealthDiary() {
     },
     [displayedSchedules]
   );
-  console.log("Selected raw:", selected);
-  console.log("SelectedDateKey:", selectedDateKey);
-  console.log("Schedules keys:", Object.keys(schedules));
-  console.log("TodaySchedules:", todaySchedules);
-  console.log("DisplayedSchedules:", displayedSchedules);
+
   return (
     <SafeAreaView style={styles.dashboardContainer}>
       <ScrollView

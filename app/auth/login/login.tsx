@@ -1,4 +1,4 @@
-import InputField from "@/components/InputField";
+import InputField from "@/components/utils/InputField";
 import { COLORS } from "@/constants/colors";
 import { useAuth } from "@/hooks/useAuth";
 import { router } from "expo-router";

@@ -1,11 +1,11 @@
 import { initialReminders } from "@/./constants/initialData";
 import UpHeader from "@/components/hcd/UpHeader";
-import { ReminderCard } from "@/components/Reminder";
+import { ReminderCard } from "@/components/meditrack-forms/Reminder";
 import { Reminder } from "@/constants/reminder";
 import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
 import { useUserProfile } from "@/hooks/useUserProfile";
-import { NAV_ITEMS } from "@/styles/bottom-nav.styles";
 import { styles } from "@/styles/hcd/dashboard.style";
+import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
 import { router } from "expo-router";
 import { useCallback, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
