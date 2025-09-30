@@ -1,5 +1,6 @@
 import PrimaryButtonColorForm from "@/components/utils/PrimaryButtonColorForm";
 import TitleBack from "@/components/utils/TitleBack";
+import { useUserProfile } from "@/hooks/useUserProfile";
 import { styles } from "@/styles/hcd/editDiary.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
 import { useState } from "react";
@@ -13,6 +14,8 @@ import {
 export default function EditDiary() {
   const [hasInput, setHasInput] = useState(false);
   const insets = useSafeAreaInsets();
+  const { data, loading } = useUserProfile();
+
   const handleInputChange = (text: string) => {
     setHasInput(text.trim().length > 0);
   };
