@@ -1,5 +1,5 @@
 import { db } from "../config/firebaseConfig";
-import { collection, query, where, getDocs, serverTimestamp, addDoc, getDoc, doc, updateDoc, arrayUnion, setDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, serverTimestamp, addDoc, getDoc, doc, updateDoc, arrayUnion, setDoc, deleteDoc, arrayRemove } from "firebase/firestore";
 import { FamilyRequest, FamilyRequestInput } from "@/types/family"
 import { sendNotification } from "./notification.service";
 
@@ -88,4 +88,50 @@ export async function declineFamilyRequest(requestId: string) {
     status: "declined",
   });
   return { success: true };
+}
+
+export async function deleteFamilyRequest(userUid: string, memberUid: string, relation: string) {
+  try {
+    const reverseRelation = getReverseRelation(relation);
+
+
+    const userRef= doc(db, "users", userUid)
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      const data = userSnap.data();
+      const newMembers = (data.familyMembers || []).filter((i: any) => i.uid !== memberUid);
+      await updateDoc(userRef, { familyMembers: newMembers });
+    }
+
+    const memberRef = doc(db, "users", memberUid);
+    const memberSnap = await getDoc(memberRef);
+
+    if (memberSnap.exists()) {
+      const data = memberSnap.data();
+      const newMembers = (data.familyMembers || []).filter((i: any) => i.uid !== userUid);
+      await updateDoc(memberRef, { familyMembers: newMembers });
+    }
+
+    // await updateDoc(doc(db, "users", userUid), {
+    //   familyMembers: arrayRemove({ uid: userUid, relation: reverseRelation })
+    // })
+
+    // console.log("debug 1: ", uid)
+
+    // await updateDoc(doc(db, "users", memberUid), {
+    //   familyMembers: arrayRemove({ uid: userUid, relation: reverseRelation })
+    // })
+
+    const q = query(collection(db, "familyRequests"), where("fromUid", "in", [userUid, memberUid]), where("toUid", "in", [userUid, memberUid]), where("status", "==", "accepted"));
+    const snap = await getDocs(q);
+    // console.log("await dis nuts")
+    for (let i = 0; i < snap.docs.length; i++){
+      const docSnap = snap.docs[i];
+      await deleteDoc(doc(db, "familyRequests", docSnap.id))
+    }
+
+    return { success: true };
+  } catch (error) {
+    throw error;
+  }
 }

@@ -9,11 +9,15 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { styles } from "../../styles/family-mode/familyMode.styles";
+import { useState } from "react";
+import { useFamilyActions } from "../../hooks/useFamilyActions"
 
 export default function FamilyMode() {
   const insets = useSafeAreaInsets();
   const { members, loading } = useFamilyMembers();
   const { count } = useIncomingRequests();
+  const [ editMode, setEditMode ] = useState(false);
+  const { removeMember } = useFamilyActions();
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -43,20 +47,35 @@ export default function FamilyMode() {
         <View style={styles.container}>
           <Text style={styles.textHeader}>Your Member</Text>
           <View style={styles.imageContainer}>
-            <TouchableOpacity
-              onPress={() => router.push("/family-mode/addFamily")}
-            >
-              <Image
-                source={require("@/assets/utilsIcon/add-icon.png")}
-                style={styles.memberIcon}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-            <Image
-              source={require("@/assets/utilsIcon/edit-icon.png")}
-              style={styles.memberIcon}
-              resizeMode="contain"
-            />
+
+            {editMode ? (
+              <TouchableOpacity onPress={() => setEditMode(false)}>
+                <Image
+                  source={require("@/assets/family/red-decline.png")}
+                  style={styles.memberIcon}
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
+            ) : (
+              <>
+                <TouchableOpacity
+                  onPress={() => router.push("/family-mode/addFamily")}
+                >
+                  <Image
+                    source={require("@/assets/utilsIcon/add-icon.png")}
+                    style={styles.memberIcon}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setEditMode(true)}>
+                  <Image
+                    source={require("@/assets/utilsIcon/edit-icon.png")}
+                    style={styles.memberIcon}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              </>
+            )}
           </View>
         </View>
 
@@ -76,6 +95,15 @@ export default function FamilyMode() {
                 <Text style={styles.memberRelation}>{m.relation}</Text>
               </View>
             </View>
+
+            {editMode && (
+              <TouchableOpacity style={styles.deleteBtn} onPress={async () => {
+                const res = await removeMember(m.uid, m.relation);
+                if (!res?.success) console.log("debug err: ", res?.message)
+              }}>
+                <Image source={require("@/assets/family/delete-icon.png")} style={styles.deleteIcon}/>
+              </TouchableOpacity>
+            )}
 
             <View style={styles.statsRow}>
               <View style={styles.statBox}>

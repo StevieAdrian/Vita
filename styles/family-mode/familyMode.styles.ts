@@ -91,6 +91,19 @@ export const styles = StyleSheet.create({
     memberRelation: {
         fontSize: 14,
         color: COLORS.gray2,
+        position: "relative",
+    },
+    deleteBtn: {
+        position: "absolute",
+        top: 17,
+        right: 12,
+        // height: 2,
+        padding: 4,
+    },
+    deleteIcon: {
+        width: 30,
+        height: 36,
+        resizeMode: "contain",
     },
     statsRow: {
         flexDirection: "row",
