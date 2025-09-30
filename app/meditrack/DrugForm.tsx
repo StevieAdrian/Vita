@@ -3,20 +3,17 @@ import DrugsCategoryModal from "@/components/meditrack-forms/DrugCategory";
 import DrugRepeatModal from "@/components/meditrack-forms/DrugRepeat";
 import TimeDrug from "@/components/meditrack-forms/DrugTime";
 import InputField from "@/components/utils/InputField";
+import ModalError from "@/components/utils/ModalError";
+import ModalSuccess from "@/components/utils/ModalSuccess";
 import { COLORS } from "@/constants/colors";
 import { DrugReminder } from "@/constants/drugs";
+import { useDrugForm } from "@/hooks/useDrug";
 import { getCategoryLabel, getRepeatLabel } from "@/utils/drugformValidation";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
-import {
-  Image,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "../../styles/meditrack/drugform.style";
 
 interface DrugFormProps {
@@ -34,7 +31,7 @@ const DrugForm: React.FC<DrugFormProps> = ({
   isEditMode = false,
   onBack,
 }) => {
-  const [title, setTitle] = useState(initialData?.title || "");
+  const [drugName, setDrugName] = useState(initialData?.drugName || "");
   const [description, setDescription] = useState(
     initialData?.description || ""
   );
@@ -49,25 +46,54 @@ const DrugForm: React.FC<DrugFormProps> = ({
 
   const [isCategoryModalVisible, setIsCategoryModalVisible] = useState(false);
   const [isRepeatModalVisible, setIsRepeatModalVisible] = useState(false);
+  const { add, update, remove } = useDrugForm();
+  const [showError, setShowError] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const isFormValid =
-    title.trim() !== "" &&
+    drugName.trim() !== "" &&
     date.trim() !== "" &&
     category.length > 0 &&
     times.length > 0 &&
     times.every((time) => time.trim() !== "");
 
-  const handleAddReminder = () => {
+  const handleAddReminder = async () => {
+    if (!isFormValid) {
+      setErrorMessage("Please fill in all required fields correctly.");
+      setShowError(true);
+      return;
+    }
+
     const newReminder: DrugReminder = {
       id: initialData?.id || Date.now().toString(),
-      title,
+      drugName,
       description,
       date,
       category: category[0] || "",
       times,
       repeatDays,
+      isCompleted: initialData?.isCompleted ?? false,
+      createdAt: initialData?.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      userId: "",
     };
-    onSubmit(newReminder);
+
+    if (isEditMode && initialData?.id) {
+      await update(initialData.id, newReminder);
+    } else {
+      await add(newReminder);
+    }
+
+    onSubmit?.(newReminder);
+    setShowSuccess(true);
+
+    setDrugName("");
+    setDescription("");
+    setDate("");
+    setCategory([]);
+    setTimes(["12:00"]);
+    setRepeatDays([]);
   };
 
   const handleTimesChange = (newTimes: string[]) => {
@@ -109,8 +135,8 @@ const DrugForm: React.FC<DrugFormProps> = ({
           <TextInput
             style={styles.titleInput}
             placeholder="What's Reminder?"
-            value={title}
-            onChangeText={setTitle}
+            value={drugName}
+            onChangeText={setDrugName}
             editable={true}
           />
           <View style={styles.separator} />
@@ -213,6 +239,7 @@ const DrugForm: React.FC<DrugFormProps> = ({
                   : { backgroundColor: COLORS.primary3rd },
               ]}
               onPress={handleAddReminder}
+              disabled={!isFormValid}
             >
               <Ionicons
                 name={isEditMode ? "checkmark-outline" : "add-outline"}
@@ -239,6 +266,22 @@ const DrugForm: React.FC<DrugFormProps> = ({
         onClose={() => setIsRepeatModalVisible(false)}
         onApply={(selectedDays) => setRepeatDays(selectedDays)}
         initialRepeatDays={repeatDays}
+      />
+
+      <ModalError
+        visible={showError}
+        title="Missing Information"
+        description={errorMessage}
+        buttonText="OK"
+        onClose={() => setShowError(false)}
+      />
+
+      <ModalSuccess
+        visible={showSuccess}
+        title={isEditMode ? "Drug Reminer Updated!" : "Drug Reminder Added!"}
+        description="Your drug reminder has been saved successfully."
+        buttonText="Continue"
+        onClose={() => setShowSuccess(false)}
       />
     </SafeAreaView>
   );

@@ -1,6 +1,7 @@
 import { db } from "../config/firebaseConfig";
 import { collection, query, where, getDocs, serverTimestamp, addDoc, getDoc, doc, updateDoc, arrayUnion, setDoc } from "firebase/firestore";
 import { FamilyRequest, FamilyRequestInput } from "@/types/family"
+import { sendNotification } from "./notification.service";
 
 export async function checkUsernameExists(username: string) {
   const q = query(collection(db, "users"), where("username", "==", username));
@@ -34,8 +35,9 @@ export async function sendFamilyRequest(payload: FamilyRequestInput) {
     avatarUrl,
   };
 
-  await addDoc(collection(db, "familyRequests"), request);
+  const reqRef = await addDoc(collection(db, "familyRequests"), request);
 
+  await sendNotification(toUid, payload.fromUid, "FAMILY_REQUEST", `${payload.displayName} sent you a family request as ${payload.relation}`, { requestId: reqRef.id });
   return { success: true, toUid };
 }
 

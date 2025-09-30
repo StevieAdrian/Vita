@@ -6,6 +6,10 @@ export interface DrugReminder {
   category: string;
   times: string[];
   repeatDays: string[];
+  isCompleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  userId?: string;
 }
 
 export interface CategoryOption {
