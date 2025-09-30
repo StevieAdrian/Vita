@@ -12,6 +12,7 @@ import {
   validateTimeRange,
 } from "@/utils/appointment-cartegoryValidation";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   Image,
@@ -100,6 +101,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       createdAt: initialData?.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       userId: "",
+      status: "",
     };
 
     if (isEditMode && initialData?.id) {
@@ -149,7 +151,10 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={onBack}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.push("/meditrack/MediTrack")}
+          >
             <Image
               source={require("../../assets/utilsIcon/arrow-left.png")}
               style={styles.backIcon}
@@ -224,6 +229,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                 />
                 <Calender
                   value={date}
+                  allowFutureDates={true}
+                  allowPastDates={true}
                   onSelectDate={(newDate) => {
                     setDate(newDate);
                     clearFieldError("date");
