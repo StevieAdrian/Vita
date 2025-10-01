@@ -13,6 +13,8 @@ export interface NotificationItemProps {
   icon: any; 
   message: string;
   time: string;
+  isRead?: boolean;
+  onPress?: () => void;
 }
 
 export interface NotificationHeaderProps {

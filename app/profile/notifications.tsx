@@ -1,14 +1,16 @@
+import NotificationHeader from "@/components/profile/NotificaionHeader";
+import NotificationItem from "@/components/profile/NotificationItem";
+import TitleBack from "@/components/utils/TitleBack";
+import { NotificationMeta, NotificationType } from "@/constants/notification";
+import { useAuthState } from "@/hooks/useAuthState";
+import { useNotifications } from "@/hooks/useNotifications";
+import { markAsRead } from "@/services/notification.service";
+import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
+import { formatDate } from "@/utils/formatDate";
+import { useState } from "react";
 import { ActivityIndicator, ScrollView, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { styles } from "../../styles/profile/notifications.styles";
-import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
-import TitleBack from "@/components/utils/TitleBack";
-import NotificationItem from "@/components/profile/NotificationItem";
-import { NotificationMeta, NotificationType } from "@/constants/notification";
-import { useState } from "react";
-import NotificationHeader from "@/components/profile/NotificaionHeader";
-import { useAuthState } from "@/hooks/useAuthState";
-import { useNotifications } from "@/hooks/useNotifications";
 
 export default function Notifications() {
     const insets = useSafeAreaInsets();
@@ -59,14 +61,15 @@ export default function Notifications() {
                 ) : (
                     sorted.map((notif) => {
                         const meta = NotificationMeta[notif.type as NotificationType];
-                        const timeStr = notif.createdAt?.toDate ? notif.createdAt.toDate().toLocaleString() : "";
-
+                        const timeStr = notif.createdAt ? formatDate(notif.createdAt) : "";
                         return (
                             <NotificationItem
                                 key={notif.id}
                                 icon={meta.icon}
                                 message={notif.message}
                                 time={timeStr}
+                                isRead={notif.read}
+                                onPress={() => markAsRead(notif.id!)}
                             />
                         );
                     })
