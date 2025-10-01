@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { View, TextInput, TouchableOpacity, Text, Modal, Pressable, StyleSheet, Image } from "react-native";
-import { Ionicons } from "@expo/vector-icons"; 
 import { NotificationHeaderProps } from "@/types/notification";
 import { styles } from "@/styles/profile/notifications.styles";
 

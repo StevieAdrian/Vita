@@ -29,6 +29,13 @@ export default function Notifications() {
         return matchesSearch && matchesFilter;
     });
 
+    let sorted = filtered;
+    if (filter === "Newest") {
+        sorted = filtered;
+    } else if (filter === "Oldest") {
+        sorted = [...filtered].reverse();
+    }
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <ScrollView
@@ -50,7 +57,7 @@ export default function Notifications() {
                 {loading ? (
                     <ActivityIndicator size="large" color="#000" />
                 ) : (
-                    filtered.map((notif) => {
+                    sorted.map((notif) => {
                         const meta = NotificationMeta[notif.type as NotificationType];
                         const timeStr = notif.createdAt?.toDate ? notif.createdAt.toDate().toLocaleString() : "";
 
