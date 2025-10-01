@@ -11,6 +11,7 @@ export interface DiaryEntry {
   notes: string;
   createdAt?: any;
   id?: string;
+  date: any;
 }
 
 export interface DiaryInput {

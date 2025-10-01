@@ -22,6 +22,7 @@ export function validateDiary(input: DiaryInput): string | null {
   if (weight && isNaN(Number(weight))) {
     return "Weight must be a number.";
   }
+  
 
   return null;
 }

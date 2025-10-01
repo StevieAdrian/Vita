@@ -6,6 +6,7 @@ import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { styles } from "@/styles/hcd/dashboard.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
+import dayjs from "dayjs";
 import { router } from "expo-router";
 import { useCallback, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
@@ -19,7 +20,7 @@ import DateTimePicker, { DateType } from "react-native-ui-datepicker";
 export default function DashboardHome() {
   const insets = useSafeAreaInsets();
   const datePickerStyle = useDatePickerStyles();
-  const [selected, setSelected] = useState<DateType>();
+  const [selected, setSelected] = useState<DateType>(new Date());
   const [reminders, setReminders] = useState<Reminder[]>(initialReminders);
   const { data } = useUserProfile();
 
@@ -32,6 +33,10 @@ export default function DashboardHome() {
       )
     );
   }, []);
+
+  function formatDateLocal(date: Date) {
+    return date.toLocaleDateString("en-CA");
+  }
 
   return (
     <SafeAreaView style={styles.dashboardContainer}>
@@ -55,7 +60,31 @@ export default function DashboardHome() {
             <DateTimePicker
               mode="single"
               date={selected}
-              onChange={({ date }) => setSelected(date)}
+              onChange={({ date }) => {
+                if (date) {
+                  let jsDate: Date;
+
+                  if (date instanceof Date) {
+                    jsDate = date;
+                  } else if (
+                    typeof date === "string" ||
+                    typeof date === "number"
+                  ) {
+                    jsDate = new Date(date);
+                  } else {
+                    jsDate = (date as dayjs.Dayjs).toDate();
+                  }
+
+                  setSelected(jsDate);
+
+                  const selectedDate = formatDateLocal(jsDate);
+
+                  router.push({
+                    pathname: "/hcd/diary/viewHealthDiary",
+                    params: { date: selectedDate },
+                  });
+                }
+              }}
               styles={datePickerStyle}
             />
           </View>

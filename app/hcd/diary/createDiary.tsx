@@ -49,6 +49,9 @@ export default function CreateDiary() {
       year: "numeric",
     });
   };
+  function formatDateLocal(date: Date) {
+    return date.toLocaleDateString("en-CA");
+  }
 
   const checkHasInput = () => {
     if (
@@ -91,6 +94,7 @@ export default function CreateDiary() {
     const result = await addDiary({
       fromUid: user!.uid,
       ...input,
+      date: selected ? formatDateLocal(selected) : "",
     });
 
     if (result.success) {
