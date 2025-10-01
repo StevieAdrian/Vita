@@ -58,4 +58,12 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 6 },
     elevation: 3,
   },
+  emptyState: {
+    padding: 20,
+    alignItems: "center",
+  },
+  emptyText: {
+    color: COLORS.gray2,
+    fontSize: 14,
+  },
 });

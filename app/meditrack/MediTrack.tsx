@@ -1,18 +1,18 @@
 import { AppointmentCard } from "@/components/meditrack-forms/AppointmentCard";
 import { ReminderToggle } from "@/components/meditrack-forms/HeaderMediTrack";
-import { HistoryCard } from "@/components/meditrack-forms/HistoryCard";
-import { ReminderCard } from "@/components/meditrack-forms/Reminder";
-import { SectionHeader } from "@/components/meditrack-forms/TextMediTrack";
-import type { Appointment } from "@/constants/appointment";
-
 import {
-  initialAppointments,
-  initialReminders,
-} from "@/./constants/initialData";
-import type { Reminder, ReminderCategory } from "@/constants/reminder";
+  ReminderCard,
+  convertDrugToReminder,
+} from "@/components/meditrack-forms/Reminder";
+import { SectionHeader } from "@/components/meditrack-forms/TextMediTrack";
+import { useAppointments } from "@/hooks/useAppointment";
+import { useDrugForm } from "@/hooks/useDrug";
+
+import type { ReminderCategory } from "@/constants/reminder";
 import type React from "react";
 import { useCallback, useMemo, useState } from "react";
 import {
+  ActivityIndicator,
   Image,
   ScrollView,
   StatusBar,
@@ -20,48 +20,89 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { COLORS } from "../../constants/colors";
 import { styles } from "../../styles/meditrack/medistrack.style";
 
 const ScheduleScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
-
   const [selectedCategory, setSelectedCategory] =
     useState<ReminderCategory>("appointment");
-  const [reminders, setReminders] = useState<Reminder[]>(initialReminders);
-  const [appointments, setAppointments] =
-    useState<Appointment[]>(initialAppointments);
 
-  // Filter upcoming and history appointments
-  const upcomingAppointments = useMemo(
-    () =>
-      appointments.filter((appointment) => appointment.status === "upcoming"),
-    [appointments]
-  );
-  const historyAppointments = useMemo(
-    () =>
-      appointments.filter((appointment) => appointment.status === "history"),
-    [appointments]
+  // INTEGRASI DATABASE
+  const { drug: drugs, loading: drugsLoading } = useDrugForm();
+  const { appointments: appointmentReminders, loading: appointmentsLoading } =
+    useAppointments();
+
+  // Convert drugs to reminders
+  const drugReminders = useMemo(
+    () => drugs.map(convertDrugToReminder),
+    [drugs]
   );
 
+ 
+  const upcomingAppointments = useMemo(() => {
+    return appointmentReminders.filter((appt: any) => {
+      if (appt.status === "upcoming") return true;
+      if (appt.status === "history") return false;
+
+      try {
+        const appointmentDate = new Date(appt.date);
+        return appointmentDate >= new Date();
+      } catch {
+        return true;
+      }
+    });
+  }, [appointmentReminders]);
+
+  const historyAppointments = useMemo(() => {
+    return appointmentReminders.filter((appt: any) => {
+      if (appt.status === "history") return true;
+      if (appt.status === "upcoming") return false;
+
+      try {
+        const appointmentDate = new Date(appt.date);
+        return appointmentDate < new Date();
+      } catch {
+        return false; 
+      }
+    });
+  }, [appointmentReminders]);
+
+
+  // Handle toggle reminder
   const handleToggleReminder = useCallback((id: string) => {
-    setReminders((prev) =>
-      prev.map((reminder) =>
-        reminder.id === id
-          ? { ...reminder, completed: !reminder.completed }
-          : reminder
-      )
-    );
+    // Logic toggle (bisa ditambahkan update ke DB jika needed)
+    console.log("Toggle reminder:", id);
   }, []);
 
-  const handleSeeDetail = useCallback((appointment: Appointment) => {
+  const handleSeeDetail = useCallback((appointment: any) => {
     console.log("[ScheduleScreen] See detail tapped for:", appointment.id);
   }, []);
 
   const handleSeeAll = useCallback((section: string) => {
     console.log("[ScheduleScreen] See all for:", section);
   }, []);
+
+  // Loading state
+  if (drugsLoading || appointmentsLoading) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <View
+          style={[
+            styles.container,
+            { justifyContent: "center", alignItems: "center" },
+          ]}
+        >
+          <ActivityIndicator size="large" color={COLORS.primary} />
+          <Text style={{ marginTop: 10, color: COLORS.gray2 }}>Loading...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -78,9 +119,7 @@ const ScheduleScreen: React.FC = () => {
           right: 0,
           bottom: 0,
         }}
-        contentContainerStyle={{
-          paddingBottom: insets.bottom + 200,
-        }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + 200 }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
@@ -94,7 +133,6 @@ const ScheduleScreen: React.FC = () => {
             />
           </TouchableOpacity>
         </View>
-
         <ReminderToggle
           selected={selectedCategory}
           onSelect={setSelectedCategory}
@@ -105,47 +143,77 @@ const ScheduleScreen: React.FC = () => {
             title="Today Reminder"
             subtitle="See All"
             onPressSeeAll={() => handleSeeAll("today-reminders")}
-            countLabel={""}
+            countLabel={
+              drugReminders.length > 0
+                ? `${drugReminders.length} Reminders`
+                : ""
+            }
           />
-          {reminders.map((reminder) => (
-            <ReminderCard
-              key={reminder.id}
-              reminder={reminder}
-              onToggle={handleToggleReminder}
-            />
-          ))}
+          {drugReminders.length === 0 ? (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyText}>No reminders for today</Text>
+            </View>
+          ) : (
+            drugReminders.map((reminder) => (
+              <ReminderCard
+                key={reminder.id}
+                reminder={reminder}
+                onToggle={handleToggleReminder}
+              />
+            ))
+          )}
         </View>
-
+        {/* UPCOMING APPOINTMENTS SECTION */}
         <View style={styles.section}>
           <SectionHeader
             title="Upcoming Appointment"
             subtitle="See All"
-            countLabel={`${upcomingAppointments.length} Appointment`}
+            countLabel={`${upcomingAppointments.length} Appointment${
+              upcomingAppointments.length !== 1 ? "s" : ""
+            }`}
             onPressSeeAll={() => handleSeeAll("upcoming-appointments")}
           />
-          {upcomingAppointments.map((appointment) => (
-            <AppointmentCard
-              key={appointment.id}
-              appointment={appointment}
-              onPressDetail={handleSeeDetail}
-            />
-          ))}
+          {upcomingAppointments.length === 0 ? (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyText}>No upcoming appointments</Text>
+            </View>
+          ) : (
+            upcomingAppointments.map((appointment) => (
+              <AppointmentCard
+                key={appointment.id}
+                appointment={appointment}
+                onPressDetail={handleSeeDetail}
+              />
+            ))
+          )}
         </View>
-
+        {/* APPOINTMENT HISTORY SECTION */}
         <View style={styles.section}>
           <SectionHeader
             title="Appointment History"
             subtitle="See All"
             onPressSeeAll={() => handleSeeAll("appointment-history")}
-            countLabel={""}
+            countLabel={
+              historyAppointments.length > 0
+                ? `${historyAppointments.length} Appointment${
+                    historyAppointments.length !== 1 ? "s" : ""
+                  }`
+                : ""
+            }
           />
-          {historyAppointments.map((appointment) => (
-            <HistoryCard
-              key={appointment.id}
-              appointment={appointment}
-              onPressDetail={handleSeeDetail}
-            />
-          ))}
+          {historyAppointments.length === 0 ? (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyText}>No appointment history</Text>
+            </View>
+          ) : (
+            historyAppointments.map((appointment) => (
+              <AppointmentCard
+                key={appointment.id}
+                appointment={appointment}
+                onPressDetail={handleSeeDetail}
+              />
+            ))
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -172,6 +172,8 @@ export default function Signup() {
                 <Calender
                   value={data.dateOfBirth}
                   onSelectDate={(date) => handleChange("dateOfBirth", date)}
+                  allowFutureDates={false}
+                  allowPastDates={true}
                 />
               </View>
               <Text style={styles.label}>
