@@ -165,7 +165,7 @@
               <TouchableOpacity style={styles.containerHealthWarning}>
                 <View style={styles.titleHealth}>
                   <View style={styles.containerDigit}>
-                    <Image source={require("@/assets/hcd/healthWarning.png")} />
+                    <Image source={require("@/assets/hcd/healthWarning.png")} style={{ width: 34, height: 35 }}/>
                     <Text style={styles.titleDigitBio}>
                       2 Health Early Warning
                     </Text>
