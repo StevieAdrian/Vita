@@ -34,8 +34,8 @@ export const styles = StyleSheet.create({
         marginTop: 2,
     },
     icon: {
-        width: 32,
-        height: 32,
+        width: 35,
+        height: 35,
         resizeMode: "contain",
     },
     contentWrapper: {
