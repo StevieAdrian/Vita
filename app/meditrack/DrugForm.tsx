@@ -112,7 +112,7 @@ const DrugForm: React.FC<DrugFormProps> = ({
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => router.push("/meditrack/MediTrack")}
+          onPress={() => router.push("/meditrack/mediTrack")}
         >
           <Image
             source={require("../../assets/utilsIcon/arrow-left.png")}

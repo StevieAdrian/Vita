@@ -3,6 +3,7 @@ import { toggleOptions } from "@/constants/HeaderOptions";
 import type { ReminderCategory } from "@/constants/reminder";
 import { styles } from "@/styles/meditrack/headerMediTrack.styles";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import type React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
@@ -17,6 +18,14 @@ export const ReminderToggle: React.FC<ReminderToggleProps> = ({
 }) => {
   const handlePress = (optionId: ReminderCategory) => {
     onSelect(optionId);
+
+    setTimeout(() => {
+      if (optionId === "appointment") {
+        router.push("/meditrack/appointmentForm");
+      } else {
+        router.push("/meditrack/drugForm");
+      }
+    }, 100);
   };
 
   return (
@@ -34,13 +43,13 @@ export const ReminderToggle: React.FC<ReminderToggleProps> = ({
                   option.id === "appointment" ? COLORS.primary : COLORS.white,
               },
             ]}
-            onPress={() => handlePress(option.id)} 
+            onPress={() => handlePress(option.id)}
             activeOpacity={0.82}
           >
             <Ionicons
               name={option.icon}
               size={24}
-              color={option.id === "appointment" ? COLORS.white : COLORS.black} 
+              color={option.id === "appointment" ? COLORS.white : COLORS.black}
             />
             <Text
               style={[
