@@ -26,6 +26,7 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { styles } from "../../styles/meditrack/appointmentform.style";
+import { useAuth } from "@/context/AuthContext";
 
 interface AppointmentFormProps {
   initialData?: AppointmentReminder;
@@ -57,6 +58,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const { user } = useAuth();
 
   const validation = validateAppointmentForm({
     title,
@@ -100,7 +103,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       isCompleted: initialData?.isCompleted ?? false,
       createdAt: initialData?.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      userId: "",
+      userId: user?.uid || "",
       status: "",
     };
 
@@ -153,7 +156,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         <View style={styles.header}>
           <TouchableOpacity
             style={styles.backButton}
-            onPress={() => router.push("/meditrack/MediTrack")}
+            onPress={() => router.push("/meditrack/mediTrack")}
           >
             <Image
               source={require("../../assets/utilsIcon/arrow-left.png")}

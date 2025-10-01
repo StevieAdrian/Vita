@@ -1,4 +1,5 @@
 export interface AppointmentReminder {
+  status: string;
   id: string;
   title: string;
   description: string;

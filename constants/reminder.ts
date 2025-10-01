@@ -1,4 +1,4 @@
-export type ReminderCategory = "drug" | "appointment" | "other";
+export type ReminderCategory = "drug" | "appointment";
 
 export type Reminder = {
   id: string;
@@ -7,4 +7,11 @@ export type Reminder = {
   timeLabel: string;
   completed: boolean;
   category: ReminderCategory;
+  drugCategory?: string;
+  date?: string;
+  times?: string[];
+  repeatDays?: string[];
+  createdAt?: string;
+  updatedAt?: string;
+  userId?: string;
 };
