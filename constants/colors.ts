@@ -17,6 +17,7 @@ export const COLORS = {
   red: "#FE4A23",
   red2nd: "#FFCFC4",
   red3rd: "#FFF5F3",
+  red4th: "#FEF2F2",
 
   // Yellow
   yellow2nd: "#FFC116",
@@ -27,9 +28,11 @@ export const COLORS = {
   gray2: "#B1A6A6",
   gray3: "#E2E2E2",
   gray4: "#E6E6E6",
+  gray5: "#DADADA",
 
   // Other Neutrals
   white: "#FFFFFF",
   black: "#181818",
   background2nd: "#E9F3FF",
+  tosca: "#0D887C",
 };

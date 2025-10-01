@@ -4,19 +4,19 @@ export type NotificationType = | "FAMILY_REQUEST" | "MEDICINE_REMINDER" | "EARLY
 
 export const NotificationMeta: Record<NotificationType, { icon: any; color: string } > = {
   FAMILY_REQUEST: {
-    icon: require("@/assets/passiveIconNavBottom/passiveFamilyIcon.png"),
+    icon: require("@/assets/hcd/healthWarning.png"),
     color: COLORS.primary,   
   },
   MEDICINE_REMINDER: {
-    icon: require("@/assets/passiveIconNavBottom/passiveAnalysisIcon.png"),
+    icon: require("@/assets/hcd/healthWarning.png"),
     color: COLORS.primary,
   },
   EARLY_WARNING: {
-    icon: require("@/assets/passiveIconNavBottom/passiveHomeIcon.png"),
+    icon: require("@/assets/hcd/healthWarning.png"),
     color: COLORS.primary,
   },
   APPOINTMENT: {
-    icon: require("@/assets/passiveIconNavBottom/passiveScheduleIcon.png"),
+    icon: require("@/assets/hcd/healthWarning.png"),
     color: COLORS.primary,
   },
 };
