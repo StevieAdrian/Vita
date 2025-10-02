@@ -141,6 +141,7 @@ export default function HealthDiary() {
     },
     [displayedSchedules]
   );
+
   useEffect(() => {
     const fetchDiary = async () => {
       setLoading(true);
@@ -230,7 +231,10 @@ export default function HealthDiary() {
           </View>
 
           {/* Vital Sign */}
-          <TouchableOpacity style={styles.containerAllDigitBio}>
+          <TouchableOpacity
+            style={styles.containerAllDigitBio}
+            onPress={() => router.push("/profile/digitalBiomarker")}
+          >
             {/* Judul */}
             <View style={styles.titleHealth}>
               <View style={styles.containerDigit}>
@@ -301,7 +305,9 @@ export default function HealthDiary() {
                   <View style={styles.captCont1}>
                     <Text style={styles.captionNumber}>Weight</Text>
                     <View style={styles.captCont}>
-                      <Text style={styles.captionName}>{diaryData?.weight ?? "-"}</Text>
+                      <Text style={styles.captionName}>
+                        {diaryData?.weight ?? "-"}
+                      </Text>
                       <Text style={styles.captionNumber}>kg</Text>
                     </View>
                   </View>
@@ -315,7 +321,15 @@ export default function HealthDiary() {
             <View style={styles.containerReminder}>
               <View style={styles.captionSubtitle}>
                 <Text style={styles.subtitle}>Your Diary</Text>
-                <TouchableOpacity style={styles.subtitleContainerText}>
+                <TouchableOpacity
+                  style={styles.subtitleContainerText}
+                  onPress={() =>
+                    router.push({
+                      pathname: "/hcd/diary/editDiary",
+                      params: { date: selectedDateKey },
+                    })
+                  }
+                >
                   <Text style={styles.seeAllContainer}>Edit</Text>
                 </TouchableOpacity>
               </View>
@@ -417,7 +431,16 @@ export default function HealthDiary() {
                 {/* Latest Update */}
                 <View style={styles.LatestContainer}>
                   <Text style={styles.latestText}>
-                    Latest update 15/09/2025
+                    {diaryData?.updatedAt
+                      ? `Latest update ${new Date(
+                          diaryData.updatedAt.seconds * 1000
+                        ).toLocaleDateString("en-GB")} ${new Date(
+                          diaryData.updatedAt.seconds * 1000
+                        ).toLocaleTimeString("en-GB", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}`
+                      : "No updates yet"}
                   </Text>
                 </View>
               </View>

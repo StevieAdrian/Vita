@@ -34,10 +34,6 @@ export const addHealthDiary = async (payload: DiaryEntry) => {
   const reqRef = await addDoc(collection(db, "healthDiaries"), diaryData);
   return { success: true, id: reqRef.id };
 };
-export async function updateHealthDiary(id: string, data: Partial<DiaryEntry>) {
-  const diaryRef = doc(db, "healthDiaries", id);
-  return await updateDoc(diaryRef, data);
-}
 
 export const getHealthDiaries = async () => {
   const diaryCollection = collection(db, "healthDiaries");
@@ -59,8 +55,25 @@ export const getHealthDiariesByDate = async (date: any) => {
   const diaryCollection = collection(db, "healthDiaries");
   const q = query(diaryCollection, where("date", "==", date));
   const snapshot = await getDocs(q);
+  if (snapshot.empty) return [];
   return snapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
   })) as (DiaryEntry & { id: string })[];
 };
+
+export async function updateHealthDiary(id: string, data: Partial<DiaryEntry>) {
+  console.log("mau ini service");
+  try {
+    const diaryRef = doc(db, "healthDiaries", id);
+    await updateDoc(diaryRef, {
+      ...data,
+      updatedAt: serverTimestamp(),
+    });
+    console.log("update data:", data);
+    return { success: true };
+  } catch (err: any) {
+    console.error("Error updating diary:", err.message);
+    return { success: false, message: err.message };
+  }
+}
