@@ -12,6 +12,7 @@ export interface DiaryEntry {
   createdAt?: any;
   id?: string;
   date: any;
+  updatedAt: any;
 }
 
 export interface DiaryInput {

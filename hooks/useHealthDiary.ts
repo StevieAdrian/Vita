@@ -4,6 +4,7 @@ import {
   getHealthDiaries,
   getHealthDiariesByDate,
   getHealthDiaryById,
+  updateHealthDiary,
 } from "../services/diary.service";
 import { DiaryEntry } from "../types/diary";
 
@@ -50,7 +51,19 @@ export function useHealthDiary() {
     setLoading(true);
     try {
       const diary = await getHealthDiariesByDate(date);
-      return { success: true, data: diary };
+      return { success: true, data: diary ?? [] };
+    } catch (err: any) {
+      return { success: false, message: err.message, data: [] };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateDiary = async (id: string, data: Partial<DiaryEntry>) => {
+    setLoading(true);
+    try {
+      await updateHealthDiary(id, data);
+      return { success: true };
     } catch (err: any) {
       return { success: false, message: err.message };
     } finally {
@@ -58,5 +71,12 @@ export function useHealthDiary() {
     }
   };
 
-  return { addDiary, loading, fetchDiaries, fetchDiariesById, fetchDiariesByDate };
+  return {
+    addDiary,
+    loading,
+    fetchDiaries,
+    fetchDiariesById,
+    fetchDiariesByDate,
+    updateDiary,
+  };
 }
