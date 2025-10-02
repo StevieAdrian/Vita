@@ -163,4 +163,10 @@ export const styles = StyleSheet.create({
     textAlignVertical: "top",
     minHeight: 60,
   },
+  titleHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 8,
+  },
 });

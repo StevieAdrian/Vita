@@ -14,4 +14,5 @@ export type Reminder = {
   createdAt?: string;
   updatedAt?: string;
   userId?: string;
+  drugId?: string;
 };
