@@ -1,5 +1,6 @@
 import { SignupData, UserProfile } from "../types/auth";
 import { SignupValues } from "./signUpValidation";
+import { Notification } from "@/types/notification";
 
 export function mapperSignupValues(data: Partial<SignupData>, confirmPassword: string ): SignupValues {
     return {
@@ -31,4 +32,17 @@ export function mapperUserProfile(data: Partial<UserProfile>): UserProfile {
         avatarUrl: data.avatarUrl ?? "",
         emergencyContacts: Array.isArray(data.emergencyContacts) ? data.emergencyContacts : [],
     };
+}
+
+export function mapperNotification(id: string, data: any): Notification {
+  return {
+    id,
+    toUid: data.toUid ?? "",
+    fromUid: data.fromUid ?? "",
+    type: data.type ?? "GENERAL",
+    message: data.message ?? "",
+    createdAt: data.createdAt,
+    read: data.read ?? false,
+    extraData: data.extraData ?? {},
+  };
 }

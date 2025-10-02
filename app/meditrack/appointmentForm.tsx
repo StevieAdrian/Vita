@@ -1,6 +1,6 @@
 import Calender from "@/components/hcd/Calender";
 import AppointmentCategoryModal from "@/components/meditrack-forms/AppointmentPopUp";
-import AppointmentTimeRange from "@/components/meditrack-forms/AppointTime";
+import AppointmentTimeRange from "@/components/meditrack-forms/AppointmentTime";
 import InputField from "@/components/utils/InputField";
 import ModalError from "@/components/utils/ModalError";
 import ModalSuccess from "@/components/utils/ModalSuccess";
@@ -12,6 +12,7 @@ import {
   validateTimeRange,
 } from "@/utils/appointment-cartegoryValidation";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   Image,
@@ -25,6 +26,7 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { styles } from "../../styles/meditrack/appointmentform.style";
+import { useAuth } from "@/context/AuthContext";
 
 interface AppointmentFormProps {
   initialData?: AppointmentReminder;
@@ -56,6 +58,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const { user } = useAuth();
 
   const validation = validateAppointmentForm({
     title,
@@ -99,7 +103,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       isCompleted: initialData?.isCompleted ?? false,
       createdAt: initialData?.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      userId: "",
+      userId: user?.uid || "",
+      status: "",
     };
 
     if (isEditMode && initialData?.id) {
@@ -149,7 +154,10 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={onBack}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.push("/meditrack/mediTrack")}
+          >
             <Image
               source={require("../../assets/utilsIcon/arrow-left.png")}
               style={styles.backIcon}
@@ -224,6 +232,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                 />
                 <Calender
                   value={date}
+                  allowFutureDates={true}
+                  allowPastDates={true}
                   onSelectDate={(newDate) => {
                     setDate(newDate);
                     clearFieldError("date");

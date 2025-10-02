@@ -121,6 +121,8 @@ export default function ProfileSettings() {
               <Calender
                 value={data.dateOfBirth}
                 onSelectDate={(date) => handleChange("dateOfBirth", date)}
+                allowFutureDates={false}
+                allowPastDates={true}
               />
             </View>
 

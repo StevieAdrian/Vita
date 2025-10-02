@@ -7,9 +7,11 @@ import ModalError from "@/components/utils/ModalError";
 import ModalSuccess from "@/components/utils/ModalSuccess";
 import { COLORS } from "@/constants/colors";
 import { DrugReminder } from "@/constants/drugs";
+import { useAuth } from "@/context/AuthContext";
 import { useDrugForm } from "@/hooks/useDrug";
 import { getCategoryLabel, getRepeatLabel } from "@/utils/drugformValidation";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
@@ -50,6 +52,7 @@ const DrugForm: React.FC<DrugFormProps> = ({
   const [showError, setShowError] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const { user } = useAuth();
 
   const isFormValid =
     drugName.trim() !== "" &&
@@ -76,7 +79,7 @@ const DrugForm: React.FC<DrugFormProps> = ({
       isCompleted: initialData?.isCompleted ?? false,
       createdAt: initialData?.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      userId: "",
+      userId: user?.uid || "",
     };
 
     if (isEditMode && initialData?.id) {
@@ -107,7 +110,10 @@ const DrugForm: React.FC<DrugFormProps> = ({
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={onBack}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.push("/meditrack/mediTrack")}
+        >
           <Image
             source={require("../../assets/utilsIcon/arrow-left.png")}
             style={styles.backIcon}
@@ -166,7 +172,12 @@ const DrugForm: React.FC<DrugFormProps> = ({
                 placeholderTextColor={COLORS.gray2}
                 style={styles.inputLabel}
               />
-              <Calender value={date} onSelectDate={setDate} />
+              <Calender
+                value={date}
+                allowFutureDates={true}
+                allowPastDates={true}
+                onSelectDate={setDate}
+              />
             </View>
           </View>
 

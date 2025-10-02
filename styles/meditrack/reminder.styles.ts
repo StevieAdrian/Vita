@@ -48,4 +48,24 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+
+    completedText: {
+    textDecorationLine: 'line-through',
+    opacity: 0.6,
+  },
+  repeatDays: {
+    fontSize: 12,
+    color: COLORS.gray1,
+    marginTop: 2,
+  },
+  categoryDetail: {
+    fontSize: 11,
+    color: COLORS.gray1,
+    fontStyle: 'italic',
+    marginTop: 2,
+  },
+  textContainer: {
+    flex: 1,
+    marginLeft: 12,
+  },
 });

@@ -1,4 +1,5 @@
 import { COLORS } from "@/constants/colors";
+import { DRUG_CATEGORIES, DrugReminder } from "@/constants/drugs";
 import type { Reminder } from "@/constants/reminder";
 import { styles } from "@/styles/meditrack/reminder.styles";
 import type React from "react";
@@ -9,6 +10,7 @@ type ReminderCardProps = {
   onToggle: (id: string) => void;
   showDescription?: boolean;
 };
+
 const truncateText = (text: string, wordLimit: number) => {
   if (!text) return "";
   const words = text.trim().split(/\s+/);
@@ -18,48 +20,128 @@ const truncateText = (text: string, wordLimit: number) => {
   return text;
 };
 
+export const convertDrugToReminder = (drugReminder: DrugReminder): Reminder => {
+  return {
+    id: drugReminder.id,
+    title: drugReminder.drugName,
+    description: drugReminder.description,
+    category: "drug",
+    drugCategory: drugReminder.category,
+    timeLabel: formatTimesToTimeLabel(drugReminder.times),
+    date: drugReminder.date,
+    times: drugReminder.times,
+    repeatDays: drugReminder.repeatDays || [],
+    completed: drugReminder.isCompleted,
+    createdAt: drugReminder.createdAt,
+    updatedAt: drugReminder.updatedAt,
+    userId: drugReminder.userId,
+  };
+};
+
+const formatTimesToTimeLabel = (times: string[]): string => {
+  if (!times || times.length === 0) return "No time set";
+  if (times.length === 1) return times[0];
+  return `${times.length} times`;
+};
+
+const getCardBackground = (reminderType: "drug" | "appointment") => {
+  switch (reminderType) {
+    case "drug":
+      return COLORS.primary4th;
+    case "appointment":
+      return COLORS.secondary4th;
+    default:
+      return COLORS.primary4th;
+  }
+};
+
+const getReminderIcon = (reminderType: "drug" | "appointment" ) => {
+  switch (reminderType) {
+    case "drug":
+      return require("@/assets/mediTrack/pill.png");
+    case "appointment":
+      return require("@/assets/mediTrack/medicalCheckUp.png");
+    default:
+      return require("@/assets/mediTrack/pill.png");
+  }
+};
+
 export const ReminderCard: React.FC<ReminderCardProps> = ({
   reminder,
   onToggle,
   showDescription = true,
 }) => {
-  const cardBackground =
-    reminder.category === "drug" ? COLORS.primary4th : COLORS.secondary4th;
+  const reminderType = reminder.category;
+  const cardBackground = getCardBackground(reminderType);
+  const reminderIcon = getReminderIcon(reminderType);
+
+  const handleToggle = () => {
+    onToggle(reminder.id);
+  };
 
   return (
     <TouchableOpacity
       style={[styles.container, { backgroundColor: cardBackground }]}
+      onPress={handleToggle}
     >
       <View style={styles.leftColumn}>
         <View>
-          <Image
-            source={
-              reminder.category === "drug"
-                ? require("@/assets/mediTrack/pill.png")
-                : require("@/assets/mediTrack/medicalCheckUp.png")
-            }
-            style={{ width: 35, height: 35 }}
-            resizeMode="contain"
-          />
+          {reminderIcon && (
+            <Image
+              source={reminderIcon}
+              style={[
+                { width: 35, height: 35 },
+                reminder.completed && { opacity: 0.5 },
+              ]}
+              resizeMode="contain"
+            />
+          )}
         </View>
-        <View>
+        <View style={styles.textContainer}>
           <Text
-            style={[styles.title, { maxWidth: 120 }]}
+            style={[
+              styles.title,
+              { maxWidth: 120 },
+              reminder.completed && styles.completedText,
+            ]}
             numberOfLines={1}
             ellipsizeMode="tail"
           >
             {reminder.title}
           </Text>
+
           {showDescription && (
-            <Text style={styles.subtitle}>
+            <Text
+              style={[
+                styles.subtitle,
+                reminder.completed && styles.completedText,
+              ]}
+            >
               {truncateText(reminder.description, 15)}
             </Text>
           )}
+
           <Text style={styles.time}>{reminder.timeLabel}</Text>
+
+          {reminder.repeatDays && reminder.repeatDays.length > 0 && (
+            <Text style={styles.repeatDays}>
+              Repeats: {reminder.repeatDays.join(", ")}
+            </Text>
+          )}
+
+          {reminderType === "drug" &&
+            reminder.drugCategory &&
+            reminder.drugCategory !== "other" && (
+              <Text style={styles.categoryDetail}>
+                {DRUG_CATEGORIES.find(
+                  (cat) => cat.value === reminder.drugCategory
+                )?.label || reminder.drugCategory}
+              </Text>
+            )}
         </View>
       </View>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleToggle}>
         <Image
           source={require("@/assets/utilsIcon/arrow-left.png")}
           style={styles.icon}
