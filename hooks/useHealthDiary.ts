@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { addHealthDiary, updateHealthDiary } from "../services/diary.service";
+import {
+  addHealthDiary,
+  getHealthDiaries,
+  getHealthDiariesByDate,
+  getHealthDiaryById,
+} from "../services/diary.service";
 import { DiaryEntry } from "../types/diary";
 
 export function useHealthDiary() {
@@ -17,10 +22,11 @@ export function useHealthDiary() {
     }
   };
 
-  const editDiary = async (id: string, data: Partial<DiaryEntry>) => {
+  const fetchDiaries = async () => {
     setLoading(true);
     try {
-      return await updateHealthDiary(id, data);
+      const diaries = await getHealthDiaries();
+      return { success: true, data: diaries };
     } catch (err: any) {
       return { success: false, message: err.message };
     } finally {
@@ -28,5 +34,29 @@ export function useHealthDiary() {
     }
   };
 
-  return { addDiary, loading, editDiary };
+  const fetchDiariesById = async (id: string) => {
+    setLoading(true);
+    try {
+      const diary = await getHealthDiaryById(id);
+      return { success: true, data: diary };
+    } catch (err: any) {
+      return { success: false, message: err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchDiariesByDate = async (date: any) => {
+    setLoading(true);
+    try {
+      const diary = await getHealthDiariesByDate(date);
+      return { success: true, data: diary };
+    } catch (err: any) {
+      return { success: false, message: err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { addDiary, loading, fetchDiaries, fetchDiariesById, fetchDiariesByDate };
 }
