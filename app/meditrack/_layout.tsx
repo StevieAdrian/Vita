@@ -7,6 +7,12 @@ export default function MeditrackLayout() {
       <Stack>
         <Stack.Screen name="mediTrack" options={{ headerShown: false }} />
         <Stack.Screen name="drugForm" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="AllReminderCard"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
     </DrugProvider>
   );
