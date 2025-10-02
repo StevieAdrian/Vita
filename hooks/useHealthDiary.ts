@@ -1,9 +1,9 @@
 import { useState } from "react";
 import {
   addHealthDiary,
+  deleteHealthDiary,
   getHealthDiaries,
   getHealthDiariesByDate,
-  getHealthDiaryById,
   updateHealthDiary,
 } from "../services/diary.service";
 import { DiaryEntry } from "../types/diary";
@@ -35,18 +35,6 @@ export function useHealthDiary() {
     }
   };
 
-  const fetchDiariesById = async (id: string) => {
-    setLoading(true);
-    try {
-      const diary = await getHealthDiaryById(id);
-      return { success: true, data: diary };
-    } catch (err: any) {
-      return { success: false, message: err.message };
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const fetchDiariesByDate = async (date: any) => {
     setLoading(true);
     try {
@@ -71,12 +59,25 @@ export function useHealthDiary() {
     }
   };
 
+  const deleteDiary = async (id: string) => {
+    setLoading(true);
+    try {
+      console.log("UseHook");
+      await deleteHealthDiary(id);
+      return { success: true };
+    } catch (err: any) {
+      return { success: false, message: err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     addDiary,
     loading,
     fetchDiaries,
-    fetchDiariesById,
     fetchDiariesByDate,
     updateDiary,
+    deleteDiary,
   };
 }

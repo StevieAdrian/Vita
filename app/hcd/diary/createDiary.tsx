@@ -91,11 +91,23 @@ export default function CreateDiary() {
       return;
     }
 
-    const result = await addDiary({
+    const diaryEntry = {
       fromUid: user!.uid,
-      ...input,
-      date: selected ? formatDateLocal(selected) : "",
-    });
+      systolic: Number(systolic),
+      diastolic: Number(diastolic),
+      heartRate: Number(heartRate),
+      bloodSugar: Number(bloodSugar),
+      weight: Number(weight),
+      mood,
+      symptoms,
+      activities,
+      notes,
+      date: selected ?? new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    const result = await addDiary(diaryEntry);
 
     if (result.success) {
       setSystolic("");

@@ -149,6 +149,7 @@ export default function HealthDiary() {
       const res = await fetchDiariesByDate(dateKey);
       if (res.success) {
         setDiaries(res.success && res.data ? res.data : []);
+        console.log(diaries);
       } else {
         setDiaries([]);
         console.log(res.message);
@@ -432,14 +433,14 @@ export default function HealthDiary() {
                 <View style={styles.LatestContainer}>
                   <Text style={styles.latestText}>
                     {diaryData?.updatedAt
-                      ? `Latest update ${new Date(
-                          diaryData.updatedAt.seconds * 1000
-                        ).toLocaleDateString("en-GB")} ${new Date(
-                          diaryData.updatedAt.seconds * 1000
-                        ).toLocaleTimeString("en-GB", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}`
+                      ? `Latest update ${diaryData.updatedAt
+                          .toDate()
+                          .toLocaleDateString("en-GB")} ${diaryData.updatedAt
+                          .toDate()
+                          .toLocaleTimeString("en-GB", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}`
                       : "No updates yet"}
                   </Text>
                 </View>
