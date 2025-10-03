@@ -6,7 +6,7 @@ export type Reminder = {
   description: string;
   timeLabel: string;
   completed: boolean;
-  category: ReminderCategory;
+  category: ReminderCategory | "other";
   drugCategory?: string;
   date?: string;
   times?: string[];

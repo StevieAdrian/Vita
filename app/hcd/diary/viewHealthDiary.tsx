@@ -3,11 +3,14 @@ import TitleBack from "@/components/utils/TitleBack";
 import { COLORS } from "@/constants/colors";
 import { initialReminders } from "@/constants/initialData";
 import { Reminder } from "@/constants/reminder";
+import { useAuth } from "@/context/AuthContext";
 import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
-import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
+import { useHealthDiary } from "@/hooks/useHealthDiary";
 import { styles } from "@/styles/hcd/viewHealthDiary.style";
-import { router } from "expo-router";
-import { useCallback, useState } from "react";
+import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
+import { DiaryEntry } from "@/types/diary";
+import { router, useLocalSearchParams } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import {
@@ -18,13 +21,20 @@ import DateTimePicker, { DateType } from "react-native-ui-datepicker";
 
 export default function HealthDiary() {
   const insets = useSafeAreaInsets();
+  const user = useAuth();
   const datePickerStyle = useDatePickerStyles();
-  const [selected, setSelected] = useState<DateType>();
   const [reminders, setReminders] = useState<Reminder[]>(initialReminders);
-  const [symptoms, setSymptoms] = useState("Headache since this morning");
-  const [mood, setMood] = useState("Feeling a bit tired but okay");
-  const [activities, setActivities] = useState("Jogging for 20 minutes");
-  const [notes, setNotes] = useState("Need to drink more water today");
+  const [symptoms, setSymptoms] = useState("");
+  const [mood, setMood] = useState("");
+  const [activities, setActivities] = useState("");
+  const [notes, setNotes] = useState("");
+  const { date } = useLocalSearchParams<{ date?: string }>();
+  const [selected, setSelected] = useState<DateType>(
+    date ? new Date(date) : new Date()
+  );
+  const [diaries, setDiaries] = useState<DiaryEntry[]>([]);
+  const { fetchDiariesByDate } = useHealthDiary();
+  const [loading, setLoading] = useState(false);
 
   const schedules: Record<string, Reminder[]> = {
     "2025-09-29": [
@@ -132,6 +142,25 @@ export default function HealthDiary() {
     [displayedSchedules]
   );
 
+  useEffect(() => {
+    const fetchDiary = async () => {
+      setLoading(true);
+      const dateKey = formatDateLocal(selected as Date);
+      const res = await fetchDiariesByDate(dateKey);
+      if (res.success) {
+        setDiaries(res.success && res.data ? res.data : []);
+      } else {
+        setDiaries([]);
+        console.log(res.message);
+      }
+      setLoading(false);
+    };
+
+    fetchDiary();
+  }, [selected]);
+  const diaryData = diaries[0];
+  console.log(diaryData);
+
   return (
     <SafeAreaView style={styles.dashboardContainer}>
       <ScrollView
@@ -202,7 +231,10 @@ export default function HealthDiary() {
           </View>
 
           {/* Vital Sign */}
-          <TouchableOpacity style={styles.containerAllDigitBio}>
+          <TouchableOpacity
+            style={styles.containerAllDigitBio}
+            onPress={() => router.push("/profile/digitalBiomarker")}
+          >
             {/* Judul */}
             <View style={styles.titleHealth}>
               <View style={styles.containerDigit}>
@@ -228,7 +260,10 @@ export default function HealthDiary() {
                   <View style={styles.captCont1}>
                     <Text style={styles.captionNumber}>Blood Pressure</Text>
                     <View style={styles.captCont}>
-                      <Text style={styles.captionName}>120/80</Text>
+                      <Text style={styles.captionName}>
+                        {diaryData?.systolic ?? "-"} /{" "}
+                        {diaryData?.diastolic ?? "-"}
+                      </Text>
                       <Text style={styles.captionNumber}>mmHg</Text>
                     </View>
                   </View>
@@ -240,7 +275,10 @@ export default function HealthDiary() {
                   <View style={styles.captCont1}>
                     <Text style={styles.captionNumber}>Blood Sugar</Text>
                     <View style={styles.captCont}>
-                      <Text style={styles.captionName}>72</Text>
+                      <Text style={styles.captionName}>
+                        {" "}
+                        {diaryData?.bloodSugar ?? "-"}
+                      </Text>
                       <Text style={styles.captionNumber}>mg/dL</Text>
                     </View>
                   </View>
@@ -253,7 +291,9 @@ export default function HealthDiary() {
                   <View style={styles.captCont1}>
                     <Text style={styles.captionNumber}>Heart Rate</Text>
                     <View style={styles.captCont}>
-                      <Text style={styles.captionName}>100</Text>
+                      <Text style={styles.captionName}>
+                        {diaryData?.heartRate ?? "-"}
+                      </Text>
                       <Text style={styles.captionNumber}>bpm</Text>
                     </View>
                   </View>
@@ -265,7 +305,9 @@ export default function HealthDiary() {
                   <View style={styles.captCont1}>
                     <Text style={styles.captionNumber}>Weight</Text>
                     <View style={styles.captCont}>
-                      <Text style={styles.captionName}>60</Text>
+                      <Text style={styles.captionName}>
+                        {diaryData?.weight ?? "-"}
+                      </Text>
                       <Text style={styles.captionNumber}>kg</Text>
                     </View>
                   </View>
@@ -279,7 +321,15 @@ export default function HealthDiary() {
             <View style={styles.containerReminder}>
               <View style={styles.captionSubtitle}>
                 <Text style={styles.subtitle}>Your Diary</Text>
-                <TouchableOpacity style={styles.subtitleContainerText}>
+                <TouchableOpacity
+                  style={styles.subtitleContainerText}
+                  onPress={() =>
+                    router.push({
+                      pathname: "/hcd/diary/editDiary",
+                      params: { date: selectedDateKey },
+                    })
+                  }
+                >
                   <Text style={styles.seeAllContainer}>Edit</Text>
                 </TouchableOpacity>
               </View>
@@ -305,7 +355,7 @@ export default function HealthDiary() {
                           backgroundColor: COLORS.primary5th,
                         },
                       ]}
-                      value={symptoms}
+                      value={diaryData?.symptoms ?? "-"}
                       onChangeText={setSymptoms}
                       multiline
                     />
@@ -327,7 +377,7 @@ export default function HealthDiary() {
                           backgroundColor: COLORS.red3rd,
                         },
                       ]}
-                      value={mood}
+                      value={diaryData?.mood ?? "-"}
                       onChangeText={setMood}
                       multiline
                     />
@@ -349,7 +399,7 @@ export default function HealthDiary() {
                           backgroundColor: COLORS.secondary5th,
                         },
                       ]}
-                      value={activities}
+                      value={diaryData?.activities ?? "-"}
                       onChangeText={setActivities}
                       multiline
                     />
@@ -371,7 +421,7 @@ export default function HealthDiary() {
                           backgroundColor: "#EAEAEA",
                         },
                       ]}
-                      value={notes}
+                      value={diaryData?.notes ?? "-"}
                       onChangeText={setNotes}
                       multiline
                     />
@@ -381,7 +431,16 @@ export default function HealthDiary() {
                 {/* Latest Update */}
                 <View style={styles.LatestContainer}>
                   <Text style={styles.latestText}>
-                    Latest update 15/09/2025
+                    {diaryData?.updatedAt
+                      ? `Latest update ${new Date(
+                          diaryData.updatedAt.seconds * 1000
+                        ).toLocaleDateString("en-GB")} ${new Date(
+                          diaryData.updatedAt.seconds * 1000
+                        ).toLocaleTimeString("en-GB", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}`
+                      : "No updates yet"}
                   </Text>
                 </View>
               </View>

@@ -1,8 +1,15 @@
+import ModalError from "@/components/utils/ModalError";
+import ModalSuccess from "@/components/utils/ModalSuccess";
 import PrimaryButtonColorForm from "@/components/utils/PrimaryButtonColorForm";
 import TitleBack from "@/components/utils/TitleBack";
+import { useAuth } from "@/context/AuthContext";
 import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
+import { useHealthDiary } from "@/hooks/useHealthDiary";
+import { useUserProfile } from "@/hooks/useUserProfile";
 import { styles } from "@/styles/hcd/createDiary.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
+import { DiaryInput } from "@/types/diary";
+import { validateDiary } from "@/utils/validateDiary";
 import { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
@@ -13,11 +20,26 @@ import {
 import DateTimePicker from "react-native-ui-datepicker";
 
 export default function CreateDiary() {
+  const { user } = useAuth();
+  const { addDiary } = useHealthDiary();
   const insets = useSafeAreaInsets();
   const [selected, setSelected] = useState<Date | undefined>(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const datePickerStyles = useDatePickerStyles();
   const [hasInput, setHasInput] = useState(false);
+  const { loading } = useUserProfile();
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [systolic, setSystolic] = useState("");
+  const [diastolic, setDiastolic] = useState("");
+  const [heartRate, setHeartRate] = useState("");
+  const [mood, setMood] = useState("");
+  const [bloodSugar, setBloodSugar] = useState("");
+  const [weight, setWeight] = useState("");
+  const [symptoms, setSymptoms] = useState("");
+  const [activities, setActivities] = useState("");
+  const [notes, setNotes] = useState("");
 
   const formatDate = (date?: Date) => {
     if (!date) return "";
@@ -27,9 +49,67 @@ export default function CreateDiary() {
       year: "numeric",
     });
   };
+  function formatDateLocal(date: Date) {
+    return date.toLocaleDateString("en-CA");
+  }
 
-  const handleInputChange = (text: string) => {
-    setHasInput(text.trim().length > 0);
+  const checkHasInput = () => {
+    if (
+      systolic.trim() ||
+      diastolic.trim() ||
+      heartRate.trim() ||
+      bloodSugar.trim() ||
+      weight.trim() ||
+      mood.trim() ||
+      symptoms.trim() ||
+      activities.trim() ||
+      notes.trim()
+    ) {
+      setHasInput(true);
+    } else {
+      setHasInput(false);
+    }
+  };
+
+  const saveDiary = async () => {
+    const input: DiaryInput = {
+      systolic,
+      diastolic,
+      heartRate,
+      bloodSugar,
+      weight,
+      mood,
+      symptoms,
+      activities,
+      notes,
+    };
+
+    const error = validateDiary(input);
+    if (error) {
+      setErrorMessage(error);
+      setShowError(true);
+      return;
+    }
+
+    const result = await addDiary({
+      fromUid: user!.uid,
+      ...input,
+      date: selected ? formatDateLocal(selected) : "",
+    });
+
+    if (result.success) {
+      setSystolic("");
+      setDiastolic("");
+      setHeartRate("");
+      setBloodSugar("");
+      setWeight("");
+      setMood("");
+      setSymptoms("");
+      setActivities("");
+      setNotes("");
+      setShowSuccess(true);
+      setHasInput(false);
+    }
   };
 
   return (
@@ -87,7 +167,11 @@ export default function CreateDiary() {
                   <View style={styles.bottomInputCont}>
                     <TextInput
                       style={styles.halfInput}
-                      onChangeText={handleInputChange}
+                      value={systolic}
+                      onChangeText={(text) => {
+                        setSystolic(text);
+                        checkHasInput();
+                      }}
                       keyboardType="numeric"
                     />
                     <Text style={styles.shadowContent}>Systolic</Text>
@@ -95,7 +179,11 @@ export default function CreateDiary() {
                   <View style={styles.bottomInputCont}>
                     <TextInput
                       style={styles.halfInput}
-                      onChangeText={handleInputChange}
+                      value={diastolic}
+                      onChangeText={(text) => {
+                        setDiastolic(text);
+                        checkHasInput();
+                      }}
                       keyboardType="numeric"
                     />
                     <Text style={styles.shadowContent}>Diastolic</Text>
@@ -109,7 +197,11 @@ export default function CreateDiary() {
                   <Text style={styles.inputTitle}>Heart Rate(bpm)</Text>
                   <TextInput
                     style={styles.halfInput}
-                    onChangeText={handleInputChange}
+                    value={heartRate}
+                    onChangeText={(text) => {
+                      setHeartRate(text);
+                      checkHasInput();
+                    }}
                     keyboardType="numeric"
                   />
                 </View>
@@ -117,7 +209,11 @@ export default function CreateDiary() {
                   <Text style={styles.inputTitle}>Blood Sugar (mg/dL)</Text>
                   <TextInput
                     style={styles.halfInput}
-                    onChangeText={handleInputChange}
+                    value={bloodSugar}
+                    onChangeText={(text) => {
+                      setBloodSugar(text);
+                      checkHasInput();
+                    }}
                     keyboardType="numeric"
                   />
                 </View>
@@ -128,7 +224,11 @@ export default function CreateDiary() {
                 <Text style={styles.inputTitle}>Weight (kg)</Text>
                 <TextInput
                   style={styles.fullInput}
-                  onChangeText={handleInputChange}
+                  value={weight}
+                  onChangeText={(text) => {
+                    setWeight(text);
+                    checkHasInput();
+                  }}
                   keyboardType="numeric"
                 />
               </View>
@@ -146,7 +246,27 @@ export default function CreateDiary() {
                   placeholder="Describe any symptoms....."
                   placeholderTextColor="#828282"
                   multiline
-                  onChangeText={handleInputChange}
+                  value={symptoms}
+                  onChangeText={(text) => {
+                    setSymptoms(text);
+                    checkHasInput();
+                  }}
+                />
+              </View>
+
+              {/* Mood */}
+              <View style={styles.bottomInputCont}>
+                <Text style={styles.inputTitle}>Mood</Text>
+                <TextInput
+                  style={styles.descInput}
+                  placeholder="Describe your mood today....."
+                  placeholderTextColor="#828282"
+                  multiline
+                  value={mood}
+                  onChangeText={(text) => {
+                    setMood(text);
+                    checkHasInput();
+                  }}
                 />
               </View>
 
@@ -158,7 +278,11 @@ export default function CreateDiary() {
                   placeholder="Describe your physical activities today....."
                   placeholderTextColor="#828282"
                   multiline
-                  onChangeText={handleInputChange}
+                  value={activities}
+                  onChangeText={(text) => {
+                    setActivities(text);
+                    checkHasInput();
+                  }}
                 />
               </View>
 
@@ -170,13 +294,36 @@ export default function CreateDiary() {
                   placeholder="Any notes about your health..."
                   placeholderTextColor="#828282"
                   multiline
-                  onChangeText={handleInputChange}
+                  value={notes}
+                  onChangeText={(text) => {
+                    setNotes(text);
+                    checkHasInput();
+                  }}
                 />
               </View>
             </View>
           </View>
 
-          <PrimaryButtonColorForm text="Save Changes" active={hasInput} />
+          <PrimaryButtonColorForm
+            text={loading ? "Saving..." : "Save Changes"}
+            active={hasInput}
+            onPress={saveDiary}
+          />
+          <ModalSuccess
+            visible={showSuccess}
+            title="Success"
+            description="Your diary has been saved successfully."
+            buttonText="Continue"
+            onClose={() => setShowSuccess(false)}
+          />
+
+          <ModalError
+            visible={showError}
+            title="Error"
+            description={errorMessage}
+            buttonText="Close"
+            onClose={() => setShowError(false)}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
