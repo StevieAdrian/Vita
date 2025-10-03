@@ -1,7 +1,7 @@
 import { Timestamp } from "firebase/firestore";
 
 export interface DiaryEntry {
-  fromUid: string;
+  fromUid?: string;
   systolic: number;
   diastolic: number;
   heartRate: number;
@@ -13,7 +13,7 @@ export interface DiaryEntry {
   notes: string;
   createdAt?: Timestamp;
   id?: string;
-  date: Date;
+  date: Timestamp;
   updatedAt: Timestamp;
 }
 

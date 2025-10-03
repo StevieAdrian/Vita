@@ -31,27 +31,38 @@ const checkDiaryByDate = async (date: Date, uid: string) => {
   );
 
   const snapshot = await getDocs(q);
-  return snapshot.empty ? null : snapshot.docs[0];
+  if (snapshot.empty) {
+    return null;
+  }
+
+  const docSnap = snapshot.docs[0];
+  return { id: docSnap.id, ...docSnap.data() };
 };
 
 export const addHealthDiary = async (payload: DiaryEntry) => {
-  console.log(payload);
   if (!payload.fromUid) {
     throw new Error("Missing user UID");
   }
-  const existingDiary = await checkDiaryByDate(
-    payload.date instanceof Date ? payload.date : payload.date,
-    payload.fromUid
-  );
+  const diaryDate =
+    payload.date instanceof Date
+      ? payload.date
+      : (payload.date as Timestamp).toDate();
+  console.log("payload.date type:", payload.date.constructor.name);
+  const existingDiary = await checkDiaryByDate(diaryDate, payload.fromUid);
+  console.log("existingDiary:", existingDiary);
+
   if (existingDiary) {
     return {
       success: false,
       message: "Diary already exists for this date",
       id: existingDiary.id,
     };
+  } else {
+    console.log("test");
   }
 
   const diaryData = {
+    fromUid: payload.fromUid,
     systolic: payload.systolic,
     diastolic: payload.diastolic,
     heartRate: payload.heartRate,
@@ -64,25 +75,27 @@ export const addHealthDiary = async (payload: DiaryEntry) => {
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
     date:
-      payload.date instanceof Date
-        ? Timestamp.fromDate(payload.date)
-        : payload.date,
+      payload.date instanceof Timestamp
+        ? payload.date
+        : Timestamp.fromDate(payload.date as Date),
   };
   console.log("payload:", diaryData);
+
   const reqRef = await addDoc(collection(db, "healthDiaries"), diaryData);
 
   return { success: true, id: reqRef.id };
 };
 
-export const getHealthDiaries = async () => {
+export const getHealthDiaries = async (uid: string) => {
   const diaryCollection = collection(db, "healthDiaries");
-  const snapshot = await getDocs(diaryCollection);
+  const q = query(diaryCollection, where("fromUid", "==", uid));
+  const snapshot = await getDocs(q);
   return snapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
   })) as (DiaryEntry & { id: string })[];
 };
-export const getHealthDiariesByDate = async (date: string) => {
+export const getHealthDiariesByDate = async (date: string, uid: string) => {
   const dateObj = new Date(date);
   dateObj.setHours(0, 0, 0, 0);
 
@@ -94,6 +107,7 @@ export const getHealthDiariesByDate = async (date: string) => {
   const diaryCollection = collection(db, "healthDiaries");
   const q = query(
     diaryCollection,
+    // where("fromUid", "==", uid),
     where("date", ">=", start),
     where("date", "<", end)
   );
@@ -108,7 +122,8 @@ export const getHealthDiariesByDate = async (date: string) => {
 
 export const updateHealthDiary = async (
   id: string,
-  data: Partial<DiaryEntry>
+  data: Partial<DiaryEntry>,
+  uid: string
 ) => {
   try {
     const diaryRef = doc(db, "healthDiaries", id);
@@ -124,7 +139,7 @@ export const updateHealthDiary = async (
   }
 };
 
-export const deleteHealthDiary = async (id: string) => {
+export const deleteHealthDiary = async (id: string, uid: string) => {
   try {
     const diaryRef = doc(db, "healthDiaries", id);
     await deleteDoc(diaryRef);
