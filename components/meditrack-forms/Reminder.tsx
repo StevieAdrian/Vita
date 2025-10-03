@@ -44,7 +44,7 @@ export const convertDrugToReminder = (drugReminder: DrugReminder): Reminder => {
 const formatTimesToTimeLabel = (times: string[]): string => {
   if (!times || times.length === 0) return "No time set";
   if (times.length === 1) return times[0];
-  return `${times.length} times`;
+  return times.join(", ");
 };
 
 const getCardBackground = (reminderType: "drug" | "appointment") => {

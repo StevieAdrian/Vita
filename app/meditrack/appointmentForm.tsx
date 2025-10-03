@@ -1,19 +1,21 @@
 import Calender from "@/components/hcd/Calender";
 import AppointmentCategoryModal from "@/components/meditrack-forms/AppointmentPopUp";
 import AppointmentTimeRange from "@/components/meditrack-forms/appointTime";
+import { getAppointmentStatus } from "@/components/utils/DateUtils";
 import InputField from "@/components/utils/InputField";
 import ModalError from "@/components/utils/ModalError";
 import ModalSuccess from "@/components/utils/ModalSuccess";
 import { COLORS } from "@/constants/colors";
-import { useAppointments } from "@/hooks/useAppointment";
+import { useAppointments } from "@/context/AppointmentContext";
+import { useAuth } from "@/context/AuthContext";
 import { AppointmentReminder } from "@/types/appointment";
 import {
   validateAppointmentForm,
   validateTimeRange,
 } from "@/utils/appointment-cartegoryValidation";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import React, { useState } from "react";
+import { router, useLocalSearchParams } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -26,7 +28,6 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { styles } from "../../styles/meditrack/appointmentform.style";
-import { useAuth } from "@/context/AuthContext";
 
 interface AppointmentFormProps {
   initialData?: AppointmentReminder;
@@ -43,6 +44,10 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   isEditMode = false,
   onBack,
 }) => {
+  const params = useLocalSearchParams();
+  const routeEditMode = params.editMode === "true";
+  const routeAppointmentId = params.appointmentId as string;
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
@@ -54,13 +59,42 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
 
   const [isCategoryModalVisible, setIsCategoryModalVisible] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
-  const { add, update, remove } = useAppointments();
+  const { appointments, add, update, remove } = useAppointments();
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const { user } = useAuth();
 
+  const actualEditMode = isEditMode || routeEditMode;
+
+  useEffect(() => {
+    if (routeEditMode && routeAppointmentId && appointments.length > 0) {
+      const editingAppointment = appointments.find(
+        (appt) => appt.id === routeAppointmentId
+      );
+
+      if (editingAppointment) {
+        setTitle(editingAppointment.title);
+        setDescription(editingAppointment.description);
+        setDate(editingAppointment.date);
+        setCategory(editingAppointment.category);
+        setMedicalStaff(editingAppointment.medicalStaff);
+        setLocation(editingAppointment.location);
+        setStartTime(editingAppointment.startTime);
+        setEndTime(editingAppointment.endTime);
+      }
+    } else if (initialData) {
+      setTitle(initialData.title);
+      setDescription(initialData.description);
+      setDate(initialData.date);
+      setCategory(initialData.category);
+      setMedicalStaff(initialData.medicalStaff);
+      setLocation(initialData.location);
+      setStartTime(initialData.startTime);
+      setEndTime(initialData.endTime);
+    }
+  }, [routeEditMode, routeAppointmentId, appointments, initialData]);
   const validation = validateAppointmentForm({
     title,
     date,
@@ -77,6 +111,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
     const timeValidationError = validateTimeRange(startTime, endTime);
     if (timeValidationError) {
       setErrors([timeValidationError]);
+      setErrorMessage(timeValidationError);
+      setShowError(true);
       return;
     }
 
@@ -90,8 +126,9 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       return;
     }
 
-    const newAppointment: AppointmentReminder = {
-      id: initialData?.id || Date.now().toString(),
+    const calculatedStatus = getAppointmentStatus(date, startTime);
+
+    const appointmentData: Omit<AppointmentReminder, "id"> = {
       title: title.trim(),
       description: description.trim(),
       date,
@@ -104,26 +141,57 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       createdAt: initialData?.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       userId: user?.uid || "",
-      status: "",
+      status: actualEditMode
+        ? initialData?.status || calculatedStatus
+        : calculatedStatus,
     };
 
-    if (isEditMode && initialData?.id) {
-      await update(initialData.id, newAppointment);
-    } else {
-      await add(newAppointment);
+    try {
+      if (actualEditMode && routeAppointmentId) {
+        await update(routeAppointmentId, appointmentData);
+        setShowSuccess(true);
+        onSubmit?.({
+          ...appointmentData,
+          id: routeAppointmentId,
+        } as AppointmentReminder);
+      } else {
+        await add(appointmentData);
+        setShowSuccess(true);
+        onSubmit?.({
+          ...appointmentData,
+          id: Date.now().toString(),
+        } as AppointmentReminder);
+
+        if (!actualEditMode) {
+          setTitle("");
+          setDescription("");
+          setDate("");
+          setCategory("");
+          setMedicalStaff("");
+          setLocation("");
+          setStartTime("09:00");
+          setEndTime("10:00");
+        }
+      }
+    } catch (err) {
+      setErrorMessage("Failed to save appointment. Please try again.");
+      setShowError(true);
     }
+  };
 
-    onSubmit?.(newAppointment);
-    setShowSuccess(true);
+  const handleDelete = async () => {
+    if (!routeAppointmentId) return;
 
-    setTitle("");
-    setDescription("");
-    setDate("");
-    setCategory("");
-    setMedicalStaff("");
-    setLocation("");
-    setStartTime("09:00");
-    setEndTime("10:00");
+    try {
+      await remove(routeAppointmentId);
+      setTimeout(() => {
+        router.push("/meditrack/mediTrack");
+      }, 1500);
+    } catch (err) {
+      console.error(err);
+      setErrorMessage("Failed to delete appointment. Please try again.");
+      setShowError(true);
+    }
   };
 
   const handleTimeRangeChange = (start: string, end: string) => {
@@ -164,7 +232,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>
-            {isEditMode ? "Edit Appointment" : "New Appointment"}
+            {actualEditMode ? "Edit Appointment" : "New Appointment"}
           </Text>
           <View style={styles.headerSpacer} />
         </View>
@@ -176,6 +244,28 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.card}>
+            <View style={styles.titleHeader}>
+              <TextInput
+                style={[styles.titleInput, { flex: 1, marginBottom: 0 }]}
+                placeholder="What's Appointment?"
+                placeholderTextColor={COLORS.gray2}
+                value={title}
+                onChangeText={(text) => {
+                  setTitle(text);
+                  clearFieldError("title");
+                }}
+              />
+              {actualEditMode && (
+                <TouchableOpacity onPress={handleDelete}>
+                  <Image
+                    source={require("../../assets/utilsIcon/delete.png")}
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+
+            <View style={styles.separator} />
+
             {errors.length > 0 && (
               <View style={styles.errorContainer}>
                 <Ionicons name="warning-outline" size={20} color={COLORS.red} />
@@ -189,21 +279,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                 ))}
               </View>
             )}
-
-            <TextInput
-              style={[
-                styles.titleInput,
-                errors.some((e) => e.includes("Title")) && styles.inputError,
-              ]}
-              placeholder="What's Appointment?"
-              placeholderTextColor={COLORS.gray2}
-              value={title}
-              onChangeText={(text) => {
-                setTitle(text);
-                clearFieldError("title");
-              }}
-            />
-            <View style={styles.separator} />
 
             <View style={styles.section}>
               <Text style={styles.label}>Description</Text>
@@ -269,13 +344,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
 
             <View style={styles.section}>
               <Text style={styles.label}>Medical Staff</Text>
-              <View
-                style={[
-                  styles.inputField,
-                  errors.some((e) => e.includes("Medical staff")) &&
-                    styles.inputError,
-                ]}
-              >
+              <View style={[styles.inputField]}>
                 <TextInput
                   style={styles.inputText}
                   placeholder="Who's the doctor/nurse/medical staff?"
@@ -292,13 +361,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
 
             <View style={styles.section}>
               <Text style={styles.label}>Location</Text>
-              <View
-                style={[
-                  styles.descriptionContainer,
-                  errors.some((e) => e.includes("Location")) &&
-                    styles.inputError,
-                ]}
-              >
+              <View style={[styles.descriptionContainer]}>
                 <TextInput
                   style={styles.descriptionInput}
                   placeholder="Add location address or facility name"
@@ -323,38 +386,39 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             </View>
 
             <View style={styles.buttonContainer}>
-              {isEditMode && onDelete && (
+              {actualEditMode ? (
                 <TouchableOpacity
-                  style={styles.deleteButton}
-                  accessibilityLabel="Delete appointment"
-                  accessibilityRole="button"
-                  onPress={() => initialData?.id && remove(initialData.id)}
+                  style={[
+                    styles.submitButton,
+                    {
+                      width: "100%",
+                      backgroundColor: isFormValid
+                        ? COLORS.primary
+                        : COLORS.primary3rd,
+                    },
+                  ]}
+                  onPress={handleAddAppointment}
+                  disabled={!isFormValid}
                 >
-                  <Ionicons
-                    name="trash-outline"
-                    size={20}
-                    color={COLORS.white}
-                  />
-                  <Text style={styles.deleteButtonText}>Delete</Text>
+                  <Text style={[styles.submitButtonText, { marginLeft: 0 }]}>
+                    Done
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={[
+                    styles.submitButton,
+                    isFormValid
+                      ? { backgroundColor: COLORS.primary }
+                      : { backgroundColor: COLORS.primary3rd },
+                  ]}
+                  onPress={handleAddAppointment}
+                  disabled={!isFormValid}
+                >
+                  <Ionicons name="add-outline" size={20} color={COLORS.white} />
+                  <Text style={styles.submitButtonText}>Add Reminder</Text>
                 </TouchableOpacity>
               )}
-              <TouchableOpacity
-                style={[
-                  styles.submitButton,
-                  isFormValid && styles.submitButtonActive,
-                ]}
-                onPress={handleAddAppointment}
-                disabled={!isFormValid}
-              >
-                <Ionicons
-                  name={isEditMode ? "checkmark-outline" : "add-outline"}
-                  size={20}
-                  color={COLORS.white}
-                />
-                <Text style={styles.submitButtonText}>
-                  {isEditMode ? "Update Appointment" : "Add Reminder"}
-                </Text>
-              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
@@ -376,10 +440,13 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
 
         <ModalSuccess
           visible={showSuccess}
-          title={isEditMode ? "Appointment Updated!" : "Appointment Added!"}
+          title={actualEditMode ? "Appointment Updated!" : "Appointment Added!"}
           description="Your appointment has been saved successfully."
           buttonText="Continue"
-          onClose={() => setShowSuccess(false)}
+          onClose={() => {
+            setShowSuccess(false);
+            router.push("/meditrack/mediTrack");
+          }}
         />
       </KeyboardAvoidingView>
     </SafeAreaView>

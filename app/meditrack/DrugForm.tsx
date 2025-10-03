@@ -42,7 +42,7 @@ const DrugForm: React.FC<DrugFormProps> = ({
 
   const [drugName, setDrugName] = useState("");
   const [description, setDescription] = useState("");
-  const [date, setDate] = useState("August 25, 2025");
+  const [date, setDate] = useState("");
   const [category, setCategory] = useState<string[]>([]);
   const [times, setTimes] = useState<string[]>(["12:00"]);
   const [repeatDays, setRepeatDays] = useState<string[]>([]);
@@ -85,44 +85,44 @@ const DrugForm: React.FC<DrugFormProps> = ({
 
   const handleAddReminder = async () => {
     if (!isFormValid) {
-      setErrorMessage("Please fill in all required fields correctly.");
       setShowError(true);
       return;
     }
 
-    const newReminder: DrugReminder = {
+    const drugData: DrugReminder = {
       id: actualEditMode ? routeDrugId : Date.now().toString(),
-      drugName,
-      description,
+      drugName: drugName.trim(),
+      description: description.trim(),
       date,
       category: category[0] || "",
       times,
       repeatDays,
-      isCompleted: false,
-      createdAt: new Date().toISOString(),
+      isCompleted: initialData?.isCompleted ?? false,
+      createdAt: initialData?.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       userId: user?.uid || "",
     };
 
     try {
       if (actualEditMode && routeDrugId) {
-        await update(routeDrugId, newReminder);
+        await update(routeDrugId, drugData);
         setShowSuccess(true);
-        onSubmit?.(newReminder);
+        onSubmit?.(drugData);
       } else {
-        await add(newReminder);
+        await add(drugData);
         setShowSuccess(true);
-        onSubmit?.(newReminder);
+        onSubmit?.(drugData);
 
-        setDrugName("");
-        setDescription("");
-        setDate("August 25, 2025");
-        setCategory([]);
-        setTimes(["12:00"]);
-        setRepeatDays([]);
+        if (!actualEditMode) {
+          setDrugName("");
+          setDescription("");
+          setDate("");
+          setCategory([]);
+          setTimes(["12:00"]);
+          setRepeatDays([]);
+        }
       }
-    } catch (err) {
-      setErrorMessage("Failed to save reminder. Please try again.");
+    } catch {
       setShowError(true);
     }
   };
@@ -132,8 +132,10 @@ const DrugForm: React.FC<DrugFormProps> = ({
 
     try {
       await remove(routeDrugId);
-      router.push("/meditrack/mediTrack");
-    } catch (err) {
+      setTimeout(() => {
+        router.push("/meditrack/mediTrack");
+      }, 1500);
+    } catch {
       setErrorMessage("Failed to delete. Please try again.");
       setShowError(true);
     }
@@ -209,7 +211,7 @@ const DrugForm: React.FC<DrugFormProps> = ({
             <View style={styles.dobWrapper}>
               <InputField
                 label="Date"
-                placeholder="August 25, 2025"
+                placeholder="Select a date"
                 value={date}
                 onChangeText={setDate}
                 editable={false}
