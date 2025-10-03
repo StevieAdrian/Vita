@@ -4,13 +4,15 @@ import { COLORS } from "../../constants/colors";
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.white,
-    borderRadius: 10,
-    padding: 16,
+    borderRadius: 12,
+    padding: 20,
     shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    marginHorizontal: 16,
+    marginVertical: 12,
   },
   header: {
     flexDirection: "row",
@@ -19,8 +21,9 @@ export const styles = StyleSheet.create({
     marginBottom: 16,
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
+    color: COLORS.black,
   },
   seeAllButton: {
     flexDirection: "row",
@@ -41,9 +44,9 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: COLORS.gray3,
-    borderRadius: 8,
-    padding: 12,
+    backgroundColor: COLORS.gray4,
+    borderRadius: 10,
+    padding: 16,
     marginBottom: 12,
   },
   cardTitle: {
@@ -57,9 +60,14 @@ export const styles = StyleSheet.create({
   },
   detailButton: {
     backgroundColor: COLORS.white,
-    borderRadius: 6,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    shadowColor: COLORS.black,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   detailButtonText: {
     color: COLORS.black,

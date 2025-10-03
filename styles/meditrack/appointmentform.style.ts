@@ -216,8 +216,14 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   categoryText: {
-    fontSize: 14, 
+    fontSize: 14,
     color: COLORS.black,
     flex: 1,
+  },
+  titleHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 8,
   },
 });

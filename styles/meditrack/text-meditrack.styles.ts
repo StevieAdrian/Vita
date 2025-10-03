@@ -29,10 +29,4 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-  caret: {
-    marginLeft: 6,
-    color: COLORS.black,
-    fontSize: 13,
-    fontWeight: "500",
-  },
 });

@@ -8,11 +8,11 @@ import ModalSuccess from "@/components/utils/ModalSuccess";
 import { COLORS } from "@/constants/colors";
 import { DrugReminder } from "@/constants/drugs";
 import { useAuth } from "@/context/AuthContext";
-import { useDrugForm } from "@/hooks/useDrug";
+import { useDrugs } from "@/context/DrugContext";
 import { getCategoryLabel, getRepeatLabel } from "@/utils/drugformValidation";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import { useState } from "react";
+import { router, useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -33,26 +33,48 @@ const DrugForm: React.FC<DrugFormProps> = ({
   isEditMode = false,
   onBack,
 }) => {
-  const [drugName, setDrugName] = useState(initialData?.drugName || "");
-  const [description, setDescription] = useState(
-    initialData?.description || ""
-  );
-  const [date, setDate] = useState(initialData?.date || "August 25, 2025");
-  const [category, setCategory] = useState<string[]>(
-    initialData?.category ? [initialData.category] : []
-  );
-  const [times, setTimes] = useState<string[]>(initialData?.times || ["12:00"]);
-  const [repeatDays, setRepeatDays] = useState<string[]>(
-    initialData?.repeatDays || []
-  );
+  const params = useLocalSearchParams();
+  const routeEditMode = params.editMode === "true";
+  const routeDrugId = params.drugId as string;
 
+  const { drugs, add, update, remove } = useDrugs();
+  const { user } = useAuth();
+
+  const [drugName, setDrugName] = useState("");
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState("");
+  const [category, setCategory] = useState<string[]>([]);
+  const [times, setTimes] = useState<string[]>(["12:00"]);
+  const [repeatDays, setRepeatDays] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (routeEditMode && routeDrugId && drugs.length > 0) {
+      const editingDrug = drugs.find((drug) => drug.id === routeDrugId);
+
+      if (editingDrug) {
+        setDrugName(editingDrug.drugName);
+        setDescription(editingDrug.description);
+        setDate(editingDrug.date);
+        setCategory([editingDrug.category]);
+        setTimes(editingDrug.times || []);
+        setRepeatDays(editingDrug.repeatDays || []);
+      }
+    } else if (initialData) {
+      setDrugName(initialData.drugName);
+      setDescription(initialData.description);
+      setDate(initialData.date);
+      setCategory([initialData.category]);
+      setTimes(initialData.times);
+      setRepeatDays(initialData.repeatDays || []);
+    }
+  }, [routeEditMode, routeDrugId, drugs, initialData]);
+
+  const actualEditMode = isEditMode || routeEditMode;
   const [isCategoryModalVisible, setIsCategoryModalVisible] = useState(false);
   const [isRepeatModalVisible, setIsRepeatModalVisible] = useState(false);
-  const { add, update, remove } = useDrugForm();
   const [showError, setShowError] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const { user } = useAuth();
 
   const isFormValid =
     drugName.trim() !== "" &&
@@ -63,44 +85,60 @@ const DrugForm: React.FC<DrugFormProps> = ({
 
   const handleAddReminder = async () => {
     if (!isFormValid) {
-      setErrorMessage("Please fill in all required fields correctly.");
       setShowError(true);
       return;
     }
 
-    const newReminder: DrugReminder = {
-      id: initialData?.id || Date.now().toString(),
-      drugName,
-      description,
+    const drugData: DrugReminder = {
+      id: actualEditMode ? routeDrugId : Date.now().toString(),
+      drugName: drugName.trim(),
+      description: description.trim(),
       date,
       category: category[0] || "",
       times,
       repeatDays,
-      isCompleted: initialData?.isCompleted ?? false,
-      createdAt: initialData?.createdAt || new Date().toISOString(),
+      isCompleted: false,
+      createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       userId: user?.uid || "",
     };
 
-    if (isEditMode && initialData?.id) {
-      await update(initialData.id, newReminder);
-    } else {
-      await add(newReminder);
+    try {
+      if (actualEditMode && routeDrugId) {
+        await update(routeDrugId, drugData);
+        setShowSuccess(true);
+        onSubmit?.(drugData);
+      } else {
+        await add(drugData);
+        setShowSuccess(true);
+        onSubmit?.(drugData);
+
+        if (!actualEditMode) {
+          setDrugName("");
+          setDescription("");
+          setDate("");
+          setCategory([]);
+          setTimes(["12:00"]);
+          setRepeatDays([]);
+        }
+      }
+    } catch {
+      setShowError(true);
     }
-
-    onSubmit?.(newReminder);
-    setShowSuccess(true);
-
-    setDrugName("");
-    setDescription("");
-    setDate("");
-    setCategory([]);
-    setTimes(["12:00"]);
-    setRepeatDays([]);
   };
 
-  const handleTimesChange = (newTimes: string[]) => {
-    setTimes(newTimes);
+  const handleDelete = async () => {
+    if (!routeDrugId) return;
+
+    try {
+      await remove(routeDrugId);
+      setTimeout(() => {
+        router.push("/meditrack/mediTrack");
+      }, 1500);
+    } catch {
+      setErrorMessage("Failed to delete. Please try again.");
+      setShowError(true);
+    }
   };
 
   const handleCategoryApply = (selectedCategories: string[]) => {
@@ -120,7 +158,7 @@ const DrugForm: React.FC<DrugFormProps> = ({
           />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>
-          {isEditMode ? "Edit Reminder" : "Drugs Reminder"}
+          {actualEditMode ? "Edit Reminder" : "Drugs Reminder"}
         </Text>
         <View style={styles.headerSpacer} />
       </View>
@@ -138,13 +176,21 @@ const DrugForm: React.FC<DrugFormProps> = ({
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.card}>
-          <TextInput
-            style={styles.titleInput}
-            placeholder="What's Reminder?"
-            value={drugName}
-            onChangeText={setDrugName}
-            editable={true}
-          />
+          <View style={styles.titleHeader}>
+            <TextInput
+              style={[styles.titleInput, { flex: 1, marginBottom: 0 }]}
+              placeholder="What's Reminder?"
+              value={drugName}
+              onChangeText={setDrugName}
+              editable={true}
+            />
+            {actualEditMode && (
+              <TouchableOpacity onPress={handleDelete}>
+                <Image source={require("../../assets/utilsIcon/delete.png")} />
+              </TouchableOpacity>
+            )}
+          </View>
+
           <View style={styles.separator} />
 
           <View style={styles.section}>
@@ -165,7 +211,7 @@ const DrugForm: React.FC<DrugFormProps> = ({
             <View style={styles.dobWrapper}>
               <InputField
                 label="Date"
-                placeholder="August 25, 2025"
+                placeholder="Select a date"
                 value={date}
                 onChangeText={setDate}
                 editable={false}
@@ -205,7 +251,7 @@ const DrugForm: React.FC<DrugFormProps> = ({
           </View>
 
           <View style={styles.section}>
-            <TimeDrug onTimesChange={handleTimesChange} initialTimes={times} />
+            <TimeDrug onTimesChange={setTimes} times={times} />
           </View>
 
           <View style={styles.section}>
@@ -232,35 +278,39 @@ const DrugForm: React.FC<DrugFormProps> = ({
           </View>
 
           <View style={styles.buttonContainer}>
-            {isEditMode && onDelete && (
+            {actualEditMode ? (
               <TouchableOpacity
-                style={styles.deleteButton}
-                onPress={() => onDelete(initialData?.id || "")}
+                style={[
+                  styles.submitButton,
+                  {
+                    width: "100%",
+                    backgroundColor: isFormValid
+                      ? COLORS.primary
+                      : COLORS.primary3rd,
+                  },
+                ]}
+                onPress={handleAddReminder}
+                disabled={!isFormValid}
               >
-                <Ionicons name="trash-outline" size={20} color={COLORS.white} />
-                <Text style={styles.deleteButtonText}>Delete</Text>
+                <Text style={[styles.submitButtonText, { marginLeft: 0 }]}>
+                  Done
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={[
+                  styles.submitButton,
+                  isFormValid
+                    ? { backgroundColor: COLORS.primary }
+                    : { backgroundColor: COLORS.primary3rd },
+                ]}
+                onPress={handleAddReminder}
+                disabled={!isFormValid}
+              >
+                <Ionicons name="add-outline" size={20} color={COLORS.white} />
+                <Text style={styles.submitButtonText}>Add Reminder</Text>
               </TouchableOpacity>
             )}
-            <TouchableOpacity
-              style={[
-                styles.submitButton,
-                isEditMode && onDelete && styles.submitButtonSmall,
-                isFormValid
-                  ? { backgroundColor: COLORS.primary }
-                  : { backgroundColor: COLORS.primary3rd },
-              ]}
-              onPress={handleAddReminder}
-              disabled={!isFormValid}
-            >
-              <Ionicons
-                name={isEditMode ? "checkmark-outline" : "add-outline"}
-                size={20}
-                color={COLORS.white}
-              />
-              <Text style={styles.submitButtonText}>
-                {isEditMode ? "Update" : "Add Reminder"}
-              </Text>
-            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -289,10 +339,15 @@ const DrugForm: React.FC<DrugFormProps> = ({
 
       <ModalSuccess
         visible={showSuccess}
-        title={isEditMode ? "Drug Reminer Updated!" : "Drug Reminder Added!"}
+        title={
+          actualEditMode ? "Drug Reminder Updated!" : "Drug Reminder Added!"
+        }
         description="Your drug reminder has been saved successfully."
         buttonText="Continue"
-        onClose={() => setShowSuccess(false)}
+        onClose={() => {
+          setShowSuccess(false);
+          router.push("/meditrack/mediTrack");
+        }}
       />
     </SafeAreaView>
   );

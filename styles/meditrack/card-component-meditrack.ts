@@ -7,8 +7,6 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     padding: 16,
     borderRadius: 12,
-    // Contoh warna latar belakang seperti yang ada di screenshot:
-    // Anda harus menyesuaikan berdasarkan data reminder.color
   },
   reminderContent: {
     flexDirection: "row",

@@ -135,8 +135,8 @@ interface AppointmentTimeRangeProps {
 
 const AppointmentTimeRange: React.FC<AppointmentTimeRangeProps> = ({
   onTimeRangeChange,
-  initialStartTime = "12:00",
-  initialEndTime = "13:00",
+  initialStartTime = "09:00",
+  initialEndTime = "10:00",
 }) => {
   const [startTime, setStartTime] = useState(initialStartTime);
   const [endTime, setEndTime] = useState(initialEndTime);
@@ -144,8 +144,9 @@ const AppointmentTimeRange: React.FC<AppointmentTimeRangeProps> = ({
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
 
   useEffect(() => {
-    onTimeRangeChange(startTime, endTime);
-  }, [startTime, endTime, onTimeRangeChange]);
+    setStartTime(initialStartTime);
+    setEndTime(initialEndTime);
+  }, [initialStartTime, initialEndTime]);
 
   const handleStartTimeChange = (time: string) => {
     setStartTime(time);
