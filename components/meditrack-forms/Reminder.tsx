@@ -1,6 +1,6 @@
 import { COLORS } from "@/constants/colors";
 import { DRUG_CATEGORIES, DrugReminder } from "@/constants/drugs";
-import type { Reminder } from "@/constants/reminder";
+import type { Reminder, ReminderCategory } from "@/constants/reminder";
 import { styles } from "@/styles/meditrack/reminder.styles";
 import type React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
@@ -47,7 +47,7 @@ const formatTimesToTimeLabel = (times: string[]): string => {
   return times.join(", ");
 };
 
-const getCardBackground = (reminderType: "drug" | "appointment") => {
+const getCardBackground = (reminderType: ReminderCategory | "other") => {
   switch (reminderType) {
     case "drug":
       return COLORS.primary4th;
@@ -58,7 +58,7 @@ const getCardBackground = (reminderType: "drug" | "appointment") => {
   }
 };
 
-const getReminderIcon = (reminderType: "drug" | "appointment") => {
+const getReminderIcon = (reminderType: ReminderCategory | "other") => {
   switch (reminderType) {
     case "drug":
       return require("@/assets/mediTrack/pill.png");
