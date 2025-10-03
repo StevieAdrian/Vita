@@ -1,22 +1,56 @@
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
-  getDoc,
   getDocs,
   query,
   serverTimestamp,
+  Timestamp,
   updateDoc,
   where,
 } from "firebase/firestore";
 import { db } from "../config/firebaseConfig";
 import { DiaryEntry } from "../types/diary";
 
+const checkDiaryByDate = async (date: Date, uid: string) => {
+  const dateObj = new Date(date);
+  dateObj.setHours(0, 0, 0, 0);
+
+  const start = Timestamp.fromDate(dateObj);
+  const end = Timestamp.fromDate(
+    new Date(dateObj.getTime() + 24 * 60 * 60 * 1000)
+  );
+
+  const diaryCollection = collection(db, "healthDiaries");
+  const q = query(
+    diaryCollection,
+    where("fromUid", "==", uid),
+    where("date", ">=", start),
+    where("date", "<", end)
+  );
+
+  const snapshot = await getDocs(q);
+  return snapshot.empty ? null : snapshot.docs[0];
+};
+
 export const addHealthDiary = async (payload: DiaryEntry) => {
   console.log(payload);
   if (!payload.fromUid) {
     throw new Error("Missing user UID");
   }
+  const existingDiary = await checkDiaryByDate(
+    payload.date instanceof Date ? payload.date : payload.date,
+    payload.fromUid
+  );
+  if (existingDiary) {
+    return {
+      success: false,
+      message: "Diary already exists for this date",
+      id: existingDiary.id,
+    };
+  }
+
   const diaryData = {
     systolic: payload.systolic,
     diastolic: payload.diastolic,
@@ -28,10 +62,15 @@ export const addHealthDiary = async (payload: DiaryEntry) => {
     activities: payload.activities,
     notes: payload.notes,
     createdAt: serverTimestamp(),
-    date: payload.date,
+    updatedAt: serverTimestamp(),
+    date:
+      payload.date instanceof Date
+        ? Timestamp.fromDate(payload.date)
+        : payload.date,
   };
   console.log("payload:", diaryData);
   const reqRef = await addDoc(collection(db, "healthDiaries"), diaryData);
+
   return { success: true, id: reqRef.id };
 };
 
@@ -43,17 +82,22 @@ export const getHealthDiaries = async () => {
     ...doc.data(),
   })) as (DiaryEntry & { id: string })[];
 };
-export const getHealthDiaryById = async (id: string) => {
-  const diaryRef = doc(db, "healthDiaries", id);
-  const snapshot = await getDoc(diaryRef);
-  if (!snapshot.exists()) {
-    return null;
-  }
-  return { id: snapshot.id, ...snapshot.data() } as DiaryEntry & { id: string };
-};
-export const getHealthDiariesByDate = async (date: any) => {
+export const getHealthDiariesByDate = async (date: string) => {
+  const dateObj = new Date(date);
+  dateObj.setHours(0, 0, 0, 0);
+
+  const start = Timestamp.fromDate(dateObj);
+  const end = Timestamp.fromDate(
+    new Date(dateObj.getTime() + 24 * 60 * 60 * 1000)
+  );
+
   const diaryCollection = collection(db, "healthDiaries");
-  const q = query(diaryCollection, where("date", "==", date));
+  const q = query(
+    diaryCollection,
+    where("date", ">=", start),
+    where("date", "<", end)
+  );
+
   const snapshot = await getDocs(q);
   if (snapshot.empty) return [];
   return snapshot.docs.map((doc) => ({
@@ -62,8 +106,10 @@ export const getHealthDiariesByDate = async (date: any) => {
   })) as (DiaryEntry & { id: string })[];
 };
 
-export async function updateHealthDiary(id: string, data: Partial<DiaryEntry>) {
-  console.log("mau ini service");
+export const updateHealthDiary = async (
+  id: string,
+  data: Partial<DiaryEntry>
+) => {
   try {
     const diaryRef = doc(db, "healthDiaries", id);
     await updateDoc(diaryRef, {
@@ -76,4 +122,16 @@ export async function updateHealthDiary(id: string, data: Partial<DiaryEntry>) {
     console.error("Error updating diary:", err.message);
     return { success: false, message: err.message };
   }
-}
+};
+
+export const deleteHealthDiary = async (id: string) => {
+  try {
+    const diaryRef = doc(db, "healthDiaries", id);
+    await deleteDoc(diaryRef);
+    console.log("Success");
+    return { success: true };
+  } catch (err: any) {
+    console.error("Error deleting diary:", err.message);
+    return { success: false, message: err.message };
+  }
+};

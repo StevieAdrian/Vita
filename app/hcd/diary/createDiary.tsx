@@ -10,6 +10,7 @@ import { styles } from "@/styles/hcd/createDiary.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
 import { DiaryInput } from "@/types/diary";
 import { validateDiary } from "@/utils/validateDiary";
+import { Timestamp } from "firebase/firestore";
 import { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
@@ -91,11 +92,23 @@ export default function CreateDiary() {
       return;
     }
 
-    const result = await addDiary({
+    const diaryEntry = {
       fromUid: user!.uid,
-      ...input,
-      date: selected ? formatDateLocal(selected) : "",
-    });
+      systolic: Number(systolic),
+      diastolic: Number(diastolic),
+      heartRate: Number(heartRate),
+      bloodSugar: Number(bloodSugar),
+      weight: Number(weight),
+      mood,
+      symptoms,
+      activities,
+      notes,
+      date: selected ?? new Date(),
+      createdAt: Timestamp.fromDate(new Date()),
+      updatedAt: Timestamp.fromDate(new Date()),
+    };
+
+    const result = await addDiary(diaryEntry);
 
     if (result.success) {
       setSystolic("");
@@ -109,6 +122,9 @@ export default function CreateDiary() {
       setNotes("");
       setShowSuccess(true);
       setHasInput(false);
+    } else {
+      setErrorMessage(result.message || "Failed to save diary");
+      setShowError(true);
     }
   };
 

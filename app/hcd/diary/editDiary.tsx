@@ -7,7 +7,7 @@ import { useHealthDiary } from "@/hooks/useHealthDiary";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { styles } from "@/styles/hcd/editDiary.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
@@ -20,7 +20,7 @@ export default function EditDiary() {
   const [hasInput, setHasInput] = useState(false);
   const insets = useSafeAreaInsets();
   const { user } = useAuth();
-  const { fetchDiariesByDate, updateDiary } = useHealthDiary();
+  const { fetchDiariesByDate, updateDiary, deleteDiary } = useHealthDiary();
   const [diary, setDiary] = useState<any>(null);
   const { date } = useLocalSearchParams<{ date?: string }>();
   const { loading } = useUserProfile();
@@ -41,7 +41,6 @@ export default function EditDiary() {
   }, [date]);
 
   const handleSave = async () => {
-    console.log(diary);
     if (!diary) return;
     try {
       const res = await updateDiary(diary.id, {
@@ -69,6 +68,26 @@ export default function EditDiary() {
     setHasInput(text.trim().length > 0);
   };
 
+  const handleDelete = async () => {
+    console.log("Mau Delete");
+    console.log(diary);
+    if (!diary) return;
+    try {
+      const res = await deleteDiary(diary.id);
+      if (res.success) {
+        setShowSuccess(true);
+        router.back();
+      } else {
+        setErrorMessage("Failed to delete diary");
+        setShowError(true);
+      }
+    } catch (err: any) {
+      console.error(err);
+      setErrorMessage(err.message || "Something went wrong");
+      setShowError(true);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView
@@ -88,7 +107,7 @@ export default function EditDiary() {
             <View style={styles.formContainer}>
               <View style={styles.formHeaderContainer}>
                 <Text style={styles.titleForm}>Edit Your Health Diary</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handleDelete}>
                   <Image
                     source={require("@/assets/utilsIcon/delete.png")}
                     style={{ width: 25, height: 25 }}
