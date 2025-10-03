@@ -1,5 +1,6 @@
 import { AppointmentCard } from "@/components/meditrack-forms/AppointmentCard";
 import { ReminderToggle } from "@/components/meditrack-forms/HeaderMediTrack";
+import { HistoryCard } from "@/components/meditrack-forms/HistoryCard";
 import {
   ReminderCard,
   convertDrugToReminder,
@@ -52,8 +53,7 @@ const ScheduleScreen: React.FC = () => {
     return appointmentReminders.filter((appt) => {
       try {
         const appointmentDate = new Date(appt.date);
-        const [hours, minutes] = appt.startTime.split(":");
-        appointmentDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+        appointmentDate.setHours(0, 0, 0, 0);
 
         return appointmentDate >= now;
       } catch {
@@ -68,8 +68,7 @@ const ScheduleScreen: React.FC = () => {
     return appointmentReminders.filter((appt) => {
       try {
         const appointmentDate = new Date(appt.date);
-        const [hours, minutes] = appt.startTime.split(":");
-        appointmentDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+        appointmentDate.setHours(0, 0, 0, 0);
 
         return appointmentDate < now;
       } catch {
@@ -82,35 +81,37 @@ const ScheduleScreen: React.FC = () => {
     console.log(id);
   }, []);
 
-  const handleSeeDetail = useCallback(
-    (appointment: any) => {
+  const handleSeeDetail = useCallback((appointment: any) => {
+    router.push({
+      pathname: "/meditrack/appointmentForm",
+      params: {
+        editMode: "true",
+        appointmentId: appointment.id,
+      },
+    });
+  }, []);
 
-      router.push({
-        pathname: "/meditrack/appointmentForm",
-        params: {
-          editMode: "true",
-          appointmentId: appointment.id,
-        },
-      });
-    },
-    []
-  );
+  const handleEditDrug = useCallback((reminder: Reminder) => {
+    router.push({
+      pathname: "/meditrack/drugForm",
+      params: {
+        editMode: "true",
+        drugId: reminder.id,
+      },
+    });
+  }, []);
 
-  const handleEditDrug = useCallback(
-    (reminder: Reminder) => {
-      router.push({
-        pathname: "/meditrack/drugForm",
-        params: {
-          editMode: "true",
-          drugId: reminder.id,
-        },
-      });
-    },
-    []
-  );
   const limitedDrugReminders = useMemo(() => {
     return drugReminders.slice(0, 3);
   }, [drugReminders]);
+
+  const limitedUpcomingAppointments = useMemo(() => {
+    return upcomingAppointments.slice(0, 3);
+  }, [upcomingAppointments]);
+
+  const limitedHistoryAppointments = useMemo(() => {
+    return historyAppointments.slice(0, 3);
+  }, [historyAppointments]);
 
   {
     limitedDrugReminders.map((reminder) => (
@@ -124,22 +125,23 @@ const ScheduleScreen: React.FC = () => {
     ));
   }
 
-  const handleEditAppointment = useCallback(
-    (appointment: any) => {
-      router.push({
-        pathname: "/meditrack/appointmentForm",
-        params: {
-          editMode: "true",
-          appointmentId: appointment.id,
-        },
-      });
-    },
-    []
-  );
+  const handleEditAppointment = useCallback((appointment: any) => {
+    router.push({
+      pathname: "/meditrack/appointmentForm",
+      params: {
+        editMode: "true",
+        appointmentId: appointment.id,
+      },
+    });
+  }, []);
 
   const handleSeeAll = useCallback((section: string) => {
     if (section === "today-reminders") {
       router.push("/meditrack/allremindercard");
+    } else if (section === "upcoming-appointments") {
+      router.push("/meditrack/allupcomingappointment");
+    } else if (section === "history-appointments") {
+      router.push("/meditrack/allhistoryappointment");
     }
   }, []);
 
@@ -244,17 +246,17 @@ const ScheduleScreen: React.FC = () => {
             }`}
             onPressSeeAll={() => handleSeeAll("upcoming-appointments")}
           />
-          {upcomingAppointments.length === 0 ? (
+          {limitedUpcomingAppointments.length === 0 ? (
             <View style={styles.emptyState}>
               <Text style={styles.emptyText}>No upcoming appointments</Text>
             </View>
           ) : (
-            upcomingAppointments.map((appointment) => (
+            limitedUpcomingAppointments.map((appointment) => (
               <AppointmentCard
                 key={appointment.id}
                 appointment={convertAppointment(appointment)}
-                onPressDetail={handleSeeDetail} 
-                onEdit={handleEditAppointment} 
+                onPressDetail={handleSeeDetail}
+                onEdit={handleEditAppointment}
                 onDelete={handleDeleteAppointment}
                 showActions={true}
               />
@@ -266,26 +268,19 @@ const ScheduleScreen: React.FC = () => {
           <SectionHeader
             title="Appointment History"
             subtitle="See All >"
-            onPressSeeAll={() => handleSeeAll("appointment-history")}
-            countLabel={
-              historyAppointments.length > 0
-                ? `${historyAppointments.length} Appointment${
-                    historyAppointments.length !== 1 ? "s" : ""
-                  }`
-                : ""
-            }
+            onPressSeeAll={() => handleSeeAll("history-appointments")}
+            countLabel={""}
           />
-          {historyAppointments.length === 0 ? (
+          {limitedHistoryAppointments.length === 0 ? (
             <View style={styles.emptyState}>
               <Text style={styles.emptyText}>No appointment history</Text>
             </View>
           ) : (
-            historyAppointments.map((appointment) => (
-              <AppointmentCard
+            limitedHistoryAppointments.map((appointment) => (
+              <HistoryCard
                 key={appointment.id}
                 appointment={convertAppointment(appointment)}
-                onPressDetail={handleSeeDetail} 
-                showActions={false} 
+                onPressDetail={handleSeeDetail}
               />
             ))
           )}

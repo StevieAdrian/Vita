@@ -1,6 +1,6 @@
 import Calender from "@/components/hcd/Calender";
 import AppointmentCategoryModal from "@/components/meditrack-forms/AppointmentPopUp";
-import AppointmentTimeRange from "@/components/meditrack-forms/appointTime";
+import AppointmentTimeRange from "@/components/meditrack-forms/AppointmentTime";
 import { getAppointmentStatus } from "@/components/utils/DateUtils";
 import InputField from "@/components/utils/InputField";
 import ModalError from "@/components/utils/ModalError";

@@ -17,6 +17,14 @@ export default function MeditrackLayout() {
             name="allremindercard"
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="allupcomingappointment"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="allhistoryappointment"
+            options={{ headerShown: false }}
+          />
         </Stack>
       </AppointmentProvider>
     </DrugProvider>
