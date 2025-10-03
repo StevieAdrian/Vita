@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   dashboardContainer: {
     backgroundColor: COLORS.background2nd,
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     position: "absolute",
     top: 0,
     left: 0,
