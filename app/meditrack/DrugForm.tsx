@@ -97,8 +97,8 @@ const DrugForm: React.FC<DrugFormProps> = ({
       category: category[0] || "",
       times,
       repeatDays,
-      isCompleted: initialData?.isCompleted ?? false,
-      createdAt: initialData?.createdAt || new Date().toISOString(),
+      isCompleted: false,
+      createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       userId: user?.uid || "",
     };
