@@ -13,7 +13,7 @@ export interface DiaryEntry {
   notes: string;
   createdAt?: Timestamp;
   id?: string;
-  date: Timestamp;
+  date: Date;
   updatedAt: Timestamp;
 }
 

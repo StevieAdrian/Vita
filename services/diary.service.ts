@@ -13,11 +13,44 @@ import {
 import { db } from "../config/firebaseConfig";
 import { DiaryEntry } from "../types/diary";
 
+const checkDiaryByDate = async (date: Date, uid: string) => {
+  const dateObj = new Date(date);
+  dateObj.setHours(0, 0, 0, 0);
+
+  const start = Timestamp.fromDate(dateObj);
+  const end = Timestamp.fromDate(
+    new Date(dateObj.getTime() + 24 * 60 * 60 * 1000)
+  );
+
+  const diaryCollection = collection(db, "healthDiaries");
+  const q = query(
+    diaryCollection,
+    where("fromUid", "==", uid),
+    where("date", ">=", start),
+    where("date", "<", end)
+  );
+
+  const snapshot = await getDocs(q);
+  return snapshot.empty ? null : snapshot.docs[0];
+};
+
 export const addHealthDiary = async (payload: DiaryEntry) => {
   console.log(payload);
   if (!payload.fromUid) {
     throw new Error("Missing user UID");
   }
+  const existingDiary = await checkDiaryByDate(
+    payload.date instanceof Date ? payload.date : payload.date,
+    payload.fromUid
+  );
+  if (existingDiary) {
+    return {
+      success: false,
+      message: "Diary already exists for this date",
+      id: existingDiary.id,
+    };
+  }
+
   const diaryData = {
     systolic: payload.systolic,
     diastolic: payload.diastolic,
@@ -37,6 +70,7 @@ export const addHealthDiary = async (payload: DiaryEntry) => {
   };
   console.log("payload:", diaryData);
   const reqRef = await addDoc(collection(db, "healthDiaries"), diaryData);
+
   return { success: true, id: reqRef.id };
 };
 
