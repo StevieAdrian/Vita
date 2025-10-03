@@ -3,7 +3,7 @@ import TitleBack from "@/components/utils/TitleBack";
 import { COLORS } from "@/constants/colors";
 import { initialReminders } from "@/constants/initialData";
 import { Reminder } from "@/constants/reminder";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthState } from "@/hooks/useAuthState";
 import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
 import { useHealthDiary } from "@/hooks/useHealthDiary";
 import { styles } from "@/styles/hcd/viewHealthDiary.style";
@@ -21,7 +21,8 @@ import DateTimePicker, { DateType } from "react-native-ui-datepicker";
 
 export default function HealthDiary() {
   const insets = useSafeAreaInsets();
-  const user = useAuth();
+  const { user } = useAuthState();
+  const uid = user?.uid;
   const datePickerStyle = useDatePickerStyles();
   const [reminders, setReminders] = useState<Reminder[]>(initialReminders);
   const [symptoms, setSymptoms] = useState("");
@@ -143,12 +144,14 @@ export default function HealthDiary() {
   );
 
   useEffect(() => {
+    if (!uid) return;
     const fetchDiary = async () => {
       setLoading(true);
       const dateKey = formatDateLocal(selected as Date);
-      const res = await fetchDiariesByDate(dateKey);
+      const res = await fetchDiariesByDate(dateKey, uid);
       if (res.success) {
         setDiaries(res.success && res.data ? res.data : []);
+        console.log(diaries);
       } else {
         setDiaries([]);
         console.log(res.message);
@@ -157,8 +160,10 @@ export default function HealthDiary() {
     };
 
     fetchDiary();
-  }, [selected]);
+  }, [selected, uid]);
+  console.log(diaries);
   const diaryData = diaries[0];
+  console.log("test");
   console.log(diaryData);
 
   return (
@@ -189,7 +194,7 @@ export default function HealthDiary() {
                 <TouchableOpacity style={styles.subtitleContainerText}>
                   <Text
                     style={styles.seeAllContainer}
-                    onPress={() => router.push("/hcd/diary/createDiary")}
+                    onPress={() => router.push("/meditrack/mediTrack")}
                   >
                     Add Event
                   </Text>
@@ -225,226 +230,264 @@ export default function HealthDiary() {
                 ))
               )}
             </View>
-            <View>
-              <Text style={styles.seeAllReminder}>View All</Text>
-            </View>
+            {todayReminders.length > 0 && (
+              <TouchableOpacity
+                onPress={() => router.push("/hcd/diary/remindersAll")}
+              >
+                <Text style={styles.seeAllReminder}>View All</Text>
+              </TouchableOpacity>
+            )}
           </View>
 
-          {/* Vital Sign */}
-          <TouchableOpacity
-            style={styles.containerAllDigitBio}
-            onPress={() => router.push("/profile/digitalBiomarker")}
-          >
-            {/* Judul */}
-            <View style={styles.titleHealth}>
-              <View style={styles.containerDigit}>
-                <View style={styles.containerTitle}>
-                  <Text style={styles.titleDigitBio}>Vital Signs</Text>
-                  <Text style={styles.captionDigitBio}>
-                    Latest update 15/09/2025 13:00
-                  </Text>
-                </View>
-              </View>
-              <Image
-                source={require("@/assets/utilsIcon/arrow-left.png")}
-                style={styles.icon}
-              />
-            </View>
-
-            {/* Kotak */}
-            <View style={styles.squaresContainer}>
-              <View style={styles.subSquareContainer}>
-                {/* Blood Pressure */}
-                <View style={styles.containerStatus}>
-                  <View style={styles.bulletin}></View>
-                  <View style={styles.captCont1}>
-                    <Text style={styles.captionNumber}>Blood Pressure</Text>
-                    <View style={styles.captCont}>
-                      <Text style={styles.captionName}>
-                        {diaryData?.systolic ?? "-"} /{" "}
-                        {diaryData?.diastolic ?? "-"}
-                      </Text>
-                      <Text style={styles.captionNumber}>mmHg</Text>
-                    </View>
-                  </View>
-                </View>
-
-                {/* Blood Sugar */}
-                <View style={styles.containerStatus}>
-                  <View style={styles.bulletin}></View>
-                  <View style={styles.captCont1}>
-                    <Text style={styles.captionNumber}>Blood Sugar</Text>
-                    <View style={styles.captCont}>
-                      <Text style={styles.captionName}>
-                        {" "}
-                        {diaryData?.bloodSugar ?? "-"}
-                      </Text>
-                      <Text style={styles.captionNumber}>mg/dL</Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-              <View style={styles.subSquareContainer}>
-                {/* Heart Rate */}
-                <View style={styles.containerStatus}>
-                  <View style={styles.bulletin}></View>
-                  <View style={styles.captCont1}>
-                    <Text style={styles.captionNumber}>Heart Rate</Text>
-                    <View style={styles.captCont}>
-                      <Text style={styles.captionName}>
-                        {diaryData?.heartRate ?? "-"}
-                      </Text>
-                      <Text style={styles.captionNumber}>bpm</Text>
-                    </View>
-                  </View>
-                </View>
-
-                {/* Blood Sugar */}
-                <View style={styles.containerStatus}>
-                  <View style={styles.bulletin}></View>
-                  <View style={styles.captCont1}>
-                    <Text style={styles.captionNumber}>Weight</Text>
-                    <View style={styles.captCont}>
-                      <Text style={styles.captionName}>
-                        {diaryData?.weight ?? "-"}
-                      </Text>
-                      <Text style={styles.captionNumber}>kg</Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </TouchableOpacity>
-
-          {/* Your Diary */}
           <View>
-            <View style={styles.containerReminder}>
-              <View style={styles.captionSubtitle}>
-                <Text style={styles.subtitle}>Your Diary</Text>
+            {diaryData ? (
+              <>
+                {/* Vital Sign */}
                 <TouchableOpacity
-                  style={styles.subtitleContainerText}
-                  onPress={() =>
-                    router.push({
-                      pathname: "/hcd/diary/editDiary",
-                      params: { date: selectedDateKey },
-                    })
-                  }
+                  style={styles.containerAllDigitBio}
+                  onPress={() => router.push("/profile/digitalBiomarker")}
                 >
-                  <Text style={styles.seeAllContainer}>Edit</Text>
+                  {/* Judul */}
+                  <View style={styles.titleHealth}>
+                    <View style={styles.containerDigit}>
+                      <View style={styles.containerTitle}>
+                        <Text style={styles.titleDigitBio}>Vital Signs</Text>
+                        <Text style={styles.captionDigitBio}>
+                          Latest update 15/09/2025 13:00
+                        </Text>
+                      </View>
+                    </View>
+                    <Image
+                      source={require("@/assets/utilsIcon/arrow-left.png")}
+                      style={styles.icon}
+                    />
+                  </View>
+
+                  {/* Kotak */}
+                  <View style={styles.squaresContainer}>
+                    <View style={styles.subSquareContainer}>
+                      {/* Blood Pressure */}
+                      <View style={styles.containerStatus}>
+                        <View style={styles.bulletin}></View>
+                        <View style={styles.captCont1}>
+                          <Text style={styles.captionNumber}>
+                            Blood Pressure
+                          </Text>
+                          <View style={styles.captCont}>
+                            <Text style={styles.captionName}>
+                              {diaryData?.systolic ?? "-"} /{" "}
+                              {diaryData?.diastolic ?? "-"}
+                            </Text>
+                            <Text style={styles.captionNumber}>mmHg</Text>
+                          </View>
+                        </View>
+                      </View>
+
+                      {/* Blood Sugar */}
+                      <View style={styles.containerStatus}>
+                        <View style={styles.bulletin}></View>
+                        <View style={styles.captCont1}>
+                          <Text style={styles.captionNumber}>Blood Sugar</Text>
+                          <View style={styles.captCont}>
+                            <Text style={styles.captionName}>
+                              {" "}
+                              {diaryData?.bloodSugar ?? "-"}
+                            </Text>
+                            <Text style={styles.captionNumber}>mg/dL</Text>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                    <View style={styles.subSquareContainer}>
+                      {/* Heart Rate */}
+                      <View style={styles.containerStatus}>
+                        <View style={styles.bulletin}></View>
+                        <View style={styles.captCont1}>
+                          <Text style={styles.captionNumber}>Heart Rate</Text>
+                          <View style={styles.captCont}>
+                            <Text style={styles.captionName}>
+                              {diaryData?.heartRate ?? "-"}
+                            </Text>
+                            <Text style={styles.captionNumber}>bpm</Text>
+                          </View>
+                        </View>
+                      </View>
+
+                      {/* Blood Sugar */}
+                      <View style={styles.containerStatus}>
+                        <View style={styles.bulletin}></View>
+                        <View style={styles.captCont1}>
+                          <Text style={styles.captionNumber}>Weight</Text>
+                          <View style={styles.captCont}>
+                            <Text style={styles.captionName}>
+                              {diaryData?.weight ?? "-"}
+                            </Text>
+                            <Text style={styles.captionNumber}>kg</Text>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
                 </TouchableOpacity>
-              </View>
-            </View>
-            <View style={styles.contentContainer}>
-              <View style={styles.formContainer}>
-                {/* Form */}
-                <View style={styles.containerForm}>
-                  {/* Symptoms */}
-                  <View style={styles.containerInput}>
-                    <View style={styles.flexInput}>
-                      <Image
-                        source={require("@/assets/hcd/symptoms.svg")}
-                        style={{ width: 25, height: 25 }}
-                        resizeMode="contain"
-                      />
-                      <Text style={styles.textTitle}>Symptoms</Text>
+
+                {/* Your Diary */}
+                <View>
+                  <View style={styles.containerReminder}>
+                    <View style={styles.captionSubtitle}>
+                      <Text style={styles.subtitle}>Your Diary</Text>
+                      <TouchableOpacity
+                        style={styles.subtitleContainerText}
+                        onPress={() =>
+                          router.push({
+                            pathname: "/hcd/diary/editDiary",
+                            params: { date: selectedDateKey },
+                          })
+                        }
+                      >
+                        <Text style={styles.seeAllContainer}>Edit</Text>
+                      </TouchableOpacity>
                     </View>
-                    <TextInput
-                      style={[
-                        styles.descInput,
-                        {
-                          backgroundColor: COLORS.primary5th,
-                        },
-                      ]}
-                      value={diaryData?.symptoms ?? "-"}
-                      onChangeText={setSymptoms}
-                      multiline
-                    />
                   </View>
-                  {/* Mood */}
-                  <View style={styles.containerInput}>
-                    <View style={styles.flexInput}>
-                      <Image
-                        source={require("@/assets/hcd/mood.svg")}
-                        style={{ width: 25, height: 25 }}
-                        resizeMode="contain"
-                      />
-                      <Text style={styles.textTitle}>Mood</Text>
+                  <View style={styles.contentContainer}>
+                    <View style={styles.formContainer}>
+                      {/* Form */}
+                      <View style={styles.containerForm}>
+                        {/* Symptoms */}
+                        <View style={styles.containerInput}>
+                          <View style={styles.flexInput}>
+                            <Image
+                              source={require("@/assets/hcd/symptoms.svg")}
+                              style={{ width: 25, height: 25 }}
+                              resizeMode="contain"
+                            />
+                            <Text style={styles.textTitle}>Symptoms</Text>
+                          </View>
+                          <TextInput
+                            style={[
+                              styles.descInput,
+                              {
+                                backgroundColor: COLORS.primary5th,
+                              },
+                            ]}
+                            value={diaryData?.symptoms ?? "-"}
+                            onChangeText={setSymptoms}
+                            multiline
+                          />
+                        </View>
+                        {/* Mood */}
+                        <View style={styles.containerInput}>
+                          <View style={styles.flexInput}>
+                            <Image
+                              source={require("@/assets/hcd/mood.svg")}
+                              style={{ width: 25, height: 25 }}
+                              resizeMode="contain"
+                            />
+                            <Text style={styles.textTitle}>Mood</Text>
+                          </View>
+                          <TextInput
+                            style={[
+                              styles.descInput,
+                              {
+                                backgroundColor: COLORS.red3rd,
+                              },
+                            ]}
+                            value={diaryData?.mood ?? "-"}
+                            onChangeText={setMood}
+                            multiline
+                          />
+                        </View>
+                        {/* Physical Activities */}
+                        <View style={styles.containerInput}>
+                          <View style={styles.flexInput}>
+                            <Image
+                              source={require("@/assets/hcd/physicalAct.svg")}
+                              style={{ width: 25, height: 25 }}
+                              resizeMode="contain"
+                            />
+                            <Text style={styles.textTitle}>
+                              Physical Activities
+                            </Text>
+                          </View>
+                          <TextInput
+                            style={[
+                              styles.descInput,
+                              {
+                                backgroundColor: COLORS.secondary5th,
+                              },
+                            ]}
+                            value={diaryData?.activities ?? "-"}
+                            onChangeText={setActivities}
+                            multiline
+                          />
+                        </View>
+                        {/* Additional Notes */}
+                        <View style={styles.containerInput}>
+                          <View style={styles.flexInput}>
+                            <Image
+                              source={require("@/assets/hcd/additionalNotes.svg")}
+                              style={{ width: 25, height: 25 }}
+                              resizeMode="contain"
+                            />
+                            <Text style={styles.textTitle}>
+                              Additional Notes
+                            </Text>
+                          </View>
+                          <TextInput
+                            style={[
+                              styles.descInput,
+                              {
+                                backgroundColor: "#EAEAEA",
+                              },
+                            ]}
+                            value={diaryData?.notes ?? "-"}
+                            onChangeText={setNotes}
+                            multiline
+                          />
+                        </View>
+                      </View>
+                      <View style={styles.divider} />
+                      {/* Latest Update */}
+                      <View style={styles.LatestContainer}>
+                        <Text style={styles.latestText}>
+                          {diaryData?.updatedAt
+                            ? `Latest update ${(diaryData.updatedAt instanceof
+                              Date
+                                ? diaryData.updatedAt
+                                : diaryData.updatedAt.toDate()
+                              ).toLocaleDateString(
+                                "en-GB"
+                              )} ${(diaryData.updatedAt instanceof Date
+                                ? diaryData.updatedAt
+                                : diaryData.updatedAt.toDate()
+                              ).toLocaleTimeString("en-GB", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}`
+                            : "No updates yet"}
+                        </Text>
+                      </View>
                     </View>
-                    <TextInput
-                      style={[
-                        styles.descInput,
-                        {
-                          backgroundColor: COLORS.red3rd,
-                        },
-                      ]}
-                      value={diaryData?.mood ?? "-"}
-                      onChangeText={setMood}
-                      multiline
-                    />
-                  </View>
-                  {/* Physical Activities */}
-                  <View style={styles.containerInput}>
-                    <View style={styles.flexInput}>
-                      <Image
-                        source={require("@/assets/hcd/physicalAct.svg")}
-                        style={{ width: 25, height: 25 }}
-                        resizeMode="contain"
-                      />
-                      <Text style={styles.textTitle}>Physical Activities</Text>
-                    </View>
-                    <TextInput
-                      style={[
-                        styles.descInput,
-                        {
-                          backgroundColor: COLORS.secondary5th,
-                        },
-                      ]}
-                      value={diaryData?.activities ?? "-"}
-                      onChangeText={setActivities}
-                      multiline
-                    />
-                  </View>
-                  {/* Additional Notes */}
-                  <View style={styles.containerInput}>
-                    <View style={styles.flexInput}>
-                      <Image
-                        source={require("@/assets/hcd/additionalNotes.svg")}
-                        style={{ width: 25, height: 25 }}
-                        resizeMode="contain"
-                      />
-                      <Text style={styles.textTitle}>Additional Notes</Text>
-                    </View>
-                    <TextInput
-                      style={[
-                        styles.descInput,
-                        {
-                          backgroundColor: "#EAEAEA",
-                        },
-                      ]}
-                      value={diaryData?.notes ?? "-"}
-                      onChangeText={setNotes}
-                      multiline
-                    />
                   </View>
                 </View>
-                <View style={styles.divider} />
-                {/* Latest Update */}
-                <View style={styles.LatestContainer}>
-                  <Text style={styles.latestText}>
-                    {diaryData?.updatedAt
-                      ? `Latest update ${new Date(
-                          diaryData.updatedAt.seconds * 1000
-                        ).toLocaleDateString("en-GB")} ${new Date(
-                          diaryData.updatedAt.seconds * 1000
-                        ).toLocaleTimeString("en-GB", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}`
-                      : "No updates yet"}
-                  </Text>
+              </>
+            ) : (
+              <>
+                <View style={styles.containerContentDiary}>
+                  <Text style={styles.emptyText}>No diary entries yet</Text>
+                  <View style={styles.containerContentEmpty}>
+                    <TouchableOpacity
+                      style={styles.createButton}
+                      onPress={() => router.push("/hcd/diary/createDiary")}
+                    >
+                      <Text style={styles.createButtonText}>
+                        {" "}
+                        + Create New Diary
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-            </View>
+              </>
+            )}
           </View>
         </View>
       </ScrollView>

@@ -2,7 +2,7 @@ import ModalError from "@/components/utils/ModalError";
 import ModalSuccess from "@/components/utils/ModalSuccess";
 import PrimaryButtonColorForm from "@/components/utils/PrimaryButtonColorForm";
 import TitleBack from "@/components/utils/TitleBack";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthState } from "@/hooks/useAuthState";
 import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
 import { useHealthDiary } from "@/hooks/useHealthDiary";
 import { useUserProfile } from "@/hooks/useUserProfile";
@@ -10,6 +10,7 @@ import { styles } from "@/styles/hcd/createDiary.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
 import { DiaryInput } from "@/types/diary";
 import { validateDiary } from "@/utils/validateDiary";
+import { Timestamp } from "firebase/firestore";
 import { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
@@ -20,7 +21,7 @@ import {
 import DateTimePicker from "react-native-ui-datepicker";
 
 export default function CreateDiary() {
-  const { user } = useAuth();
+  const { user } = useAuthState();
   const { addDiary } = useHealthDiary();
   const insets = useSafeAreaInsets();
   const [selected, setSelected] = useState<Date | undefined>(new Date());
@@ -72,6 +73,12 @@ export default function CreateDiary() {
   };
 
   const saveDiary = async () => {
+    if (!user?.uid) {
+      setErrorMessage("You must be logged in to save a diary");
+      setShowError(true);
+      return;
+    }
+
     const input: DiaryInput = {
       systolic,
       diastolic,
@@ -91,11 +98,25 @@ export default function CreateDiary() {
       return;
     }
 
-    const result = await addDiary({
-      fromUid: user!.uid,
-      ...input,
-      date: selected ? formatDateLocal(selected) : "",
-    });
+    const diaryEntry = {
+      fromUid: user.uid,
+      systolic: Number(systolic),
+      diastolic: Number(diastolic),
+      heartRate: Number(heartRate),
+      bloodSugar: Number(bloodSugar),
+      weight: Number(weight),
+      mood,
+      symptoms,
+      activities,
+      notes,
+      date: selected
+        ? Timestamp.fromDate(selected)
+        : Timestamp.fromDate(new Date()),
+      createdAt: Timestamp.fromDate(new Date()),
+      updatedAt: Timestamp.fromDate(new Date()),
+    };
+
+    const result = await addDiary(diaryEntry);
 
     if (result.success) {
       setSystolic("");
@@ -109,6 +130,10 @@ export default function CreateDiary() {
       setNotes("");
       setShowSuccess(true);
       setHasInput(false);
+    } else {
+      setErrorMessage(result.message || "Failed to save diary");
+      setShowError(true);
+      console.log(error);
     }
   };
 

@@ -2,12 +2,12 @@ import ModalError from "@/components/utils/ModalError";
 import ModalSuccess from "@/components/utils/ModalSuccess";
 import PrimaryButtonColorForm from "@/components/utils/PrimaryButtonColorForm";
 import TitleBack from "@/components/utils/TitleBack";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthState } from "@/hooks/useAuthState";
 import { useHealthDiary } from "@/hooks/useHealthDiary";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { styles } from "@/styles/hcd/editDiary.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
@@ -19,8 +19,9 @@ import {
 export default function EditDiary() {
   const [hasInput, setHasInput] = useState(false);
   const insets = useSafeAreaInsets();
-  const { user } = useAuth();
-  const { fetchDiariesByDate, updateDiary } = useHealthDiary();
+  const { user } = useAuthState();
+  const uid = user?.uid;
+  const { fetchDiariesByDate, updateDiary, deleteDiary } = useHealthDiary();
   const [diary, setDiary] = useState<any>(null);
   const { date } = useLocalSearchParams<{ date?: string }>();
   const { loading } = useUserProfile();
@@ -30,26 +31,29 @@ export default function EditDiary() {
   console.log(date);
 
   useEffect(() => {
-    if (!date || !user) return;
+    if (!date || !uid) return;
     const load = async () => {
-      const res = await fetchDiariesByDate(date);
+      const res = await fetchDiariesByDate(date, uid);
       if (res.success && res.data?.length > 0) {
         setDiary(res.data[0]);
       }
     };
     load();
-  }, [date]);
+  }, [date, uid]);
 
   const handleSave = async () => {
-    console.log(diary);
-    if (!diary) return;
+    if (!diary || !uid) return;
     try {
-      const res = await updateDiary(diary.id, {
-        mood: diary.mood,
-        symptoms: diary.symptoms,
-        activities: diary.activities,
-        notes: diary.notes,
-      });
+      const res = await updateDiary(
+        diary.id,
+        {
+          mood: diary.mood,
+          symptoms: diary.symptoms,
+          activities: diary.activities,
+          notes: diary.notes,
+        },
+        uid
+      );
 
       if (res.success) {
         console.log("Diary updated!");
@@ -67,6 +71,26 @@ export default function EditDiary() {
 
   const handleInputChange = (text: string) => {
     setHasInput(text.trim().length > 0);
+  };
+
+  const handleDelete = async () => {
+    console.log("Mau Delete");
+    console.log(diary);
+    if (!diary || !uid) return;
+    try {
+      const res = await deleteDiary(diary.id, uid);
+      if (res.success) {
+        setShowSuccess(true);
+        router.back();
+      } else {
+        setErrorMessage("Failed to delete diary");
+        setShowError(true);
+      }
+    } catch (err: any) {
+      console.error(err);
+      setErrorMessage(err.message || "Something went wrong");
+      setShowError(true);
+    }
   };
 
   return (
@@ -88,7 +112,7 @@ export default function EditDiary() {
             <View style={styles.formContainer}>
               <View style={styles.formHeaderContainer}>
                 <Text style={styles.titleForm}>Edit Your Health Diary</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handleDelete}>
                   <Image
                     source={require("@/assets/utilsIcon/delete.png")}
                     style={{ width: 25, height: 25 }}
