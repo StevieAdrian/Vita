@@ -1,13 +1,36 @@
+import { AppointmentProvider } from "@/context/AppointmentContext";
 import { DrugProvider } from "@/context/DrugContext";
 import { Stack } from "expo-router";
 
 export default function MeditrackLayout() {
   return (
     <DrugProvider>
-      <Stack>
-        <Stack.Screen name="mediTrack" options={{ headerShown: false }} />
-        <Stack.Screen name="drugForm" options={{ headerShown: false }} />
-      </Stack>
+      <AppointmentProvider>
+        <Stack>
+          <Stack.Screen name="mediTrack" options={{ headerShown: false }} />
+          <Stack.Screen name="drugForm" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="appointmentForm"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="allremindercard"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="allupcomingappointment"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="allhistoryappointment"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="alltodayreminder"
+            options={{ headerShown: false }}
+          />
+        </Stack>
+      </AppointmentProvider>
     </DrugProvider>
   );
 }

@@ -2,7 +2,7 @@ import { COLORS } from "@/constants/colors";
 import { styles, timePickerStyles } from "@/styles/meditrack/drug-time.styles";
 import { formatTime } from "@/utils/appointment-cartegoryValidation";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, Modal, Text, TouchableOpacity, View } from "react-native";
 
 interface TimePickerProps {
@@ -125,24 +125,21 @@ const TimePicker: React.FC<TimePickerProps> = ({
 };
 
 interface TimeDrugProps {
-  onTimesChange?: (times: string[]) => void;
-  initialTimes?: string[];
+  times: string[];
+  onTimesChange: (times: string[]) => void;
 }
 
-const TimeDrug: React.FC<TimeDrugProps> = ({
-  onTimesChange,
-  initialTimes = ["12:00"],
-}) => {
-  const [times, setTimes] = useState<string[]>(initialTimes);
-  const [showTimePickers, setShowTimePickers] = useState<boolean[]>(
-    initialTimes.map(() => false)
-  );
+const TimeDrug: React.FC<TimeDrugProps> = ({ times, onTimesChange }) => {
+  const [showTimePickers, setShowTimePickers] = useState<boolean[]>([]);
+
+  useEffect(() => {
+    setShowTimePickers(times.map(() => false));
+  }, [times, times.length]);
 
   const handleTimeChange = (time: string, index: number) => {
     const newTimes = [...times];
     newTimes[index] = time;
-    setTimes(newTimes);
-    onTimesChange?.(newTimes);
+    onTimesChange(newTimes);
   };
 
   const handleShowTimePicker = (index: number, show: boolean) => {
@@ -153,18 +150,13 @@ const TimeDrug: React.FC<TimeDrugProps> = ({
 
   const handleAddMoreTime = () => {
     const newTimes = [...times, "12:00"];
-    setTimes(newTimes);
-    setShowTimePickers([...showTimePickers, false]);
-    onTimesChange?.(newTimes);
+    onTimesChange(newTimes);
   };
 
   const handleRemoveTime = (index: number) => {
     if (times.length > 1) {
       const newTimes = times.filter((_, i) => i !== index);
-      const newShowTimePickers = showTimePickers.filter((_, i) => i !== index);
-      setTimes(newTimes);
-      setShowTimePickers(newShowTimePickers);
-      onTimesChange?.(newTimes);
+      onTimesChange(newTimes);
     }
   };
 

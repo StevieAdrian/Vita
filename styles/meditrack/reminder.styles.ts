@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 5,
-    gap:10
+    gap: 10,
   },
   leftColumn: {
     flexDirection: "row",
@@ -18,7 +18,6 @@ export const styles = StyleSheet.create({
     gap: 12,
     flex: 1,
   } as const,
-
   title: {
     color: COLORS.black,
     fontSize: 16,
@@ -49,8 +48,8 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-    completedText: {
-    textDecorationLine: 'line-through',
+  completedText: {
+    textDecorationLine: "line-through",
     opacity: 0.6,
   },
   repeatDays: {
@@ -61,11 +60,18 @@ export const styles = StyleSheet.create({
   categoryDetail: {
     fontSize: 11,
     color: COLORS.gray1,
-    fontStyle: 'italic',
+    fontStyle: "italic",
     marginTop: 2,
   },
   textContainer: {
     flex: 1,
     marginLeft: 12,
+  },
+  actionButtons: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  actionButton: {
+    padding: 8,
   },
 });

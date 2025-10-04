@@ -1,6 +1,6 @@
 import { COLORS } from "@/constants/colors";
 import { DRUG_CATEGORIES, DrugReminder } from "@/constants/drugs";
-import type { Reminder } from "@/constants/reminder";
+import type { Reminder, ReminderCategory } from "@/constants/reminder";
 import { styles } from "@/styles/meditrack/reminder.styles";
 import type React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
@@ -8,7 +8,10 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 type ReminderCardProps = {
   reminder: Reminder;
   onToggle: (id: string) => void;
+  onEdit?: (reminder: Reminder) => void;
+  onDelete?: (reminder: Reminder) => void;
   showDescription?: boolean;
+  showActions?: boolean;
 };
 
 const truncateText = (text: string, wordLimit: number) => {
@@ -41,10 +44,10 @@ export const convertDrugToReminder = (drugReminder: DrugReminder): Reminder => {
 const formatTimesToTimeLabel = (times: string[]): string => {
   if (!times || times.length === 0) return "No time set";
   if (times.length === 1) return times[0];
-  return `${times.length} times`;
+  return times.join(", ");
 };
 
-const getCardBackground = (reminderType: "drug" | "appointment") => {
+const getCardBackground = (reminderType: ReminderCategory | "other") => {
   switch (reminderType) {
     case "drug":
       return COLORS.primary4th;
@@ -55,7 +58,7 @@ const getCardBackground = (reminderType: "drug" | "appointment") => {
   }
 };
 
-const getReminderIcon = (reminderType: "drug" | "appointment" ) => {
+const getReminderIcon = (reminderType: ReminderCategory | "other") => {
   switch (reminderType) {
     case "drug":
       return require("@/assets/mediTrack/pill.png");
@@ -69,7 +72,10 @@ const getReminderIcon = (reminderType: "drug" | "appointment" ) => {
 export const ReminderCard: React.FC<ReminderCardProps> = ({
   reminder,
   onToggle,
+  onEdit,
+  onDelete,
   showDescription = true,
+  showActions = false,
 }) => {
   const reminderType = reminder.category;
   const cardBackground = getCardBackground(reminderType);
@@ -77,6 +83,14 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
 
   const handleToggle = () => {
     onToggle(reminder.id);
+  };
+
+  const handleEditPress = () => {
+    onEdit?.(reminder);
+  };
+
+  const handleDeletePress = () => {
+    onDelete?.(reminder);
   };
 
   return (
@@ -141,12 +155,19 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
         </View>
       </View>
 
-      <TouchableOpacity onPress={handleToggle}>
-        <Image
-          source={require("@/assets/utilsIcon/arrow-left.png")}
-          style={styles.icon}
-        />
-      </TouchableOpacity>
+      {showActions && (
+        <View style={styles.actionButtons}>
+          <TouchableOpacity
+            onPress={handleEditPress}
+            style={styles.actionButton}
+          >
+            <Image
+              source={require("@/assets/utilsIcon/arrow-left.png")}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
+        </View>
+      )}
     </TouchableOpacity>
   );
 };
