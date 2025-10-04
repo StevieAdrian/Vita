@@ -308,7 +308,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                 <Calender
                   value={date}
                   allowFutureDates={true}
-                  allowPastDates={true}
+                  allowPastDates={false}
                   onSelectDate={(newDate) => {
                     setDate(newDate);
                     clearFieldError("date");

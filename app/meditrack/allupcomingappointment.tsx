@@ -19,15 +19,19 @@ const AllUpcomingAppointmentScreen: React.FC = () => {
   const { appointments, remove } = useAppointments();
 
   const upcomingAppointments = useMemo(() => {
-    const now = new Date();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
     return appointments
       .filter((appt) => {
         try {
           const appointmentDate = new Date(appt.date);
-          const [hours, minutes] = appt.startTime.split(":");
-          appointmentDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-          return appointmentDate >= now;
+          appointmentDate.setHours(0, 0, 0, 0);
+
+          return appointmentDate >= tomorrow;
         } catch {
           return false;
         }
