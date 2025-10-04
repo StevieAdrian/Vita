@@ -221,7 +221,7 @@ const DrugForm: React.FC<DrugFormProps> = ({
               <Calender
                 value={date}
                 allowFutureDates={true}
-                allowPastDates={true}
+                allowPastDates={false}
                 onSelectDate={setDate}
               />
             </View>

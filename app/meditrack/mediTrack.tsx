@@ -13,6 +13,7 @@ import type { Reminder, ReminderCategory } from "@/constants/reminder";
 import { useAppointments } from "@/context/AppointmentContext";
 import { useDrugs } from "@/context/DrugContext";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -38,7 +39,7 @@ const ScheduleScreen: React.FC = () => {
   const [selectedCategory, setSelectedCategory] =
     useState<ReminderCategory>("appointment");
 
-  const { drugs, loading: drugsLoading } = useDrugs();
+  const { drugs, loading: drugsLoading, removeExpiredDrugs } = useDrugs();
   const {
     appointments: appointmentReminders,
     loading: appointmentsLoading,
@@ -173,6 +174,31 @@ const ScheduleScreen: React.FC = () => {
 
     return () => clearInterval(interval);
   }, [drugs, todayAppointments]);
+
+  useEffect(() => {
+    const checkDaily = async () => {
+      try {
+        const today = new Date().toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+
+        const lastCheck = await AsyncStorage.getItem("lastExpiredCheck");
+
+        if (lastCheck !== today) {
+          await removeExpiredDrugs();
+          await AsyncStorage.setItem("lastExpiredCheck", today);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    const interval = setInterval(checkDaily, 60 * 60 * 1000);
+    checkDaily();
+    return () => clearInterval(interval);
+  }, [removeExpiredDrugs]);
 
   const handleToggleReminder = useCallback((id: string) => {
     console.log(id);
