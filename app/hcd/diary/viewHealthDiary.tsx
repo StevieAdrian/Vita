@@ -3,7 +3,7 @@ import TitleBack from "@/components/utils/TitleBack";
 import { COLORS } from "@/constants/colors";
 import { initialReminders } from "@/constants/initialData";
 import { Reminder } from "@/constants/reminder";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthState } from "@/hooks/useAuthState";
 import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
 import { useHealthDiary } from "@/hooks/useHealthDiary";
 import { styles } from "@/styles/hcd/viewHealthDiary.style";
@@ -21,7 +21,8 @@ import DateTimePicker, { DateType } from "react-native-ui-datepicker";
 
 export default function HealthDiary() {
   const insets = useSafeAreaInsets();
-  const user = useAuth();
+  const { user } = useAuthState();
+  const uid = user?.uid;
   const datePickerStyle = useDatePickerStyles();
   const [reminders, setReminders] = useState<Reminder[]>(initialReminders);
   const [symptoms, setSymptoms] = useState("");
@@ -143,10 +144,11 @@ export default function HealthDiary() {
   );
 
   useEffect(() => {
+    if (!uid) return;
     const fetchDiary = async () => {
       setLoading(true);
       const dateKey = formatDateLocal(selected as Date);
-      const res = await fetchDiariesByDate(dateKey);
+      const res = await fetchDiariesByDate(dateKey, uid);
       if (res.success) {
         setDiaries(res.success && res.data ? res.data : []);
         console.log(diaries);
@@ -158,8 +160,10 @@ export default function HealthDiary() {
     };
 
     fetchDiary();
-  }, [selected]);
+  }, [selected, uid]);
+  console.log(diaries);
   const diaryData = diaries[0];
+  console.log("test");
   console.log(diaryData);
 
   return (
@@ -190,7 +194,7 @@ export default function HealthDiary() {
                 <TouchableOpacity style={styles.subtitleContainerText}>
                   <Text
                     style={styles.seeAllContainer}
-                    onPress={() => router.push("/hcd/diary/createDiary")}
+                    onPress={() => router.push("/meditrack/mediTrack")}
                   >
                     Add Event
                   </Text>
@@ -446,16 +450,19 @@ export default function HealthDiary() {
                       <View style={styles.LatestContainer}>
                         <Text style={styles.latestText}>
                           {diaryData?.updatedAt
-                            ? `Latest update ${diaryData.updatedAt
-                                .toDate()
-                                .toLocaleDateString(
-                                  "en-GB"
-                                )} ${diaryData.updatedAt
-                                .toDate()
-                                .toLocaleTimeString("en-GB", {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                })}`
+                            ? `Latest update ${(diaryData.updatedAt instanceof
+                              Date
+                                ? diaryData.updatedAt
+                                : diaryData.updatedAt.toDate()
+                              ).toLocaleDateString(
+                                "en-GB"
+                              )} ${(diaryData.updatedAt instanceof Date
+                                ? diaryData.updatedAt
+                                : diaryData.updatedAt.toDate()
+                              ).toLocaleTimeString("en-GB", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}`
                             : "No updates yet"}
                         </Text>
                       </View>

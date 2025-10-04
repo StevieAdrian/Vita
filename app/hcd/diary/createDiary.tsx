@@ -2,7 +2,7 @@ import ModalError from "@/components/utils/ModalError";
 import ModalSuccess from "@/components/utils/ModalSuccess";
 import PrimaryButtonColorForm from "@/components/utils/PrimaryButtonColorForm";
 import TitleBack from "@/components/utils/TitleBack";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthState } from "@/hooks/useAuthState";
 import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
 import { useHealthDiary } from "@/hooks/useHealthDiary";
 import { useUserProfile } from "@/hooks/useUserProfile";
@@ -21,7 +21,7 @@ import {
 import DateTimePicker from "react-native-ui-datepicker";
 
 export default function CreateDiary() {
-  const { user } = useAuth();
+  const { user } = useAuthState();
   const { addDiary } = useHealthDiary();
   const insets = useSafeAreaInsets();
   const [selected, setSelected] = useState<Date | undefined>(new Date());
@@ -73,6 +73,12 @@ export default function CreateDiary() {
   };
 
   const saveDiary = async () => {
+    if (!user?.uid) {
+      setErrorMessage("You must be logged in to save a diary");
+      setShowError(true);
+      return;
+    }
+
     const input: DiaryInput = {
       systolic,
       diastolic,
@@ -93,7 +99,7 @@ export default function CreateDiary() {
     }
 
     const diaryEntry = {
-      fromUid: user!.uid,
+      fromUid: user.uid,
       systolic: Number(systolic),
       diastolic: Number(diastolic),
       heartRate: Number(heartRate),
@@ -103,7 +109,9 @@ export default function CreateDiary() {
       symptoms,
       activities,
       notes,
-      date: selected ?? new Date(),
+      date: selected
+        ? Timestamp.fromDate(selected)
+        : Timestamp.fromDate(new Date()),
       createdAt: Timestamp.fromDate(new Date()),
       updatedAt: Timestamp.fromDate(new Date()),
     };
@@ -125,6 +133,7 @@ export default function CreateDiary() {
     } else {
       setErrorMessage(result.message || "Failed to save diary");
       setShowError(true);
+      console.log(error);
     }
   };
 
