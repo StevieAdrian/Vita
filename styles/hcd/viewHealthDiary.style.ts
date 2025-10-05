@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   dashboardContainer: {
     backgroundColor: COLORS.background2nd,
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     position: "absolute",
     top: 0,
     left: 0,
@@ -37,6 +37,41 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     gap: 5,
   },
+  containerContentDiary: {
+    backgroundColor: COLORS.primary,
+    paddingVertical: 20,
+    width: "100%",
+    height: "auto",
+    borderRadius: 10,
+  },
+
+  emptyText: {
+    textAlign: "center",
+    marginVertical: 8,
+    fontSize: 14,
+    color: COLORS.white,
+    fontFamily: "Inter-Regular",
+  },
+  containerContentEmpty: {
+    alignItems: "center",
+    marginTop: 4,
+  },
+
+  createButton: {
+    backgroundColor: COLORS.white,
+    paddingVertical: 12,
+    paddingHorizontal: 28,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  createButtonText: {
+    color: COLORS.primary,
+    fontSize: 14,
+    fontFamily: "Inter-Medium",
+  },
+
   subtitle: {
     color: COLORS.black,
     fontFamily: "Inter-SemiBold",
@@ -353,5 +388,12 @@ export const styles = StyleSheet.create({
   },
   scheduleCont: {
     marginTop: 15,
+  },
+
+  // Reminder Page All
+  container: { flex: 1 },
+  headerContainer: {
+    width: "100%",
+    backgroundColor: COLORS.background2nd,
   },
 });
