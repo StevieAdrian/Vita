@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     name: {
         marginTop: 12,
         fontSize: 18,
-        fontWeight: "700",
+        fontFamily: "Inter-SemiBold",
         color: COLORS.black,
     },
     username: {
@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
     downloadBtn: {
         height: 44,
         borderRadius: 10,
-        backgroundColor: COLORS.primary2nd,
+        backgroundColor: COLORS.primary,
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "row",
@@ -32,9 +32,10 @@ export const styles = StyleSheet.create({
         marginRight: 8,
         tintColor: COLORS.white,
         resizeMode: "contain",
+        
     },
     downloadText: {
         color: COLORS.white,
-        fontWeight: "600",
+        fontFamily: "Inter-Medium",
     },
 })
