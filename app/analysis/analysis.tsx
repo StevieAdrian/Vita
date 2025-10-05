@@ -11,11 +11,13 @@ import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 import { styles } from "../../styles/analysis/analysis.styles";
 import HeartRateDetail from "@/components/analysis/HeartRateDetail";
 import BloodPressureDetail from "@/components/analysis/BloodPressureDetail";
+import { useEarlyWarning } from "@/hooks/useEarlyWarning";
 
 export default function Analysis() {
     const insets = useSafeAreaInsets();
     const { user } = useAuthState();
     const { stats, loading } = useHealthStats(user?.uid ?? "");
+    const { warnings, loading: loadingWarning } = useEarlyWarning(user?.uid ?? "");
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -29,37 +31,25 @@ export default function Analysis() {
                     <UpHeader title="Health Analysis" showProfile={false} />
                 </View>
 
-                <EarlyWarningCard
-                    title="Early Warning System"
-                    status="Status: Need Attention"
-                    description={[
-                        { text: "Your " },
-                        { text: "heart rate has been consistently high for the past week", bold: true },
-                        { text: ". Consider adjusting your lifestyle or consulting a doctor." },
-                    ]}
-                    risk="Risk Of Hypertension"
-                    priority="Mid"
-                />
-
-                <EarlyWarningCard
-                    title="Early Warning System"
-                    status="Status: Need Attention"
-                    description={[
-                        { text: "Your " },
-                        { text: "blood sugar has been consistently high for the past 2 week.", bold: true },
-                        { text: " Avoid risk of Diabetes now." },
-                    ]}
-                    risk="Risk Of Diabetes"
-                    priority="High"
-                />
-
-                <EarlyGoodCard
-                    title="All Good"
-                    status="Status: Good"
-                    description={[
-                        { text: "Maintain your lifestyle and keep your body healthy now and later." },
-                    ]}
-                />
+                {!loadingWarning && warnings.map((warn, i) =>
+                    warn.status?.includes("Good") ? (
+                        <EarlyGoodCard
+                            key={i}
+                            title={warn.title}
+                            status={warn.status}
+                            description={warn.description}
+                        />
+                    ) : (
+                        <EarlyWarningCard
+                            key={i}
+                            title={warn.title}
+                            status={warn.status}
+                            description={warn.description}
+                            risk={warn.risk}
+                            priority={warn.priority}
+                        />
+                    )
+                )}
 
                 {!loading && stats && (
                     <HealthStatisticsCard

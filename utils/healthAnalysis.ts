@@ -1,13 +1,13 @@
 import { DiaryEntry } from "../types/diary";
 import { HealthStatsSummary, MetricStat, MetricStatus } from "../types/health-stats";
 
-function classifyStatus(percent: number): MetricStatus {
+export function classifyStatus(percent: number): MetricStatus {
     if (percent >= 80) return "Good";
     if (percent >= 60) return "Okay";
     return "Bad";
 }
 
-function classifyBloodSugar(val: number | null): MetricStatus {
+export function classifyBloodSugar(val: number | null): MetricStatus {
     if (val == null) return "Bad";
     if (val <= 55) return "Bad";
     if (val <= 75) return "Okay";
@@ -16,7 +16,7 @@ function classifyBloodSugar(val: number | null): MetricStatus {
     return "Bad";
 }
 
-function classifyHeartRate(val: number | null): MetricStatus {
+export function classifyHeartRate(val: number | null): MetricStatus {
     // klo ad waktu nanti mau enh pake umur jg
     if (val == null) return "Bad";
     if (val < 40) return "Bad";
@@ -27,8 +27,9 @@ function classifyHeartRate(val: number | null): MetricStatus {
     return "Bad";                         
 }
 
-function classifyBP(sys: number | null, dia: number | null): MetricStatus {
+export function classifyBP(sys: number | null, dia: number | null): MetricStatus {
     if (sys == null || dia == null) return "Bad";
+    if (sys < 70 || dia < 40) return "Bad";
     if (sys < 120 && dia < 80) return "Good";
     if (sys >= 120 && sys <= 129 && dia < 80) return "Okay";
     if ((sys >= 130 && sys <= 139) || (dia >= 80 && dia <= 89)) return "Bad"; 
@@ -37,7 +38,7 @@ function classifyBP(sys: number | null, dia: number | null): MetricStatus {
     return "Bad";
 }
 
-function ensureDate(val: any): Date {
+export function ensureDate(val: any): Date {
     if (val instanceof Date) return val;
     if (val && typeof val.toDate === 'function') return val.toDate();
 
