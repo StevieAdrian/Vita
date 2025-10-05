@@ -18,11 +18,16 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "../../../styles/auth/signup/singup.styles";
+import { useCheckUsername } from "@/hooks/useCheckUsername";
+import { useCheckEmail } from "@/hooks/useCheckEmail";
+import Icon from "react-native-vector-icons/Feather";
 
 export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const { data, setField } = useSignupContext();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const { exists: usernameExists, isChecking: checkingUsername, verifyUsername } = useCheckUsername();
+  const { exists: emailExists, isChecking: checkingEmail, verifyEmail } = useCheckEmail();
 
   const handleChange = (field: keyof SignupValues, value: string) => {
     if (field === "confirmPassword") {
@@ -52,6 +57,16 @@ export default function Signup() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
+      if (usernameExists) {
+        alert("Username is already taken");
+        return;
+      }
+
+      if (emailExists) {
+        alert("Email is already registered");
+        return;
+      }
+
       router.push("/auth/signup/profilesignup");
     }
   };
@@ -93,10 +108,26 @@ export default function Signup() {
                 label="Username"
                 placeholder="johndoe123"
                 value={data.username}
-                onChangeText={(text) => handleChange("username", text)}
+                onChangeText={(text) => {
+                  handleChange("username", text);
+                  if (text.trim().length >= 3) {
+                    verifyUsername(text.trim());
+                  } else {
+                    verifyUsername("");
+                  }
+                }}
                 required
                 error={errors.username}
                 placeholderTextColor={COLORS.gray2}
+                rightIcon={
+                  checkingUsername ? (
+                    <Icon name="loader" size={20} color={COLORS.gray2} />
+                  ) : usernameExists === true ? (
+                    <Icon name="x-circle" size={20} color="red" />
+                  ) : usernameExists === false ? (
+                    <Icon name="check-circle" size={20} color="green" />
+                  ) : null
+                }
               />
 
               <InputField
@@ -121,12 +152,28 @@ export default function Signup() {
                 label="Email"
                 placeholder="johndoe@gmail.com"
                 value={data.email}
-                onChangeText={(text) => handleChange("email", text)}
+                onChangeText={(text) => {
+                  handleChange("email", text);
+                  if (text.includes("@")) {
+                    verifyEmail(text.trim());
+                  } else {
+                    verifyEmail("");
+                  }
+                }}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 required
                 error={errors.email}
                 placeholderTextColor={COLORS.gray2}
+                rightIcon={
+                  checkingEmail ? (
+                    <Icon name="loader" size={20} color={COLORS.gray2} />
+                  ) : emailExists === true ? (
+                    <Icon name="x-circle" size={20} color="red" />
+                  ) : emailExists === false ? (
+                    <Icon name="check-circle" size={20} color="green" />
+                  ) : null
+                }
               />
               <InputField
                 label="Password"
