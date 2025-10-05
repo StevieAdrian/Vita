@@ -1,6 +1,3 @@
-// npm uninstall react-native-print
-// npm install react-native-print@0.8.0 --legacy-peer-deps
-
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import { Platform } from "react-native";
@@ -224,7 +221,7 @@ export async function generateReportPDF(data: ReportData) {
                 document.body.removeChild(printFrame);
               }, 1000);
             }
-          }, 500);
+          }, 100);
         };
       }
     } else {
@@ -233,18 +230,16 @@ export async function generateReportPDF(data: ReportData) {
           html: htmlContent,
         });
 
-        if (await Sharing.isAvailableAsync()) {
-          await Sharing.shareAsync(uri, {
-            mimeType: "application/pdf",
-            dialogTitle: "Download Health Report",
-            UTI: "com.adobe.pdf",
-          });
-        }
-      } catch (mobileError) {
-        console.error(mobileError);
+        await Sharing.shareAsync(uri, {
+          mimeType: "application/pdf",
+          dialogTitle: "Download Health Report",
+          UTI: "public.pdf",
+        });
+      } catch (error) {
+        console.error(error);
       }
     }
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
   }
 }
