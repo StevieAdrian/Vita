@@ -11,6 +11,8 @@ import {
 import { styles } from "../../styles/family-mode/familyMode.styles";
 import { useState } from "react";
 import { useFamilyActions } from "../../hooks/useFamilyActions"
+import { useFamilyView } from "@/context/FamilyViewContext";
+import { useAuthState } from "@/hooks/useAuthState";
 
 export default function FamilyMode() {
   const insets = useSafeAreaInsets();
@@ -18,6 +20,8 @@ export default function FamilyMode() {
   const { count } = useIncomingRequests();
   const [ editMode, setEditMode ] = useState(false);
   const { removeMember } = useFamilyActions();
+  const { setViewingUid } = useFamilyView();
+  const { user } = useAuthState();
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -130,7 +134,10 @@ export default function FamilyMode() {
               <Text style={styles.alertText}>1 Alert Need Attentions</Text>
             </View>
 
-            <TouchableOpacity style={styles.monitorBtn}>
+            <TouchableOpacity style={styles.monitorBtn} onPress={() => {
+              setViewingUid(m.uid);
+              router.push("/family-mode/monitorDashboard")
+            }}>
               <Text style={styles.monitorBtnText}>Monitor Account</Text>
             </TouchableOpacity>
           </View>

@@ -6,7 +6,7 @@ export const getHealthDiaries = async ( uid: string, options?: { startDate?: Dat
   if (!uid) throw new Error("Missing user UID");
 
   const diaryCollection = collection(db, "healthDiaries");
-  const conditions: any[] = [where("uid", "==", uid)];
+  const conditions: any[] = [where("fromUid", "==", uid)];
 
   if (options?.startDate) conditions.push(where("date", ">=", options.startDate));
   if (options?.endDate) conditions.push(where("date", "<=", options.endDate));
