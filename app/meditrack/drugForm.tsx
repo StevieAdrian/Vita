@@ -13,7 +13,7 @@ import { getCategoryLabel, getRepeatLabel } from "@/utils/drugformValidation";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Image, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "../../styles/meditrack/drugform.style";
@@ -147,208 +147,209 @@ const DrugForm: React.FC<DrugFormProps> = ({
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.push("/meditrack/mediTrack")}
-        >
-          <Image
-            source={require("../../assets/utilsIcon/arrow-left.png")}
-            style={styles.backIcon}
-          />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>
-          {actualEditMode ? "Edit Reminder" : "Drugs Reminder"}
-        </Text>
-        <View style={styles.headerSpacer} />
-      </View>
-
-      <ScrollView
-        style={{
-          position: "absolute",
-          top: 60,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoid}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <View style={styles.card}>
-          <View style={styles.titleHeader}>
-            <TextInput
-              style={[styles.titleInput, { flex: 1, marginBottom: 0 }]}
-              placeholder="What's Reminder?"
-              value={drugName}
-              onChangeText={setDrugName}
-              editable={true}
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.push("/meditrack/mediTrack")}
+          >
+            <Image
+              source={require("../../assets/utilsIcon/arrow-left.png")}
+              style={styles.backIcon}
             />
-            {actualEditMode && (
-              <TouchableOpacity onPress={handleDelete}>
-                <Image source={require("../../assets/utilsIcon/delete.png")} />
-              </TouchableOpacity>
-            )}
-          </View>
-
-          <View style={styles.separator} />
-
-          <View style={styles.section}>
-            <Text style={styles.label}>Description</Text>
-            <View style={styles.descriptionContainer}>
-              <TextInput
-                style={styles.descriptionInput}
-                placeholder="Add description..."
-                value={description}
-                onChangeText={setDescription}
-                multiline
-                placeholderTextColor={COLORS.gray2}
-              />
-            </View>
-          </View>
-
-          <View style={styles.section}>
-            <View style={styles.dobWrapper}>
-              <InputField
-                label="Date"
-                placeholder="Select a date"
-                value={date}
-                onChangeText={setDate}
-                editable={false}
-                placeholderTextColor={COLORS.gray2}
-                style={styles.inputLabel}
-              />
-              <Calender
-                value={date}
-                allowFutureDates={true}
-                allowPastDates={false}
-                onSelectDate={setDate}
-              />
-            </View>
-          </View>
-
-          <View style={styles.section}>
-            <Text style={styles.label}>Category</Text>
-            <TouchableOpacity
-              style={styles.inputField}
-              onPress={() => setIsCategoryModalVisible(true)}
-            >
-              <Text
-                style={[
-                  styles.inputText,
-                  category.length === 0 && styles.placeholderText,
-                ]}
-              >
-                {getCategoryLabel(category)}
-              </Text>
-              <Ionicons
-                name="chevron-down"
-                size={20}
-                color={COLORS.black}
-                style={styles.chevronIcon}
-              />
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.section}>
-            <TimeDrug onTimesChange={setTimes} times={times} />
-          </View>
-
-          <View style={styles.section}>
-            <Text style={styles.label}>Repeat</Text>
-            <TouchableOpacity
-              style={styles.inputField}
-              onPress={() => setIsRepeatModalVisible(true)}
-            >
-              <Text
-                style={[
-                  styles.inputText,
-                  repeatDays.length === 0 && styles.placeholderText,
-                ]}
-              >
-                {getRepeatLabel(repeatDays)}
-              </Text>
-              <Ionicons
-                name="chevron-down"
-                size={20}
-                color={COLORS.black}
-                style={styles.chevronIcon}
-              />
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.buttonContainer}>
-            {actualEditMode ? (
-              <TouchableOpacity
-                style={[
-                  styles.submitButton,
-                  {
-                    width: "100%",
-                    backgroundColor: isFormValid
-                      ? COLORS.primary
-                      : COLORS.primary3rd,
-                  },
-                ]}
-                onPress={handleAddReminder}
-                disabled={!isFormValid}
-              >
-                <Text style={[styles.submitButtonText, { marginLeft: 0 }]}>
-                  Done
-                </Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={[
-                  styles.submitButton,
-                  isFormValid
-                    ? { backgroundColor: COLORS.primary }
-                    : { backgroundColor: COLORS.primary3rd },
-                ]}
-                onPress={handleAddReminder}
-                disabled={!isFormValid}
-              >
-                <Ionicons name="add-outline" size={20} color={COLORS.white} />
-                <Text style={styles.submitButtonText}>Add Reminder</Text>
-              </TouchableOpacity>
-            )}
-          </View>
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>
+            {actualEditMode ? "Edit Reminder" : "Drugs Reminder"}
+          </Text>
+          <View style={styles.headerSpacer} />
         </View>
-      </ScrollView>
 
-      <DrugsCategoryModal
-        isVisible={isCategoryModalVisible}
-        onClose={() => setIsCategoryModalVisible(false)}
-        onApply={handleCategoryApply}
-        initialCategories={category}
-      />
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollViewContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.card}>
+            <View style={styles.titleHeader}>
+              <TextInput
+                style={[styles.titleInput, { flex: 1, marginBottom: 0 }]}
+                placeholder="What's Reminder?"
+                value={drugName}
+                onChangeText={setDrugName}
+                editable={true}
+              />
+              {actualEditMode && (
+                <TouchableOpacity onPress={handleDelete}>
+                  <Image
+                    source={require("../../assets/utilsIcon/delete.png")}
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
 
-      <DrugRepeatModal
-        isVisible={isRepeatModalVisible}
-        onClose={() => setIsRepeatModalVisible(false)}
-        onApply={(selectedDays) => setRepeatDays(selectedDays)}
-        initialRepeatDays={repeatDays}
-      />
+            <View style={styles.separator} />
 
-      <ModalError
-        visible={showError}
-        title="Missing Information"
-        description={errorMessage}
-        buttonText="OK"
-        onClose={() => setShowError(false)}
-      />
+            <View style={styles.section}>
+              <Text style={styles.label}>Description</Text>
+              <View style={styles.descriptionContainer}>
+                <TextInput
+                  style={styles.descriptionInput}
+                  placeholder="Add description..."
+                  value={description}
+                  onChangeText={setDescription}
+                  multiline
+                  placeholderTextColor={COLORS.gray2}
+                />
+              </View>
+            </View>
 
-      <ModalSuccess
-        visible={showSuccess}
-        title={
-          actualEditMode ? "Drug Reminder Updated!" : "Drug Reminder Added!"
-        }
-        description="Your drug reminder has been saved successfully."
-        buttonText="Continue"
-        onClose={() => {
-          setShowSuccess(false);
-          router.push("/meditrack/mediTrack");
-        }}
-      />
+            <View style={styles.section}>
+              <View style={styles.dobWrapper}>
+                <InputField
+                  label="Date"
+                  placeholder="Select a date"
+                  value={date}
+                  onChangeText={setDate}
+                  editable={false}
+                  placeholderTextColor={COLORS.gray2}
+                  style={styles.inputLabel}
+                />
+                <Calender
+                  value={date}
+                  allowFutureDates={true}
+                  allowPastDates={false}
+                  onSelectDate={setDate}
+                />
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.label}>Category</Text>
+              <TouchableOpacity
+                style={styles.inputField}
+                onPress={() => setIsCategoryModalVisible(true)}
+              >
+                <Text
+                  style={[
+                    styles.inputText,
+                    category.length === 0 && styles.placeholderText,
+                  ]}
+                >
+                  {getCategoryLabel(category)}
+                </Text>
+                <Ionicons
+                  name="chevron-down"
+                  size={20}
+                  color={COLORS.black}
+                  style={styles.chevronIcon}
+                />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.section}>
+              <TimeDrug onTimesChange={setTimes} times={times} />
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.label}>Repeat</Text>
+              <TouchableOpacity
+                style={styles.inputField}
+                onPress={() => setIsRepeatModalVisible(true)}
+              >
+                <Text
+                  style={[
+                    styles.inputText,
+                    repeatDays.length === 0 && styles.placeholderText,
+                  ]}
+                >
+                  {getRepeatLabel(repeatDays)}
+                </Text>
+                <Ionicons
+                  name="chevron-down"
+                  size={20}
+                  color={COLORS.black}
+                  style={styles.chevronIcon}
+                />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.buttonContainer}>
+              {actualEditMode ? (
+                <TouchableOpacity
+                  style={[
+                    styles.submitButton,
+                    {
+                      width: "100%",
+                      backgroundColor: isFormValid
+                        ? COLORS.primary
+                        : COLORS.primary3rd,
+                    },
+                  ]}
+                  onPress={handleAddReminder}
+                  disabled={!isFormValid}
+                >
+                  <Text style={[styles.submitButtonText, { marginLeft: 0 }]}>
+                    Done
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={[
+                    styles.submitButton,
+                    isFormValid
+                      ? { backgroundColor: COLORS.primary }
+                      : { backgroundColor: COLORS.primary3rd },
+                  ]}
+                  onPress={handleAddReminder}
+                  disabled={!isFormValid}
+                >
+                  <Ionicons name="add-outline" size={20} color={COLORS.white} />
+                  <Text style={styles.submitButtonText}>Add Reminder</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+        </ScrollView>
+
+        <DrugsCategoryModal
+          isVisible={isCategoryModalVisible}
+          onClose={() => setIsCategoryModalVisible(false)}
+          onApply={handleCategoryApply}
+          initialCategories={category}
+        />
+
+        <DrugRepeatModal
+          isVisible={isRepeatModalVisible}
+          onClose={() => setIsRepeatModalVisible(false)}
+          onApply={(selectedDays) => setRepeatDays(selectedDays)}
+          initialRepeatDays={repeatDays}
+        />
+
+        <ModalError
+          visible={showError}
+          title="Missing Information"
+          description={errorMessage}
+          buttonText="OK"
+          onClose={() => setShowError(false)}
+        />
+
+        <ModalSuccess
+          visible={showSuccess}
+          title={
+            actualEditMode ? "Drug Reminder Updated!" : "Drug Reminder Added!"
+          }
+          description="Your drug reminder has been saved successfully."
+          buttonText="Continue"
+          onClose={() => {
+            setShowSuccess(false);
+            router.push("/meditrack/mediTrack");
+          }}
+        />
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

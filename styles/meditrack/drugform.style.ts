@@ -6,6 +6,21 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background2nd,
   },
+  scrollView: {
+    position: "absolute",
+    top: 60,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    paddingBottom: 200,
+    paddingHorizontal: 16,
+  },
+  keyboardAvoid: {
+    flex: 1,
+  },
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -103,7 +118,7 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   placeholderText: {
-    color: "COLORS.gray2",
+    color: COLORS.gray2,
   },
   buttonContainer: {
     flexDirection: "row",
