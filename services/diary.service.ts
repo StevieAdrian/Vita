@@ -107,7 +107,7 @@ export const getHealthDiariesByDate = async (date: string, uid: string) => {
   const diaryCollection = collection(db, "healthDiaries");
   const q = query(
     diaryCollection,
-    // where("fromUid", "==", uid),
+    where("fromUid", "==", uid),
     where("date", ">=", start),
     where("date", "<", end)
   );
