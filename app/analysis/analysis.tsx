@@ -12,12 +12,18 @@ import { styles } from "../../styles/analysis/analysis.styles";
 import HeartRateDetail from "@/components/analysis/HeartRateDetail";
 import BloodPressureDetail from "@/components/analysis/BloodPressureDetail";
 import { useEarlyWarning } from "@/hooks/useEarlyWarning";
+import { useFutureHealth } from "@/hooks/useFutureHealth";
+import { useAIRecommendation } from "@/hooks/useAIRecommendation";
+import { HEALTH_RECOMMENDATION_PROMPT } from "@/constants/prompt";
 
 export default function Analysis() {
     const insets = useSafeAreaInsets();
     const { user } = useAuthState();
     const { stats, loading } = useHealthStats(user?.uid ?? "");
     const { warnings, loading: loadingWarning } = useEarlyWarning(user?.uid ?? "");
+    const { futureHealth } = useFutureHealth(user?.uid ?? "");
+    const healthSummary = HEALTH_RECOMMENDATION_PROMPT(futureHealth);
+    const { recommendation, loading: loadingAI } = useAIRecommendation(healthSummary);
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -65,15 +71,19 @@ export default function Analysis() {
 
                 <FutureHealthCard
                     items={[
-                        { label: "Heart Health", status: "Need Attention", statusType: "warning" },
-                        { label: "Metabolism", status: "Good", statusType: "good" },
-                        { label: "Physical Fitness", status: "Good", statusType: "good" },
+                        { label: "Heart Health", status: futureHealth?.heartHealth ?? "Good", statusType: futureHealth?.heartHealth === "Good" ? "good" : "warning" },
+                        { label: "Blood Sugar", status: futureHealth?.metabolism ?? "Good", statusType: futureHealth?.metabolism === "Good" ? "good" : "warning" },
+                        { label: "Hypertension", status: futureHealth?.hypertension  ?? "Good", statusType: futureHealth?.hypertension === "Good" ? "good" : "warning" },
+                        { label: "Hypotension", status: futureHealth?.hypotension  ?? "Good", statusType: futureHealth?.hypotension === "Good" ? "good" : "warning" },
                     ]}
-                    recommendations={[
-                        "Increase cardio activity twice a week",
-                        "Consume omega-3s for heart health",
-                        "Monitor blood pressure every three days",
-                    ]}
+                    recommendations={
+                        loadingAI
+                        ? ["Generating AI recommendation..."]
+                        : recommendation
+                            ? recommendation.split("\n").map(line => line.trim().replace(/^[-•]\s*/, "").trim())
+                        .filter(Boolean)
+                            : ["No recommendation available."]
+                    }
                 />
 
             </ScrollView>

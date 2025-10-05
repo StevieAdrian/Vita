@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, limit, orderBy, query, where } from "firebase/firestore";
 import { db } from "../config/firebaseConfig";
 import { DiaryEntry } from "../types/diary";
 
@@ -6,7 +6,7 @@ export const getHealthDiaries = async ( uid: string, options?: { startDate?: Dat
   if (!uid) throw new Error("Missing user UID");
 
   const diaryCollection = collection(db, "healthDiaries");
-  const conditions: any[] = [where("uid", "==", uid)];
+  const conditions: any[] = [where("fromUid", "==", uid)];
 
   if (options?.startDate) conditions.push(where("date", ">=", options.startDate));
   if (options?.endDate) conditions.push(where("date", "<=", options.endDate));
@@ -26,4 +26,30 @@ export const getHealthDiaries = async ( uid: string, options?: { startDate?: Dat
     } as DiaryEntry & { id: string };
   });
 
+};
+
+export const getLatestHealthDiary = async (uid: string): Promise<DiaryEntry | null> => {
+  if (!uid) throw new Error("Missing user UID");
+
+  const diaryCollection = collection(db, "healthDiaries");
+  const q = query(
+    diaryCollection,
+    where("fromUid", "==", uid),
+    orderBy("date", "desc"),
+    limit(1) 
+  );
+
+  const snapshot = await getDocs(q);
+  if (snapshot.empty) return null;
+
+  const docSnap = snapshot.docs[0];
+  const data = docSnap.data();
+
+  return {
+    id: docSnap.id,
+    ...data,
+    date: data.date instanceof Date ? data.date : data.date.toDate(),
+    createdAt: data.createdAt?.toDate ? data.createdAt.toDate() : null,
+    updatedAt: data.updatedAt?.toDate ? data.updatedAt.toDate() : null,
+  } as DiaryEntry & { id: string };
 };

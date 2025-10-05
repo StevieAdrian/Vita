@@ -2,6 +2,7 @@ import BottomNav from "@/components/utils/BottomNav";
 import { Fonts } from "@/constants/fonts";
 import { NAV_ITEMS } from "@/constants/navItems";
 import { AuthContext } from "@/context/AuthContext";
+import { FamilyViewProvider } from "@/context/FamilyViewContext";
 import { useAuthState } from "@/hooks/useAuthState";
 import { useFonts } from "expo-font";
 import { Slot, SplashScreen, usePathname, useRouter } from "expo-router";
@@ -64,7 +65,9 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <AuthContext>
-        <RootContent />
+        <FamilyViewProvider>
+          <RootContent />
+        </FamilyViewProvider>
       </AuthContext>
     </GestureHandlerRootView>
   );

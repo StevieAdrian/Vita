@@ -18,11 +18,14 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
+import { useFamilyView } from "@/context/FamilyViewContext";
+import { stylesMonitor } from "@/styles/utils/monitoring.styles"
 
 export default function HealthDiary() {
+  const { uid: paramUid, isMonitoring } = useLocalSearchParams<{ uid?: string, isMonitoring?: string }>();
   const insets = useSafeAreaInsets();
   const { user } = useAuthState();
-  const uid = user?.uid;
+  const uid = paramUid || user?.uid;
   const datePickerStyle = useDatePickerStyles();
   const [reminders, setReminders] = useState<Reminder[]>(initialReminders);
   const [symptoms, setSymptoms] = useState("");
@@ -36,6 +39,8 @@ export default function HealthDiary() {
   const [diaries, setDiaries] = useState<DiaryEntry[]>([]);
   const { fetchDiariesByDate } = useHealthDiary();
   const [loading, setLoading] = useState(false);
+  const { setViewingUid } = useFamilyView();
+  const monitoring = isMonitoring === "1" || (paramUid && paramUid !== user?.uid);
 
   const schedules: Record<string, Reminder[]> = {
     "2025-09-29": [
@@ -175,7 +180,25 @@ export default function HealthDiary() {
         ]}
         showsVerticalScrollIndicator={false}
       >
-        <TitleBack title="Health Diary"></TitleBack>
+
+        {!monitoring && (
+          <TitleBack title="Health Diary" />
+        )}
+
+        {monitoring && (
+          <TouchableOpacity
+            style={stylesMonitor.banner}
+            onPress={() => {
+              setViewingUid(user!.uid);
+              router.push("/family-mode/familyMode");
+            }}
+          >
+            <Text style={{ color: "#fff", fontWeight: "bold", textAlign: "center", fontSize: 16 }}>
+              Back to my account
+            </Text>
+          </TouchableOpacity>
+        )}
+
         <View>
           <View style={styles.dateBg}>
             <DateTimePicker
