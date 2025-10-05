@@ -1,36 +1,29 @@
 import { AppointmentProvider } from "@/context/AppointmentContext";
 import { DrugProvider } from "@/context/DrugContext";
 import { Stack } from "expo-router";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function MeditrackLayout() {
   return (
-    <DrugProvider>
-      <AppointmentProvider>
-        <Stack>
-          <Stack.Screen name="mediTrack" options={{ headerShown: false }} />
-          <Stack.Screen name="drugForm" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="appointmentForm"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="allremindercard"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="allupcomingappointment"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="allhistoryappointment"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="alltodayreminder"
-            options={{ headerShown: false }}
-          />
-        </Stack>
-      </AppointmentProvider>
-    </DrugProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <SafeAreaView style={{ flex: 1 }}>
+          <DrugProvider>
+            <AppointmentProvider>
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="mediTrack" />
+                <Stack.Screen name="drugForm" />
+                <Stack.Screen name="appointmentForm" />
+                <Stack.Screen name="allremindercard" />
+                <Stack.Screen name="allupcomingappointment" />
+                <Stack.Screen name="allhistoryappointment" />
+                <Stack.Screen name="alltodayreminder" />
+              </Stack>
+            </AppointmentProvider>
+          </DrugProvider>
+        </SafeAreaView>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
