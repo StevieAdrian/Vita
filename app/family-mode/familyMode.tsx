@@ -13,12 +13,13 @@ import { useState } from "react";
 import { useFamilyActions } from "../../hooks/useFamilyActions"
 import { useFamilyView } from "@/context/FamilyViewContext";
 import { useAuthState } from "@/hooks/useAuthState";
+import { useLatestHealthDiary } from "@/hooks/useLatestHealthDiary";
 
 export default function FamilyMode() {
   const insets = useSafeAreaInsets();
   const { members, loading } = useFamilyMembers();
   const { count } = useIncomingRequests();
-  const [ editMode, setEditMode ] = useState(false);
+  const [editMode, setEditMode] = useState(false);
   const { removeMember } = useFamilyActions();
   const { setViewingUid } = useFamilyView();
   const { user } = useAuthState();
@@ -51,7 +52,6 @@ export default function FamilyMode() {
         <View style={styles.container}>
           <Text style={styles.textHeader}>Your Member</Text>
           <View style={styles.imageContainer}>
-
             {editMode ? (
               <TouchableOpacity onPress={() => setEditMode(false)}>
                 <Image
@@ -84,65 +84,110 @@ export default function FamilyMode() {
         </View>
 
         {members.map((m) => (
-          <View key={m.uid} style={styles.memberCard}>
-            <View style={styles.memberHeader}>
-              <Image
-                source={{
-                  uri:
-                    m.avatarUrl ||
-                    "https://ui-avatars.com/api/?name=" + m.displayName,
-                }}
-                style={styles.memberAvatar}
-              />
-              <View style={{ flex: 1 }}>
-                <Text style={styles.memberName}>{m.displayName}</Text>
-                <Text style={styles.memberRelation}>{m.relation}</Text>
-              </View>
-            </View>
-
-            {editMode && (
-              <TouchableOpacity style={styles.deleteBtn} onPress={async () => {
-                const res = await removeMember(m.uid, m.relation);
-                if (!res?.success) console.log("debug err: ", res?.message)
-              }}>
-                <Image source={require("@/assets/family/delete-icon.png")} style={styles.deleteIcon}/>
-              </TouchableOpacity>
-            )}
-
-            <View style={styles.statsRow}>
-              <View style={styles.statBox}>
-                <View style={styles.dot} />
-                <View>
-                  <Text style={styles.statValue}>120/80</Text>
-                  <Text style={styles.statLabel}>Blood Pressure</Text>
-                </View>
-              </View>
-              <View style={styles.statBox}>
-                <View style={styles.dot} />
-                <View>
-                  <Text style={styles.statValue}>80 bpm</Text>
-                  <Text style={styles.statLabel}>Heart Rate</Text>
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.alertRow}>
-              <Image
-                source={require("@/assets/family/alert-icon.png")}
-                style={styles.alertIcon}
-              />
-              <Text style={styles.alertText}>1 Alert Need Attentions</Text>
-            </View>
-
-            <TouchableOpacity style={styles.monitorBtn} onPress={() => {
-              setViewingUid(m.uid);
-              router.push("/family-mode/monitorDashboard")
-            }}>
-              <Text style={styles.monitorBtnText}>Monitor Account</Text>
-            </TouchableOpacity>
-          </View>
+          <MemberStatCard
+            key={m.uid}
+            m={m}
+            editMode={editMode}
+            removeMember={removeMember}
+            setViewingUid={setViewingUid}
+            router={router}
+          />
         ))}
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+type MemberStatCardProps = {
+  m: any;
+  editMode: boolean;
+  removeMember: (uid: string, relation: string) => Promise<any>;
+  setViewingUid: (uid: string) => void;
+  router: any;
+};
+
+function MemberStatCard({
+  m,
+  editMode,
+  removeMember,
+  setViewingUid,
+  router,
+}: {
+  m: any;
+  editMode: boolean;
+  removeMember: (uid: string, relation: string) => Promise<any>;
+  setViewingUid: (uid: string) => void;
+  router: any;
+}) {
+  const { data: latestDiary, loading: loadingDiary } = useLatestHealthDiary(m.uid);
+
+  return (
+    <View style={styles.memberCard}>
+      <View style={styles.memberHeader}>
+        <Image
+          source={{
+            uri: m.avatarUrl || "https://ui-avatars.com/api/?name=" + m.displayName,
+          }}
+          style={styles.memberAvatar}
+        />
+        <View style={{ flex: 1 }}>
+          <Text style={styles.memberName}>{m.displayName}</Text>
+          <Text style={styles.memberRelation}>{m.relation}</Text>
+        </View>
+      </View>
+
+      {editMode && (
+        <TouchableOpacity style={styles.deleteBtn} onPress={async () => {
+          const res = await removeMember(m.uid, m.relation);
+          if (!res?.success) console.log("debug err: ", res?.message)
+        }}>
+          <Image source={require("@/assets/family/delete-icon.png")} style={styles.deleteIcon}/>
+        </TouchableOpacity>
+      )}
+
+      <View style={styles.statsRow}>
+        <View style={styles.statBox}>
+          <View style={styles.dot} />
+          <View>
+            <Text style={styles.statValue}>
+              {loadingDiary
+                ? "-"
+                : latestDiary
+                  ? `${latestDiary.systolic ?? "-"} / ${latestDiary.diastolic ?? "-"}`
+                  : "-"}
+            </Text>
+            <Text style={styles.statLabel}>Blood Pressure</Text>
+          </View>
+        </View>
+        <View style={styles.statBox}>
+          <View style={styles.dot} />
+          <View>
+            <Text style={styles.statValue}>
+              {loadingDiary
+                ? "-"
+                : latestDiary
+                  ? `${latestDiary.heartRate ?? "-"} bpm`
+                  : "-"}
+            </Text>
+            <Text style={styles.statLabel}>Heart Rate</Text>
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.alertRow}>
+        <Image
+          source={require("@/assets/family/alert-icon.png")}
+          style={styles.alertIcon}
+        />
+        <Text style={styles.alertText}>1 Alert Need Attentions</Text>
+      </View>
+
+      <TouchableOpacity style={styles.monitorBtn} onPress={() => {
+        setViewingUid(m.uid);
+        router.push("/family-mode/monitorDashboard")
+      }}>
+        <Text style={styles.monitorBtnText}>Monitor Account</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
