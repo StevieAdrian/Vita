@@ -16,6 +16,9 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
+import { useEarlyWarning } from "@/hooks/useEarlyWarning"; 
+import { useAuthState } from "@/hooks/useAuthState";
+import { EarlyGoodCard } from "@/components/analysis/EarlyCard";
 
 export default function DashboardHome() {
   const insets = useSafeAreaInsets();
@@ -23,7 +26,8 @@ export default function DashboardHome() {
   const [selected, setSelected] = useState<DateType>(new Date());
   const [reminders, setReminders] = useState<Reminder[]>(initialReminders);
   const { data } = useUserProfile();
-
+  const { user } = useAuthState();
+  const { warnings, loading: loadingWarning } = useEarlyWarning(user?.uid ?? "");
   const handleToggleReminder = useCallback((id: string) => {
     setReminders((prev) =>
       prev.map((reminder) =>
@@ -37,6 +41,10 @@ export default function DashboardHome() {
   function formatDateLocal(date: Date) {
     return date.toLocaleDateString("en-CA");
   }
+
+  const warningCount = warnings.filter(
+    warn => warn.status && !warn.status.toLowerCase().includes("good")
+  ).length;
 
   return (
     <SafeAreaView style={styles.dashboardContainer}>
@@ -190,28 +198,41 @@ export default function DashboardHome() {
               </View>
             </View>
 
-            {/* 2 Health Early Warning */}
-            <TouchableOpacity style={styles.containerHealthWarning}>
-              <View style={styles.titleHealth}>
-                <View style={styles.containerDigit}>
-                  <Image
-                    source={require("@/assets/hcd/healthWarning.png")}
-                    style={{ width: 34, height: 35 }}
-                  />
-                  <Text style={styles.titleDigitBio}>
-                    2 Health Early Warning
+            {!loadingWarning && (
+              warningCount > 0 ? (
+                <TouchableOpacity style={styles.containerHealthWarning}>
+                  <View style={styles.titleHealth}>
+                    <View style={styles.containerDigit}>
+                      <Image
+                        source={require("@/assets/hcd/healthWarning.png")}
+                        style={{ width: 34, height: 35 }}
+                      />
+                      <Text style={styles.titleDigitBio}>
+                        {warningCount > 0
+                          ? `${warningCount} Health Early Warning`
+                          : "No Health Early Warning"}
+                      </Text>
+                    </View>
+                    <Image
+                      source={require("@/assets/utilsIcon/arrow-right-red.png")}
+                    />
+                  </View>
+                  <Text style={styles.descHealthWarning}>
+                    {warningCount > 0
+                      ? `Check the ${warningCount > 1 ? warningCount + " warnings" : "warning"} that you should take attention. Don’t be late.`
+                      : "All good! No early health warnings at the moment."}
                   </Text>
-                </View>
-
-                <Image
-                  source={require("@/assets/utilsIcon/arrow-right-red.png")}
+                </TouchableOpacity>
+              ) : (
+                <EarlyGoodCard
+                  title="All Good"
+                  status="Good"
+                  description={[
+                    { text: "Maintain your lifestyle and keep your body healthy now and later." }
+                  ]}
                 />
-              </View>
-
-              <Text style={styles.descHealthWarning}>
-                Check the warning that you should take attention. Don’t be late.
-              </Text>
-            </TouchableOpacity>
+              )
+            )}
 
             {/* Family Mode */}
             <TouchableOpacity style={styles.containerAllDigitBio}>

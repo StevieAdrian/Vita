@@ -77,4 +77,20 @@ export const styles = StyleSheet.create({
     fontWeight: "600",
     fontFamily: "Inter-SemiBold",
   },
+  actionButtons: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  actionButton: {
+    padding: 8,
+  },
+  icon: {
+    width: 20,
+    height: 20,
+  },
+  rightColumn: {
+    alignItems: "flex-end",
+    gap: 8,
+  },
 });

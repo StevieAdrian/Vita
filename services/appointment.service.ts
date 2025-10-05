@@ -1,11 +1,23 @@
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "../config/firebaseConfig";
-import { collection, doc, addDoc, updateDoc, deleteDoc, getDocs, query, where } from "firebase/firestore";
 import { AppointmentReminder } from "../types/appointment";
 
 const appointmentCollection = collection(db, "appointments");
 
-export const createAppointment = async (data: AppointmentReminder) => {
-  await addDoc(appointmentCollection, data);
+export const createAppointment = async (
+  data: Omit<AppointmentReminder, "id">
+): Promise<string> => {
+  const docRef = await addDoc(collection(db, "appointments"), data);
+  return docRef.id;
 };
 
 export const getAppointmentsByUser = async (userId: string) => {
@@ -20,7 +32,6 @@ export const getAppointmentsByUser = async (userId: string) => {
     };
   });
 };
-
 
 export const updateAppointment = async (
   id: string,

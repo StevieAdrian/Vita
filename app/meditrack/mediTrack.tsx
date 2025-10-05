@@ -1,18 +1,25 @@
 import { AppointmentCard } from "@/components/meditrack-forms/AppointmentCard";
 import { ReminderToggle } from "@/components/meditrack-forms/HeaderMediTrack";
+import { HistoryCard } from "@/components/meditrack-forms/HistoryCard";
+import AppointmentNotification from "@/components/meditrack-forms/notifcations/AppoinmentNotification";
+import DrugNotification from "@/components/meditrack-forms/notifcations/DrugNotification";
 import {
   ReminderCard,
   convertDrugToReminder,
 } from "@/components/meditrack-forms/Reminder";
 import { SectionHeader } from "@/components/meditrack-forms/TextMediTrack";
-import { useAppointments } from "@/hooks/useAppointment";
-import { useDrugForm } from "@/hooks/useDrug";
-
-import type { ReminderCategory } from "@/constants/reminder";
+import { convertAppointment } from "@/components/utils/DateUtils";
+import type { Reminder, ReminderCategory } from "@/constants/reminder";
+import { useAppointments } from "@/context/AppointmentContext";
+import { useDrugs } from "@/context/DrugContext";
+import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 import type React from "react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Image,
   ScrollView,
   StatusBar,
@@ -32,62 +39,256 @@ const ScheduleScreen: React.FC = () => {
   const [selectedCategory, setSelectedCategory] =
     useState<ReminderCategory>("appointment");
 
-  // INTEGRASI DATABASE
-  const { drug: drugs, loading: drugsLoading } = useDrugForm();
-  const { appointments: appointmentReminders, loading: appointmentsLoading } =
-    useAppointments();
+  const { drugs, loading: drugsLoading, removeExpiredDrugs } = useDrugs();
+  const {
+    appointments: appointmentReminders,
+    loading: appointmentsLoading,
+    remove,
+  } = useAppointments();
 
-  // Convert drugs to reminders
+  const [showDrugNotification, setShowDrugNotification] = useState(false);
+  const [showAppointmentNotification, setShowAppointmentNotification] =
+    useState(false);
+  const [currentDrugReminder, setCurrentDrugReminder] = useState<any>(null);
+  const [currentAppointment, setCurrentAppointment] = useState<any>(null);
+
   const drugReminders = useMemo(
     () => drugs.map(convertDrugToReminder),
     [drugs]
   );
 
- 
-  const upcomingAppointments = useMemo(() => {
-    return appointmentReminders.filter((appt: any) => {
-      if (appt.status === "upcoming") return true;
-      if (appt.status === "history") return false;
+  const todayAppointments = useMemo(() => {
+    const today = new Date();
+    const todayString = today.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
 
+    return appointmentReminders.filter((appt) => {
+      return appt.date === todayString;
+    });
+  }, [appointmentReminders]);
+
+  const upcomingAppointments = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return appointmentReminders.filter((appt) => {
       try {
         const appointmentDate = new Date(appt.date);
-        return appointmentDate >= new Date();
+        appointmentDate.setHours(0, 0, 0, 0);
+        return appointmentDate > today;
       } catch {
-        return true;
+        return false;
       }
     });
   }, [appointmentReminders]);
 
   const historyAppointments = useMemo(() => {
-    return appointmentReminders.filter((appt: any) => {
-      if (appt.status === "history") return true;
-      if (appt.status === "upcoming") return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
+    return appointmentReminders.filter((appt) => {
       try {
         const appointmentDate = new Date(appt.date);
-        return appointmentDate < new Date();
+        appointmentDate.setHours(0, 0, 0, 0);
+        return appointmentDate < today;
       } catch {
-        return false; 
+        return false;
       }
     });
   }, [appointmentReminders]);
 
+  const todayReminders = useMemo(() => {
+    const drugItems = drugReminders.map((reminder) => ({
+      ...reminder,
+      type: "drug" as const,
+    }));
 
-  // Handle toggle reminder
+    const appointmentItems = todayAppointments.map((appt) => ({
+      ...convertAppointment(appt),
+      type: "appointment" as const,
+      id: `appt-${appt.id}`,
+      isAppointment: true,
+    }));
+
+    return [...drugItems, ...appointmentItems];
+  }, [drugReminders, todayAppointments]);
+
+  const limitedTodayReminders = useMemo(() => {
+    return todayReminders.slice(0, 3);
+  }, [todayReminders]);
+
+  const limitedAllDrugs = useMemo(() => {
+    return drugReminders.slice(0, 3);
+  }, [drugReminders]);
+
+  const limitedUpcomingAppointments = useMemo(() => {
+    return upcomingAppointments.slice(0, 3);
+  }, [upcomingAppointments]);
+
+  const limitedHistoryAppointments = useMemo(() => {
+    return historyAppointments.slice(0, 3);
+  }, [historyAppointments]);
+
+  useEffect(() => {
+    const checkNotifications = () => {
+      const now = new Date();
+      const currentTime = now.getHours() * 60 + now.getMinutes();
+      const currentDate = now.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+
+      drugs.forEach((drug) => {
+        if (drug.date === currentDate && !drug.isCompleted) {
+          drug.times.forEach((time) => {
+            const [hours, minutes] = time.split(":").map(Number);
+            const reminderTime = hours * 60 + minutes;
+
+            if (Math.abs(currentTime - reminderTime) <= 1) {
+              setCurrentDrugReminder(drug);
+              setShowDrugNotification(true);
+            }
+          });
+        }
+      });
+
+      todayAppointments.forEach((appointment) => {
+        if (!appointment.isCompleted) {
+          const [hours, minutes] = appointment.startTime.split(":").map(Number);
+          const appointmentTime = hours * 60 + minutes;
+
+          if (Math.abs(currentTime - appointmentTime) <= 1) {
+            setCurrentAppointment(appointment);
+            setShowAppointmentNotification(true);
+          }
+        }
+      });
+    };
+
+    const interval = setInterval(checkNotifications, 60000);
+    checkNotifications();
+
+    return () => clearInterval(interval);
+  }, [drugs, todayAppointments]);
+
+  useEffect(() => {
+    const checkDaily = async () => {
+      try {
+        const today = new Date().toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+
+        const lastCheck = await AsyncStorage.getItem("lastExpiredCheck");
+
+        if (lastCheck !== today) {
+          await removeExpiredDrugs();
+          await AsyncStorage.setItem("lastExpiredCheck", today);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    const interval = setInterval(checkDaily, 60 * 60 * 1000);
+    checkDaily();
+    return () => clearInterval(interval);
+  }, [removeExpiredDrugs]);
+
   const handleToggleReminder = useCallback((id: string) => {
-    // Logic toggle (bisa ditambahkan update ke DB jika needed)
-    console.log("Toggle reminder:", id);
+    console.log(id);
   }, []);
 
   const handleSeeDetail = useCallback((appointment: any) => {
-    console.log("[ScheduleScreen] See detail tapped for:", appointment.id);
+    router.push({
+      pathname: "/meditrack/appointmentForm",
+      params: {
+        editMode: "true",
+        appointmentId: appointment.id,
+      },
+    });
+  }, []);
+
+  const handleEditDrug = useCallback((reminder: Reminder) => {
+    router.push({
+      pathname: "/meditrack/drugForm",
+      params: {
+        editMode: "true",
+        drugId: reminder.id,
+      },
+    });
+  }, []);
+
+  const handleEditAppointment = useCallback((appointment: any) => {
+    router.push({
+      pathname: "/meditrack/appointmentForm",
+      params: {
+        editMode: "true",
+        appointmentId: appointment.id,
+      },
+    });
   }, []);
 
   const handleSeeAll = useCallback((section: string) => {
-    console.log("[ScheduleScreen] See all for:", section);
+    if (section === "today-reminders") {
+      router.push("/meditrack/alltodayreminder");
+    } else if (section === "all-medications") {
+      router.push("/meditrack/allremindercard");
+    } else if (section === "upcoming-appointments") {
+      router.push("/meditrack/allupcomingappointment");
+    } else if (section === "history-appointments") {
+      router.push("/meditrack/allhistoryappointment");
+    }
   }, []);
 
-  // Loading state
+  const handleDeleteAppointment = async (appointment: any) => {
+    Alert.alert("Delete Appointment", `Delete "${appointment.title}"?`, [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: async () => {
+          await remove(appointment.id);
+        },
+      },
+    ]);
+  };
+
+  const handleMarkAsDoneDrug = (id: string) => {
+    setShowDrugNotification(false);
+  };
+
+  const handleMarkAsDoneAppointment = (id: string) => {
+    setShowAppointmentNotification(false);
+  };
+
+  const handleEditDrugFromNotification = (id: string) => {
+    setShowDrugNotification(false);
+    router.push({
+      pathname: "/meditrack/drugForm",
+      params: {
+        editMode: "true",
+        drugId: id,
+      },
+    });
+  };
+
+  const handleEditAppointmentFromNotification = (id: string) => {
+    setShowAppointmentNotification(false);
+    router.push({
+      pathname: "/meditrack/appointmentForm",
+      params: {
+        editMode: "true",
+        appointmentId: id,
+      },
+    });
+  };
+
   if (drugsLoading || appointmentsLoading) {
     return (
       <SafeAreaView style={styles.safeArea}>
@@ -110,18 +311,28 @@ const ScheduleScreen: React.FC = () => {
         barStyle="dark-content"
         backgroundColor={COLORS.background2nd}
       />
+
+      <DrugNotification
+        isVisible={showDrugNotification && currentDrugReminder !== null}
+        onClose={() => setShowDrugNotification(false)}
+        onMarkAsDone={handleMarkAsDoneDrug}
+        onEditReminder={handleEditDrugFromNotification}
+        reminder={currentDrugReminder}
+      />
+
+      <AppointmentNotification
+        isVisible={showAppointmentNotification && currentAppointment !== null}
+        onClose={() => setShowAppointmentNotification(false)}
+        onMarkAsDone={handleMarkAsDoneAppointment}
+        onEditAppointment={handleEditAppointmentFromNotification}
+        appointment={currentAppointment}
+      />
+
       <ScrollView
-        style={{
-          flex: 1,
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-        contentContainerStyle={{ paddingBottom: insets.bottom + 200 }}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingBottom: NAV_ITEMS + insets.bottom + 16 },
+        ]}
       >
         <View style={styles.headerRow}>
           <Text style={styles.title}>Schedule</Text>
@@ -141,75 +352,114 @@ const ScheduleScreen: React.FC = () => {
         <View style={styles.section}>
           <SectionHeader
             title="Today Reminder"
-            subtitle="See All"
+            subtitle="See All >"
             onPressSeeAll={() => handleSeeAll("today-reminders")}
             countLabel={
-              drugReminders.length > 0
-                ? `${drugReminders.length} Reminders`
+              todayReminders.length > 0
+                ? `${todayReminders.length} Reminders`
                 : ""
             }
           />
-          {drugReminders.length === 0 ? (
+
+          {limitedTodayReminders.length === 0 ? (
             <View style={styles.emptyState}>
               <Text style={styles.emptyText}>No reminders for today</Text>
             </View>
           ) : (
-            drugReminders.map((reminder) => (
+            limitedTodayReminders.map((item) =>
+              item.type === "drug" ? (
+                <ReminderCard
+                  key={item.id}
+                  reminder={item}
+                  onToggle={handleToggleReminder}
+                  onEdit={handleEditDrug}
+                  showActions={true}
+                />
+              ) : (
+                <AppointmentCard
+                  key={item.id}
+                  appointment={item}
+                  onPressDetail={handleSeeDetail}
+                  onEdit={handleEditAppointment}
+                  onDelete={handleDeleteAppointment}
+                  showActions={true}
+                />
+              )
+            )
+          )}
+        </View>
+
+        <View style={styles.section}>
+          <SectionHeader
+            title="All Medications"
+            subtitle="See All >"
+            onPressSeeAll={() => handleSeeAll("all-medications")}
+            countLabel={
+              drugReminders.length > 0
+                ? `${drugReminders.length} Medications`
+                : ""
+            }
+          />
+          {limitedAllDrugs.length === 0 ? (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyText}>No medications added</Text>
+            </View>
+          ) : (
+            limitedAllDrugs.map((reminder) => (
               <ReminderCard
                 key={reminder.id}
                 reminder={reminder}
                 onToggle={handleToggleReminder}
+                onEdit={handleEditDrug}
+                showActions={true}
               />
             ))
           )}
         </View>
-        {/* UPCOMING APPOINTMENTS SECTION */}
+
         <View style={styles.section}>
           <SectionHeader
             title="Upcoming Appointment"
-            subtitle="See All"
+            subtitle="See All >"
             countLabel={`${upcomingAppointments.length} Appointment${
               upcomingAppointments.length !== 1 ? "s" : ""
             }`}
             onPressSeeAll={() => handleSeeAll("upcoming-appointments")}
           />
-          {upcomingAppointments.length === 0 ? (
+          {limitedUpcomingAppointments.length === 0 ? (
             <View style={styles.emptyState}>
               <Text style={styles.emptyText}>No upcoming appointments</Text>
             </View>
           ) : (
-            upcomingAppointments.map((appointment) => (
+            limitedUpcomingAppointments.map((appointment) => (
               <AppointmentCard
                 key={appointment.id}
-                appointment={appointment}
+                appointment={convertAppointment(appointment)}
                 onPressDetail={handleSeeDetail}
+                onEdit={handleEditAppointment}
+                onDelete={handleDeleteAppointment}
+                showActions={true}
               />
             ))
           )}
         </View>
-        {/* APPOINTMENT HISTORY SECTION */}
+
         <View style={styles.section}>
           <SectionHeader
             title="Appointment History"
-            subtitle="See All"
-            onPressSeeAll={() => handleSeeAll("appointment-history")}
-            countLabel={
-              historyAppointments.length > 0
-                ? `${historyAppointments.length} Appointment${
-                    historyAppointments.length !== 1 ? "s" : ""
-                  }`
-                : ""
-            }
+            subtitle="See All >"
+            onPressSeeAll={() => handleSeeAll("history-appointments")}
+            countLabel={""}
           />
-          {historyAppointments.length === 0 ? (
+          {limitedHistoryAppointments.length === 0 ? (
             <View style={styles.emptyState}>
               <Text style={styles.emptyText}>No appointment history</Text>
             </View>
           ) : (
-            historyAppointments.map((appointment) => (
-              <AppointmentCard
+            limitedHistoryAppointments.map((appointment) => (
+              <HistoryCard
                 key={appointment.id}
-                appointment={appointment}
+                appointment={convertAppointment(appointment)}
                 onPressDetail={handleSeeDetail}
               />
             ))

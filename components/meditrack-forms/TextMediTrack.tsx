@@ -24,7 +24,6 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
 
       <TouchableOpacity onPress={onPressSeeAll} style={styles.actionRow}>
         <Text style={styles.subtext}>{subtitle}</Text>
-        <Text style={styles.caret}>{">"}</Text>
       </TouchableOpacity>
     </View>
   );

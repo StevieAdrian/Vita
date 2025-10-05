@@ -2,11 +2,13 @@ import BottomNav from "@/components/utils/BottomNav";
 import { Fonts } from "@/constants/fonts";
 import { NAV_ITEMS } from "@/constants/navItems";
 import { AuthContext } from "@/context/AuthContext";
+import { FamilyViewProvider } from "@/context/FamilyViewContext";
 import { useAuthState } from "@/hooks/useAuthState";
 import { useFonts } from "expo-font";
 import { Slot, SplashScreen, usePathname, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -61,8 +63,12 @@ function RootContent() {
 
 export default function RootLayout() {
   return (
-    <AuthContext>
-      <RootContent />
-    </AuthContext>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AuthContext>
+        <FamilyViewProvider>
+          <RootContent />
+        </FamilyViewProvider>
+      </AuthContext>
+    </GestureHandlerRootView>
   );
 }
