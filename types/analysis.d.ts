@@ -33,3 +33,10 @@ export interface FutureHealthProps {
   items: PredictionItem[];
   recommendations: string[];
 }
+
+export interface FutureHealth {
+  heartHealth: "Good" | "Need Attention";
+  metabolism: "Good" | "Need Attention";
+  hypertension: "Good" | "Need Attention";
+  hypotension: "Good" | "Need Attention";
+}
