@@ -13,7 +13,7 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
-export default function MonthReport() {
+export default function MonthlyReport() {
   const insets = useSafeAreaInsets();
   const [month, setMonth] = useState("September");
   const { loading } = useUserProfile();
@@ -50,46 +50,45 @@ export default function MonthReport() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView
-        contentContainerStyle={[
-          styles.scrollContent,
-          { paddingBottom: NAV_ITEMS + insets.bottom + 16 },
-        ]}
-      >
-        <View style={styles.container}>
-          {/* Header */}
+    <View style={styles.container}>
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView
+          contentContainerStyle={[
+            styles.scrollContent,
+            { paddingBottom: NAV_ITEMS + insets.bottom + 16 },
+          ]}
+        >
           <View style={styles.headerContainer}>
             <TitleBack title="My Report" />
           </View>
 
-          {/* Content */}
-          <View style={styles.formContainer}>
-            <MonthDropdown />
+          <View style={styles.contentWrapper}>
+            <View style={styles.formContainer}>
+              <View style={styles.dropdownContainer}>
+                <Text style={styles.label}>Month</Text>
+                <MonthDropdown />
+              </View>
 
-            <View>
-              <Text style={styles.warningText}>Preview Content</Text>
-              <Image
-                source={require("@/assets/images/report-preview.png")}
-                style={{
-                  width: 330,
-                  height: 200,
-                  resizeMode: "cover",
-                  alignContent: "flex-start",
-                }}
-              />
-            </View>
-            <View style={styles.textPdf}>
-              <Text style={styles.warningText}>Download Full PDF</Text>
-              <PrimaryButtonColorForm
-                text={loading ? "Loading..." : "Download"}
-                active={true}
-                onPress={handleDownload}
-              />
+              <View style={styles.previewSection}>
+                <Text style={styles.warningText}>Preview Content</Text>
+                <Image
+                  source={require("@/assets/images/report-preview.png")}
+                  style={styles.previewImage}
+                />
+              </View>
+
+              <View style={styles.textPdf}>
+                <Text style={styles.warningText}>Download Full PDF</Text>
+                <PrimaryButtonColorForm
+                  text={loading ? "Loading..." : "Download"}
+                  active={true}
+                  onPress={handleDownload}
+                />
+              </View>
             </View>
           </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+    </View>
   );
 }
