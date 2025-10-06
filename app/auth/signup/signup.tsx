@@ -2,6 +2,8 @@ import Calender from "@/components/hcd/Calender";
 import InputField from "@/components/utils/InputField";
 import { COLORS } from "@/constants/colors";
 import { useSignupContext } from "@/context/SignupContext";
+import { useCheckEmail } from "@/hooks/useCheckEmail";
+import { useCheckUsername } from "@/hooks/useCheckUsername";
 import { mapperSignupValues } from "@/utils/mapper";
 import { SignupValues, validateField } from "@/utils/signUpValidation";
 import { router } from "expo-router";
@@ -17,17 +19,25 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { styles } from "../../../styles/auth/signup/singup.styles";
-import { useCheckUsername } from "@/hooks/useCheckUsername";
-import { useCheckEmail } from "@/hooks/useCheckEmail";
 import Icon from "react-native-vector-icons/Feather";
+import { styles } from "../../../styles/auth/signup/singup.styles";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const { data, setField } = useSignupContext();
+  const { signInWithGoogle, loading } = useAuth();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const { exists: usernameExists, isChecking: checkingUsername, verifyUsername } = useCheckUsername();
-  const { exists: emailExists, isChecking: checkingEmail, verifyEmail } = useCheckEmail();
+  const {
+    exists: usernameExists,
+    isChecking: checkingUsername,
+    verifyUsername,
+  } = useCheckUsername();
+  const {
+    exists: emailExists,
+    isChecking: checkingEmail,
+    verifyEmail,
+  } = useCheckEmail();
 
   const handleChange = (field: keyof SignupValues, value: string) => {
     if (field === "confirmPassword") {
@@ -288,7 +298,12 @@ export default function Signup() {
                 <Text style={styles.dividerText}>Or Continue With</Text>
                 <View style={styles.dividerLine} />
               </View>
-              <TouchableOpacity style={styles.googleButton} activeOpacity={0.7}>
+              <TouchableOpacity
+                style={styles.googleButton}
+                activeOpacity={0.7}
+                onPress={signInWithGoogle}
+                disabled={loading}
+              >
                 <Image
                   source={require("../../../assets/images/Logo Google.png")}
                   style={styles.googleIcon}

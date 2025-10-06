@@ -9,7 +9,7 @@ import { styles } from "../../../styles/auth/login/login.styles";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { signIn, loading } = useAuth();
+  const { signIn, signInWithGoogle, loading } = useAuth();
 
   return (
     <View style={styles.container}>
@@ -44,7 +44,7 @@ export default function Login() {
         </TouchableOpacity>
 
         <Text style={styles.signupText}>
-          Haven't create an account?{" "}
+          Haven&apos;t create an account?{" "}
           <Text
             style={styles.signupLink}
             onPress={() => router.push("/auth/signup/signup")}
@@ -59,7 +59,12 @@ export default function Login() {
         <View style={styles.divider} />
       </View>
 
-      <TouchableOpacity style={styles.googleButton} activeOpacity={0.7}>
+      <TouchableOpacity
+        style={styles.googleButton}
+        activeOpacity={0.7}
+        onPress={signInWithGoogle}
+        disabled={loading}
+      >
         <Image
           source={require("@/assets/images/google.png")}
           style={styles.googleLogo}
