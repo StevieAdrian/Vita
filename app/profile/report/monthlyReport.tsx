@@ -1,10 +1,13 @@
 import MonthDropdown from "@/components/profile/MonthDropdown";
 import PrimaryButtonColorForm from "@/components/utils/PrimaryButtonColorForm";
 import TitleBack from "@/components/utils/TitleBack";
+import { useMonthlyReport } from "@/hooks/useMonthlyReport";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { styles } from "@/styles/profile/monthlyreport.styles";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
+import { calculateAge } from "@/utils/dateUtils";
 import { generateReportPDF } from "@/utils/generateReport";
+import dayjs from "dayjs";
 import { useState } from "react";
 import { Image, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
@@ -12,9 +15,6 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import { useMonthlyReport } from "@/hooks/useMonthlyReport";
-import { calculateAge } from "@/utils/dateUtils";
-import dayjs from "dayjs";
 
 export default function MonthlyReport() {
   const insets = useSafeAreaInsets();
@@ -26,13 +26,21 @@ export default function MonthlyReport() {
     if (!reportData) return;
 
     const age = calculateAge(user.dateOfBirth);
+    const today = new Date().toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
 
     await generateReportPDF({
       name: `${user.firstName} ${user.lastName}`,
       dob: user.dateOfBirth ?? "—",
       age,
+      today,
       gender: user.gender ?? "—",
       bloodType: user.bloodType ?? "—",
+      allergics: user.allergies ?? "-",
+      chronic: user.chronic ?? "-",
       period: reportData.period,
       ...reportData,
     });
@@ -55,7 +63,7 @@ export default function MonthlyReport() {
             <View style={styles.formContainer}>
               <View style={styles.dropdownContainer}>
                 <Text style={styles.label}>Month</Text>
-                <MonthDropdown onSelect={setMonth}/>
+                <MonthDropdown onSelect={setMonth} />
               </View>
 
               <View style={styles.previewSection}>

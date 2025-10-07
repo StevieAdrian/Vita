@@ -55,6 +55,7 @@ export interface UserProfile {
   hasAllergics: string;
   allergics?: string;
   allergies: string[];
+  chronic?: string[];
   avatarUrl?: string;
   emergencyContacts: EmergencyContact[];
 }
