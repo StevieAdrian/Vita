@@ -246,4 +246,36 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  reminderRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    marginBottom: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: COLORS.gray3,
+    width: "100%",
+    backgroundColor: "white",
+  },
+  reminderTimesCard: {
+    alignItems: "flex-start",
+  },
+  reminderTime: {
+    fontSize: 14,
+    color: "#666",
+    marginTop: 4,
+  },
+  reminderCardS: {
+    marginLeft: 8,
+    justifyContent: "flex-start",
+    width: "60%",
+  },
+  seeAllReminder: {
+    color: COLORS.primary,
+    fontFamily: "Inter-Medium",
+    fontSize: 14,
+    paddingVertical: 10,
+  },
 });

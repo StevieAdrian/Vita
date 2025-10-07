@@ -5,7 +5,6 @@ import {
 } from "@/components/meditrack-forms/Reminder";
 import { convertAppointment } from "@/components/utils/DateUtils";
 import TitleBack from "@/components/utils/TitleBack";
-import { initialReminders } from "@/constants/initialData";
 import { Reminder } from "@/constants/reminder";
 import { useAppointments } from "@/context/AppointmentContext";
 import { useDrugs } from "@/context/DrugContext";
@@ -113,10 +112,6 @@ export default function ReminderPageAll() {
       }
     });
   }, []);
-  const todaySchedules = initialReminders;
-  const todayReminders = [...todaySchedules].sort((a, b) =>
-    getStartTime(a.timeLabel).localeCompare(getStartTime(b.timeLabel))
-  );
   const handleEditDrug = useCallback((reminder: Reminder) => {
     router.push({
       pathname: "/meditrack/drugForm",
@@ -206,6 +201,7 @@ export default function ReminderPageAll() {
                       showTime={false}
                       showLocation={false}
                       showDetails={false}
+                      showArrow={true}
                     />
                   )}
                 </View>

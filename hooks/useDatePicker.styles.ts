@@ -47,5 +47,9 @@ export const useDatePickerStyles = (selectedDate: Date) => {
     selected_year_label: { color: "white" },
     active_year: { borderColor: "blue", borderWidth: 1 },
     active_year_label: { color: "black" },
+
+    day_content: {
+      backgroundColor: "blue",
+    },
   };
 };
