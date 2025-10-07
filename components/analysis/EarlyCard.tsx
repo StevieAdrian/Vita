@@ -18,7 +18,10 @@ export function EarlyWarningCard(props: AnalysisProps) {
 
       <Text style={styles.warningBody}>
         {props.description?.map((part, i) => (
-          <Text key={i} style={part.bold ? { fontWeight: "600" } : undefined}>
+          <Text
+            key={i}
+            style={part.bold ? { fontFamily: "Inter-Semibold" } : undefined}
+          >
             {part.text}
           </Text>
         ))}
@@ -50,11 +53,14 @@ export function EarlyGoodCard(props: AnalysisProps) {
 
       <Text style={styles.warningBody}>
         {props.description?.map((part, i) => (
-          <Text key={i} style={part.bold ? { fontWeight: "600" } : undefined}>
+          <Text
+            key={i}
+            style={part.bold ? { fontFamily: "Inter-Regular" } : undefined}
+          >
             {part.text}
           </Text>
         ))}
       </Text>
     </View>
-  )
+  );
 }
