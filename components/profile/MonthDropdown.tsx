@@ -25,7 +25,7 @@ const MONTHS = [
 ];
 
 export default function MonthDropdown() {
-  const [selectedMonth, setSelectedMonth] = useState(MONTHS[0]);
+  const [selectedMonth, setSelectedMonth] = useState("January");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleSelectMonth = (month: string) => {

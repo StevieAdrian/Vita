@@ -8,7 +8,7 @@ import { styles } from "@/styles/hcd/dashboard.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
 import dayjs from "dayjs";
 import { router } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import {
@@ -19,6 +19,8 @@ import DateTimePicker, { DateType } from "react-native-ui-datepicker";
 import { useEarlyWarning } from "@/hooks/useEarlyWarning"; 
 import { useAuthState } from "@/hooks/useAuthState";
 import { EarlyGoodCard } from "@/components/analysis/EarlyCard";
+import { useFamilyMembers } from "@/hooks/useFamilyMembers";
+import { getEarlyWarning } from "@/utils/getEarlyWarning";
 
 export default function DashboardHome() {
   const insets = useSafeAreaInsets();
@@ -28,6 +30,40 @@ export default function DashboardHome() {
   const { data } = useUserProfile();
   const { user } = useAuthState();
   const { warnings, loading: loadingWarning } = useEarlyWarning(user?.uid ?? "");
+  const { members } = useFamilyMembers();
+  const [familyStats, setFamilyStats] = useState({
+    healthy: 0,
+    attention: 0,
+    total: 0
+  });
+
+  useEffect(() => {
+    async function fetchFamilyStats() {
+      if (!members || members.length === 0) {
+        setFamilyStats({ healthy: 0, attention: 0, total: 0 });
+        return;
+      }
+
+      let healthy = 0;
+      let attention = 0;
+
+      await Promise.all(
+        members.map(async (m) => {
+          const { warnings = [] } = await getEarlyWarning(m.uid);
+          const count = warnings.filter(
+            warn => warn.status && !warn.status.toLowerCase().includes("good")
+          ).length;
+
+          if (count > 0) attention++;
+          else healthy++;
+        })
+      );
+      setFamilyStats({ healthy, attention, total: members.length });
+    }
+    fetchFamilyStats();
+  }, [members]);
+
+
   const handleToggleReminder = useCallback((id: string) => {
     setReminders((prev) =>
       prev.map((reminder) =>
@@ -257,21 +293,20 @@ export default function DashboardHome() {
                 </TouchableOpacity>
               </View>
 
-              {/* Kotak */}
               <View style={styles.containerAmount}>
                 <View style={styles.containerHealthAmount}>
-                  <Text style={styles.amountNum}>1</Text>
+                  <Text style={styles.amountNum}>{familyStats.healthy}</Text>
                   <Text style={styles.amountCat}>Healthy</Text>
                 </View>
                 <View style={styles.containerAlertAmount}>
-                  <Text style={styles.amountNum}>2</Text>
+                  <Text style={styles.amountNum}>{familyStats.attention}</Text>
                   <Text style={styles.amountCat}>Need Attention</Text>
                 </View>
               </View>
 
               <View style={styles.divider} />
               <View>
-                <Text style={styles.membersNum}>3 Members Family</Text>
+                <Text style={styles.membersNum}>{familyStats.total} Members Family</Text>
               </View>
             </TouchableOpacity>
           </View>

@@ -57,6 +57,16 @@ const ScheduleScreen: React.FC = () => {
     [drugs]
   );
 
+  const todayString = new Date().toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  const todayDrugReminders = useMemo(() => {
+    return drugReminders.filter((reminder) => reminder.date === todayString);
+  }, [drugReminders, todayString]);
+
   const todayAppointments = useMemo(() => {
     const today = new Date();
     const todayString = today.toLocaleDateString("en-US", {
@@ -101,7 +111,7 @@ const ScheduleScreen: React.FC = () => {
   }, [appointmentReminders]);
 
   const todayReminders = useMemo(() => {
-    const drugItems = drugReminders.map((reminder) => ({
+    const drugItems = todayDrugReminders.map((reminder) => ({
       ...reminder,
       type: "drug" as const,
     }));
