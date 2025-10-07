@@ -1,11 +1,16 @@
 import { initialReminders } from "@/./constants/initialData";
+import { EarlyGoodCard } from "@/components/analysis/EarlyCard";
 import UpHeader from "@/components/hcd/UpHeader";
 import { ReminderCard } from "@/components/meditrack-forms/Reminder";
 import { Reminder } from "@/constants/reminder";
+import { useAuthState } from "@/hooks/useAuthState";
 import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
+import { useEarlyWarning } from "@/hooks/useEarlyWarning";
+import { useFamilyMembers } from "@/hooks/useFamilyMembers";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { styles } from "@/styles/hcd/dashboard.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
+import { getEarlyWarning } from "@/utils/getEarlyWarning";
 import dayjs from "dayjs";
 import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -16,25 +21,24 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
-import { useEarlyWarning } from "@/hooks/useEarlyWarning"; 
-import { useAuthState } from "@/hooks/useAuthState";
-import { EarlyGoodCard } from "@/components/analysis/EarlyCard";
-import { useFamilyMembers } from "@/hooks/useFamilyMembers";
-import { getEarlyWarning } from "@/utils/getEarlyWarning";
 
 export default function DashboardHome() {
   const insets = useSafeAreaInsets();
-  const datePickerStyle = useDatePickerStyles();
   const [selected, setSelected] = useState<DateType>(new Date());
+  const datePickerStyle = useDatePickerStyles(
+    selected instanceof Date ? selected : new Date()
+  );
   const [reminders, setReminders] = useState<Reminder[]>(initialReminders);
   const { data } = useUserProfile();
   const { user } = useAuthState();
-  const { warnings, loading: loadingWarning } = useEarlyWarning(user?.uid ?? "");
+  const { warnings, loading: loadingWarning } = useEarlyWarning(
+    user?.uid ?? ""
+  );
   const { members } = useFamilyMembers();
   const [familyStats, setFamilyStats] = useState({
     healthy: 0,
     attention: 0,
-    total: 0
+    total: 0,
   });
 
   useEffect(() => {
@@ -51,7 +55,7 @@ export default function DashboardHome() {
         members.map(async (m) => {
           const { warnings = [] } = await getEarlyWarning(m.uid);
           const count = warnings.filter(
-            warn => warn.status && !warn.status.toLowerCase().includes("good")
+            (warn) => warn.status && !warn.status.toLowerCase().includes("good")
           ).length;
 
           if (count > 0) attention++;
@@ -62,7 +66,6 @@ export default function DashboardHome() {
     }
     fetchFamilyStats();
   }, [members]);
-
 
   const handleToggleReminder = useCallback((id: string) => {
     setReminders((prev) =>
@@ -79,7 +82,7 @@ export default function DashboardHome() {
   }
 
   const warningCount = warnings.filter(
-    warn => warn.status && !warn.status.toLowerCase().includes("good")
+    (warn) => warn.status && !warn.status.toLowerCase().includes("good")
   ).length;
 
   return (
@@ -234,8 +237,8 @@ export default function DashboardHome() {
               </View>
             </View>
 
-            {!loadingWarning && (
-              warningCount > 0 ? (
+            {!loadingWarning &&
+              (warningCount > 0 ? (
                 <TouchableOpacity style={styles.containerHealthWarning}>
                   <View style={styles.titleHealth}>
                     <View style={styles.containerDigit}>
@@ -255,7 +258,11 @@ export default function DashboardHome() {
                   </View>
                   <Text style={styles.descHealthWarning}>
                     {warningCount > 0
-                      ? `Check the ${warningCount > 1 ? warningCount + " warnings" : "warning"} that you should take attention. Don’t be late.`
+                      ? `Check the ${
+                          warningCount > 1
+                            ? warningCount + " warnings"
+                            : "warning"
+                        } that you should take attention. Don’t be late.`
                       : "All good! No early health warnings at the moment."}
                   </Text>
                 </TouchableOpacity>
@@ -264,11 +271,12 @@ export default function DashboardHome() {
                   title="All Good"
                   status="Good"
                   description={[
-                    { text: "Maintain your lifestyle and keep your body healthy now and later." }
+                    {
+                      text: "Maintain your lifestyle and keep your body healthy now and later.",
+                    },
                   ]}
                 />
-              )
-            )}
+              ))}
 
             {/* Family Mode */}
             <TouchableOpacity style={styles.containerAllDigitBio}>
@@ -306,7 +314,9 @@ export default function DashboardHome() {
 
               <View style={styles.divider} />
               <View>
-                <Text style={styles.membersNum}>{familyStats.total} Members Family</Text>
+                <Text style={styles.membersNum}>
+                  {familyStats.total} Members Family
+                </Text>
               </View>
             </TouchableOpacity>
           </View>

@@ -1,33 +1,41 @@
-import { ReminderCard } from "@/components/meditrack-forms/Reminder";
+import DiaryData from "@/components/hcd/DiaryData";
+import { AppointmentCard } from "@/components/meditrack-forms/AppointmentCard";
+import {
+  convertDrugToReminder,
+  ReminderCard,
+} from "@/components/meditrack-forms/Reminder";
+import { convertAppointment } from "@/components/utils/DateUtils";
 import TitleBack from "@/components/utils/TitleBack";
-import { COLORS } from "@/constants/colors";
-import { initialReminders } from "@/constants/initialData";
 import { Reminder } from "@/constants/reminder";
+import { useAppointments } from "@/context/AppointmentContext";
+import { useDrugs } from "@/context/DrugContext";
+import { useFamilyView } from "@/context/FamilyViewContext";
 import { useAuthState } from "@/hooks/useAuthState";
 import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
 import { useHealthDiary } from "@/hooks/useHealthDiary";
 import { styles } from "@/styles/hcd/viewHealthDiary.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
+import { stylesMonitor } from "@/styles/utils/monitoring.styles";
 import { DiaryEntry } from "@/types/diary";
 import { router, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
-import { useFamilyView } from "@/context/FamilyViewContext";
-import { stylesMonitor } from "@/styles/utils/monitoring.styles"
 
 export default function HealthDiary() {
-  const { uid: paramUid, isMonitoring } = useLocalSearchParams<{ uid?: string, isMonitoring?: string }>();
+  const { uid: paramUid, isMonitoring } = useLocalSearchParams<{
+    uid?: string;
+    isMonitoring?: string;
+  }>();
   const insets = useSafeAreaInsets();
   const { user } = useAuthState();
   const uid = paramUid || user?.uid;
-  const datePickerStyle = useDatePickerStyles();
-  const [reminders, setReminders] = useState<Reminder[]>(initialReminders);
+
+  const [reminders, setReminders] = useState<Reminder[]>([]);
   const [symptoms, setSymptoms] = useState("");
   const [mood, setMood] = useState("");
   const [activities, setActivities] = useState("");
@@ -36,140 +44,137 @@ export default function HealthDiary() {
   const [selected, setSelected] = useState<DateType>(
     date ? new Date(date) : new Date()
   );
+  const datePickerStyle = useDatePickerStyles(
+    selected instanceof Date ? selected : new Date()
+  );
   const [diaries, setDiaries] = useState<DiaryEntry[]>([]);
   const { fetchDiariesByDate } = useHealthDiary();
   const [loading, setLoading] = useState(false);
   const { setViewingUid } = useFamilyView();
-  const monitoring = isMonitoring === "1" || (paramUid && paramUid !== user?.uid);
+  const monitoring =
+    isMonitoring === "1" || (paramUid && paramUid !== user?.uid);
 
-  const schedules: Record<string, Reminder[]> = {
-    "2025-09-29": [
-      {
-        id: "1",
-        title: "Panadol 200mg",
-        timeLabel: "09:00",
-        description: "Take after meal",
-        category: "drug",
-        completed: false,
-      },
-      {
-        id: "2",
-        title: "Dr. Veni Checkupsssssss",
-        timeLabel: "09:00 - 11:00",
-        description: "Routine checkup",
-        category: "appointment",
-        completed: false,
-      },
-      {
-        id: "3",
-        title: "Panadol 200mg",
-        timeLabel: "13:00",
-        description: "Take after lunch",
-        category: "drug",
-        completed: false,
-      },
-      {
-        id: "4",
-        title: "Panadol 200mg",
-        timeLabel: "13:00",
-        description: "Take after lunch",
-        category: "drug",
-        completed: false,
-      },
-    ],
-    "2025-09-02": [
-      {
-        id: "4",
-        title: "Vitamin C 500mg",
-        timeLabel: "08:00",
-        description: "Morning supplement",
-        category: "drug",
-        completed: false,
-      },
-      {
-        id: "5",
-        title: "Dr. Budi Consultation",
-        timeLabel: "10:00 - 11:00",
-        description: "Consultation",
-        category: "appointment",
-        completed: false,
-      },
-    ],
-  };
+  const [selectedDateKey, setSelectedDateKey] = useState(
+    selected
+      ? formatDateLocal(new Date(selected as Date))
+      : formatDateLocal(new Date())
+  );
+
+  const { drugs } = useDrugs();
+  const { appointments, remove } = useAppointments();
 
   function formatDateLocal(date: Date) {
-    return date.toLocaleDateString("en-CA");
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
   }
 
-  const selectedDateKey = selected
-    ? formatDateLocal(new Date(selected as Date))
-    : formatDateLocal(new Date());
-
-  const todaySchedules = schedules[selectedDateKey] ?? [];
-
-  function getStartTime(timeLabel: string) {
-    const m = timeLabel.match(/\d{1,2}:\d{2}/);
-    return m ? m[0] : "00:00";
-  }
-
-  const displayedSchedules = todaySchedules.map((s) => {
-    const r = reminders.find((x) => x.id === s.id);
-    return r ? { ...s, completed: r.completed } : s;
-  });
-
-  const todayReminders = [...displayedSchedules].sort((a, b) =>
-    getStartTime(a.timeLabel).localeCompare(getStartTime(b.timeLabel))
-  );
-
-  const handleToggleReminder = useCallback(
-    (id: string) => {
-      setReminders((prev) => {
-        const existed = prev.find((r) => r.id === id);
-        if (existed) {
-          return prev.map((r) =>
-            r.id === id ? { ...r, completed: !r.completed } : r
-          );
-        } else {
-          const source = displayedSchedules.find((s) => s.id === id);
-          return [
-            ...prev,
-            {
-              id,
-              title: source?.title ?? "Untitled",
-              timeLabel: source?.timeLabel ?? "00:00",
-              description: source?.description ?? "",
-              category: source?.category ?? "other",
-              completed: true,
-            },
-          ];
-        }
-      });
-    },
-    [displayedSchedules]
-  );
-
+  // Fetching Diary
   useEffect(() => {
     if (!uid) return;
+
+    setSelectedDateKey(
+      selected
+        ? formatDateLocal(new Date(selected as Date))
+        : formatDateLocal(new Date())
+    );
+
+    // Update reminders
+    const todayDrugReminders = drugs
+      .filter((d) => d.date === selectedDateKey)
+      .map(convertDrugToReminder);
+
+    const todayAppointmentReminders: Reminder[] = appointments
+      .filter((a) => a.date === selectedDateKey)
+      .map((a) => ({
+        ...convertAppointment(a),
+        id: `appt-${a.id}`,
+        category: "appointment",
+        description: a.description ?? "",
+        completed: a.status === "done",
+      }));
+
+    const allReminders: Reminder[] = [
+      ...todayDrugReminders,
+      ...todayAppointmentReminders,
+    ].sort((a, b) => a.timeLabel.localeCompare(b.timeLabel));
+
+    setReminders(allReminders);
+
+    // Fetch diary
     const fetchDiary = async () => {
       setLoading(true);
-      const dateKey = formatDateLocal(selected as Date);
-      const res = await fetchDiariesByDate(dateKey, uid);
-      if (res.success) {
-        setDiaries(res.success && res.data ? res.data : []);
-        console.log(diaries);
+      const res = await fetchDiariesByDate(selectedDateKey, uid);
+      if (res.success && res.data) {
+        setDiaries(res.data);
       } else {
         setDiaries([]);
-        console.log(res.message);
       }
       setLoading(false);
     };
 
     fetchDiary();
-  }, [selected, uid]);
-  console.log(diaries);
+  }, [selected, uid, drugs, appointments, selected]);
+
   const diaryData = diaries[0];
-  console.log("test");
-  console.log(diaryData);
+
+  const handleEditDrug = useCallback((reminder: Reminder) => {
+    router.push({
+      pathname: "/meditrack/drugForm",
+      params: {
+        editMode: "true",
+        drugId: reminder.id,
+      },
+    });
+  }, []);
+
+  const handleEditAppointment = useCallback((appointment: any) => {
+    router.push({
+      pathname: "/meditrack/appointmentForm",
+      params: {
+        editMode: "true",
+        appointmentId: appointment.id,
+      },
+    });
+  }, []);
+
+  const handleSeeAll = useCallback((section: string) => {
+    if (section === "today-reminders") {
+      router.push("/meditrack/alltodayreminder");
+    } else if (section === "all-medications") {
+      router.push("/meditrack/allremindercard");
+    } else if (section === "upcoming-appointments") {
+      router.push("/meditrack/allupcomingappointment");
+    } else if (section === "history-appointments") {
+      router.push("/meditrack/allhistoryappointment");
+    }
+  }, []);
+  const handleSeeDetail = useCallback((appointment: any) => {
+    router.push({
+      pathname: "/meditrack/appointmentForm",
+      params: {
+        editMode: "true",
+        appointmentId: appointment.id,
+      },
+    });
+  }, []);
+  const handleDeleteAppointment = async (appointment: any) => {
+    Alert.alert("Delete Appointment", `Delete "${appointment.title}"?`, [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: async () => {
+          await remove(appointment.id);
+        },
+      },
+    ]);
+  };
+  const handleToggleReminder = useCallback((id: string) => {
+    console.log(id);
+  }, []);
 
   return (
     <SafeAreaView style={styles.dashboardContainer}>
@@ -180,10 +185,7 @@ export default function HealthDiary() {
         ]}
         showsVerticalScrollIndicator={false}
       >
-
-        {!monitoring && (
-          <TitleBack title="Health Diary" />
-        )}
+        {!monitoring && <TitleBack title="Health Diary" />}
 
         {monitoring && (
           <TouchableOpacity
@@ -193,13 +195,21 @@ export default function HealthDiary() {
               router.push("/family-mode/familyMode");
             }}
           >
-            <Text style={{ color: "#fff", fontWeight: "bold", textAlign: "center", fontSize: 16 }}>
+            <Text
+              style={{
+                color: "#fff",
+                fontWeight: "bold",
+                textAlign: "center",
+                fontSize: 16,
+              }}
+            >
               Back to my account
             </Text>
           </TouchableOpacity>
         )}
 
-        <View>
+        <View style={{ width: "100%" }}>
+          {/* Date */}
           <View style={styles.dateBg}>
             <DateTimePicker
               mode="single"
@@ -209,6 +219,7 @@ export default function HealthDiary() {
             />
           </View>
 
+          {/* Schedule Header */}
           <View>
             {/* Schedeule */}
             <View style={styles.containerReminder}>
@@ -228,288 +239,92 @@ export default function HealthDiary() {
 
           {/* --- Map Reminder--- */}
           <View style={styles.section}>
-            <View>
-              {todayReminders.length === 0 ? (
-                <Text style={{ textAlign: "center", color: "gray" }}>
-                  No reminders today
-                </Text>
-              ) : (
-                todayReminders.map((reminder) => (
-                  <View key={reminder.id} style={styles.reminderRow}>
-                    <View style={styles.reminderTimesCard}>
-                      <Text style={styles.reminderTime}>
-                        {reminder.timeLabel}
-                      </Text>
-                    </View>
-                    <View style={styles.reminderCardS}>
+            {reminders.length === 0 ? (
+              <Text style={{ textAlign: "center", color: "gray" }}>
+                No reminders today
+              </Text>
+            ) : (
+              reminders.slice(0, 3).map((reminder) => (
+                <View key={reminder.id} style={styles.reminderRow}>
+                  {/* Time label di kiri */}
+                  <View style={styles.reminderTimesCard}>
+                    <Text style={styles.reminderTime}>
+                      {reminder.timeLabel}
+                    </Text>
+                  </View>
+
+                  {/* Card */}
+                  <View style={styles.reminderCardS}>
+                    {reminder.category === "drug" ? (
                       <ReminderCard
                         key={reminder.id}
                         reminder={reminder}
-                        onToggle={() => handleToggleReminder(reminder.id)}
-                        showDescription={false}
+                        onToggle={handleToggleReminder}
+                        showActions={true}
+                        onEdit={handleEditDrug}
                       />
-                    </View>
+                    ) : (
+                      <AppointmentCard
+                        key={reminder.id}
+                        appointment={reminder}
+                        onPressDetail={() => handleSeeDetail(reminder)}
+                        onEdit={handleEditAppointment}
+                        onDelete={handleDeleteAppointment}
+                        showActions={true}
+                        showTime={false}
+                        showLocation={false}
+                        showDetails={false}
+                        showArrow={true}
+                      />
+                    )}
                   </View>
-                ))
-              )}
-            </View>
-            {todayReminders.length > 0 && (
+                </View>
+              ))
+            )}
+
+            {/* View All */}
+            {reminders.length > 3 && (
               <TouchableOpacity
-                onPress={() => router.push("/hcd/diary/remindersAll")}
+                onPress={() =>
+                  router.push({
+                    pathname: "/hcd/diary/remindersAll",
+                    params: {
+                      date: selectedDateKey,
+                    },
+                  })
+                }
+                style={{ marginTop: 8 }}
               >
                 <Text style={styles.seeAllReminder}>View All</Text>
               </TouchableOpacity>
             )}
           </View>
 
+          {/* Diary Data */}
           <View>
             {diaryData ? (
-              <>
-                {/* Vital Sign */}
-                <TouchableOpacity
-                  style={styles.containerAllDigitBio}
-                  onPress={() => router.push("/profile/digitalBiomarker")}
-                >
-                  {/* Judul */}
-                  <View style={styles.titleHealth}>
-                    <View style={styles.containerDigit}>
-                      <View style={styles.containerTitle}>
-                        <Text style={styles.titleDigitBio}>Vital Signs</Text>
-                        <Text style={styles.captionDigitBio}>
-                          Latest update 15/09/2025 13:00
-                        </Text>
-                      </View>
-                    </View>
-                    <Image
-                      source={require("@/assets/utilsIcon/arrow-left.png")}
-                      style={styles.icon}
-                    />
-                  </View>
-
-                  {/* Kotak */}
-                  <View style={styles.squaresContainer}>
-                    <View style={styles.subSquareContainer}>
-                      {/* Blood Pressure */}
-                      <View style={styles.containerStatus}>
-                        <View style={styles.bulletin}></View>
-                        <View style={styles.captCont1}>
-                          <Text style={styles.captionNumber}>
-                            Blood Pressure
-                          </Text>
-                          <View style={styles.captCont}>
-                            <Text style={styles.captionName}>
-                              {diaryData?.systolic ?? "-"} /{" "}
-                              {diaryData?.diastolic ?? "-"}
-                            </Text>
-                            <Text style={styles.captionNumber}>mmHg</Text>
-                          </View>
-                        </View>
-                      </View>
-
-                      {/* Blood Sugar */}
-                      <View style={styles.containerStatus}>
-                        <View style={styles.bulletin}></View>
-                        <View style={styles.captCont1}>
-                          <Text style={styles.captionNumber}>Blood Sugar</Text>
-                          <View style={styles.captCont}>
-                            <Text style={styles.captionName}>
-                              {" "}
-                              {diaryData?.bloodSugar ?? "-"}
-                            </Text>
-                            <Text style={styles.captionNumber}>mg/dL</Text>
-                          </View>
-                        </View>
-                      </View>
-                    </View>
-                    <View style={styles.subSquareContainer}>
-                      {/* Heart Rate */}
-                      <View style={styles.containerStatus}>
-                        <View style={styles.bulletin}></View>
-                        <View style={styles.captCont1}>
-                          <Text style={styles.captionNumber}>Heart Rate</Text>
-                          <View style={styles.captCont}>
-                            <Text style={styles.captionName}>
-                              {diaryData?.heartRate ?? "-"}
-                            </Text>
-                            <Text style={styles.captionNumber}>bpm</Text>
-                          </View>
-                        </View>
-                      </View>
-
-                      {/* Blood Sugar */}
-                      <View style={styles.containerStatus}>
-                        <View style={styles.bulletin}></View>
-                        <View style={styles.captCont1}>
-                          <Text style={styles.captionNumber}>Weight</Text>
-                          <View style={styles.captCont}>
-                            <Text style={styles.captionName}>
-                              {diaryData?.weight ?? "-"}
-                            </Text>
-                            <Text style={styles.captionNumber}>kg</Text>
-                          </View>
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-
-                {/* Your Diary */}
-                <View>
-                  <View style={styles.containerReminder}>
-                    <View style={styles.captionSubtitle}>
-                      <Text style={styles.subtitle}>Your Diary</Text>
-                      <TouchableOpacity
-                        style={styles.subtitleContainerText}
-                        onPress={() =>
-                          router.push({
-                            pathname: "/hcd/diary/editDiary",
-                            params: { date: selectedDateKey },
-                          })
-                        }
-                      >
-                        <Text style={styles.seeAllContainer}>Edit</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                  <View style={styles.contentContainer}>
-                    <View style={styles.formContainer}>
-                      {/* Form */}
-                      <View style={styles.containerForm}>
-                        {/* Symptoms */}
-                        <View style={styles.containerInput}>
-                          <View style={styles.flexInput}>
-                            <Image
-                              source={require("@/assets/hcd/symptoms.svg")}
-                              style={{ width: 25, height: 25 }}
-                              resizeMode="contain"
-                            />
-                            <Text style={styles.textTitle}>Symptoms</Text>
-                          </View>
-                          <TextInput
-                            style={[
-                              styles.descInput,
-                              {
-                                backgroundColor: COLORS.primary5th,
-                              },
-                            ]}
-                            value={diaryData?.symptoms ?? "-"}
-                            onChangeText={setSymptoms}
-                            multiline
-                          />
-                        </View>
-                        {/* Mood */}
-                        <View style={styles.containerInput}>
-                          <View style={styles.flexInput}>
-                            <Image
-                              source={require("@/assets/hcd/mood.svg")}
-                              style={{ width: 25, height: 25 }}
-                              resizeMode="contain"
-                            />
-                            <Text style={styles.textTitle}>Mood</Text>
-                          </View>
-                          <TextInput
-                            style={[
-                              styles.descInput,
-                              {
-                                backgroundColor: COLORS.red3rd,
-                              },
-                            ]}
-                            value={diaryData?.mood ?? "-"}
-                            onChangeText={setMood}
-                            multiline
-                          />
-                        </View>
-                        {/* Physical Activities */}
-                        <View style={styles.containerInput}>
-                          <View style={styles.flexInput}>
-                            <Image
-                              source={require("@/assets/hcd/physicalAct.svg")}
-                              style={{ width: 25, height: 25 }}
-                              resizeMode="contain"
-                            />
-                            <Text style={styles.textTitle}>
-                              Physical Activities
-                            </Text>
-                          </View>
-                          <TextInput
-                            style={[
-                              styles.descInput,
-                              {
-                                backgroundColor: COLORS.secondary5th,
-                              },
-                            ]}
-                            value={diaryData?.activities ?? "-"}
-                            onChangeText={setActivities}
-                            multiline
-                          />
-                        </View>
-                        {/* Additional Notes */}
-                        <View style={styles.containerInput}>
-                          <View style={styles.flexInput}>
-                            <Image
-                              source={require("@/assets/hcd/additionalNotes.svg")}
-                              style={{ width: 25, height: 25 }}
-                              resizeMode="contain"
-                            />
-                            <Text style={styles.textTitle}>
-                              Additional Notes
-                            </Text>
-                          </View>
-                          <TextInput
-                            style={[
-                              styles.descInput,
-                              {
-                                backgroundColor: "#EAEAEA",
-                              },
-                            ]}
-                            value={diaryData?.notes ?? "-"}
-                            onChangeText={setNotes}
-                            multiline
-                          />
-                        </View>
-                      </View>
-                      <View style={styles.divider} />
-                      {/* Latest Update */}
-                      <View style={styles.LatestContainer}>
-                        <Text style={styles.latestText}>
-                          {diaryData?.updatedAt
-                            ? `Latest update ${(diaryData.updatedAt instanceof
-                              Date
-                                ? diaryData.updatedAt
-                                : diaryData.updatedAt.toDate()
-                              ).toLocaleDateString(
-                                "en-GB"
-                              )} ${(diaryData.updatedAt instanceof Date
-                                ? diaryData.updatedAt
-                                : diaryData.updatedAt.toDate()
-                              ).toLocaleTimeString("en-GB", {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })}`
-                            : "No updates yet"}
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </>
+              <DiaryData
+                diaryData={diaryData}
+                selectedDateKey={selectedDateKey}
+                setSymptoms={setSymptoms}
+                setMood={setMood}
+                setActivities={setActivities}
+                setNotes={setNotes}
+              />
             ) : (
-              <>
-                <View style={styles.containerContentDiary}>
-                  <Text style={styles.emptyText}>No diary entries yet</Text>
-                  <View style={styles.containerContentEmpty}>
-                    <TouchableOpacity
-                      style={styles.createButton}
-                      onPress={() => router.push("/hcd/diary/createDiary")}
-                    >
-                      <Text style={styles.createButtonText}>
-                        {" "}
-                        + Create New Diary
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+              <View style={styles.containerContentDiary}>
+                <Text style={styles.emptyText}>No diary entries yet</Text>
+                <View style={styles.containerContentEmpty}>
+                  <TouchableOpacity
+                    style={styles.createButton}
+                    onPress={() => router.push("/hcd/diary/createDiary")}
+                  >
+                    <Text style={styles.createButtonText}>
+                      + Create New Diary
+                    </Text>
+                  </TouchableOpacity>
                 </View>
-              </>
+              </View>
             )}
           </View>
         </View>

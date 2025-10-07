@@ -3,7 +3,7 @@ import { COLORS } from "@/constants/colors";
 import { styles } from "@/styles/meditrack/appointment-card.styles";
 import { Ionicons } from "@expo/vector-icons";
 import type React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
 type AppointmentCardProps = {
   appointment: any;
@@ -11,14 +11,29 @@ type AppointmentCardProps = {
   onEdit?: (appointment: any) => void;
   onDelete?: (appointment: any) => void;
   showActions?: boolean;
+  showTime?: boolean;
+  showLocation?: boolean;
+  showDetails?: boolean;
+  showArrow?: boolean;
 };
-
+const truncateText = (text: string, wordLimit: number) => {
+  if (!text) return "";
+  const words = text.trim().split(/\s+/);
+  if (words.length > wordLimit) {
+    return words.slice(0, wordLimit).join(" ") + "...";
+  }
+  return text;
+};
 export const AppointmentCard: React.FC<AppointmentCardProps> = ({
   appointment,
   onPressDetail,
   onEdit,
   onDelete,
   showActions = false,
+  showTime = true,
+  showLocation = true,
+  showDetails = true,
+  showArrow = false,
 }) => {
   const isUpcoming = appointment.status === "upcoming";
   const backgroundColor = isUpcoming
@@ -38,52 +53,73 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
   };
 
   return (
-    <View style={[styles.container, { backgroundColor }]}>
-      <View style={styles.leftColumn}>
-        <View style={styles.iconWrapper}>
-          <Ionicons name="calendar-outline" size={18} color={COLORS.black} />
-        </View>
-        <View style={styles.infoWrapper}>
-          <Text style={styles.title} numberOfLines={1}>
-            {appointment.title}
-          </Text>
-          <Text style={styles.subtitle}>{appointment.provider}</Text>
+    <TouchableOpacity onPress={handleEditPress}>
+      <View style={[styles.container, { backgroundColor }]}>
+        <View style={styles.leftColumn}>
+          <View style={styles.iconWrapper}>
+            <Ionicons name="calendar-outline" size={18} color={COLORS.black} />
+          </View>
+          <View style={styles.infoWrapper}>
+            <Text style={styles.title} numberOfLines={1}>
+              {truncateText(appointment.title, 8)}
+            </Text>
+            <Text style={styles.subtitle}>{appointment.provider}</Text>
 
-          <View style={styles.metaRow}>
-            <View style={styles.metaBlock}>
-              <Text style={styles.metaLabel}>Location</Text>
-              <Text style={styles.metaValue}>{appointment.location}</Text>
-            </View>
-            <View style={styles.metaBlock}>
-              <Text style={styles.metaLabel}>Date</Text>
-              <Text style={styles.metaValue}>{appointment.dateLabel}</Text>
-            </View>
-            <View style={styles.metaBlock}>
-              <Text style={styles.metaLabel}>Time</Text>
-              <Text style={styles.metaValue}>{appointment.timeLabel}</Text>
+            <View style={styles.metaRow}>
+              {showLocation && appointment.location && (
+                <View style={styles.metaBlock}>
+                  <Text style={styles.metaLabel}>Location</Text>
+                  <Text style={styles.metaValue}>{appointment.location}</Text>
+                </View>
+              )}
+              {appointment.dateLabel && (
+                <View style={styles.metaBlock}>
+                  <Text style={styles.metaLabel}>Date</Text>
+                  <Text style={styles.metaValue}>{appointment.dateLabel}</Text>
+                </View>
+              )}
+              {showTime && appointment.timeLabel && (
+                <View style={styles.metaBlock}>
+                  <Text style={styles.metaLabel}>Time</Text>
+                  <Text style={styles.metaValue}>{appointment.timeLabel}</Text>
+                </View>
+              )}
             </View>
           </View>
         </View>
-      </View>
 
-      <View style={styles.rightColumn}>
-        <TouchableOpacity
-          style={styles.cta}
-          onPress={handleSeeDetailPress}
-          activeOpacity={0.82}
-        >
-          <Text style={styles.ctaLabel}>See Detail</Text>
-        </TouchableOpacity>
+        <View style={styles.rightColumn}>
+          {showDetails && (
+            <TouchableOpacity
+              style={styles.cta}
+              onPress={handleSeeDetailPress}
+              activeOpacity={0.82}
+            >
+              <Text style={styles.ctaLabel}>See Detail</Text>
+            </TouchableOpacity>
+          )}
 
-        {showActions && (
+          {showActions && (
+            <View style={styles.actionButtons}>
+              <TouchableOpacity
+                onPress={handleEditPress}
+                style={styles.actionButton}
+              ></TouchableOpacity>
+            </View>
+          )}
+        </View>
+
+        {showArrow && (
           <View style={styles.actionButtons}>
             <TouchableOpacity
               onPress={handleEditPress}
               style={styles.actionButton}
-            ></TouchableOpacity>
+            >
+              <Image source={require("@/assets/utilsIcon/arrow-right.svg")} />
+            </TouchableOpacity>
           </View>
         )}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };

@@ -354,43 +354,47 @@ export const styles = StyleSheet.create({
     borderColor: COLORS.primary,
     justifyContent: "center",
     alignItems: "center",
-  }, // --- Reminder Row ---
+  },
+
   reminderRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    marginBottom: 14,
-    borderRadius: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    marginBottom: 10,
+    borderRadius: 8,
     borderWidth: 1,
     borderColor: COLORS.gray3,
+    width: "90%",
   },
+
   reminderCardS: {
+    marginLeft: 8,
     justifyContent: "flex-start",
+    width: "60%",
   },
   reminderTimesCard: {
-    width: 100,
+    alignItems: "flex-start",
   },
   section: {
     alignItems: "center",
     marginTop: 20,
     marginBottom: 16,
-    paddingHorizontal: 16,
     paddingVertical: 30,
-    borderRadius: 12,
+    borderRadius: 10,
     backgroundColor: COLORS.white,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 2,
+    width: "100%",
   },
   scheduleCont: {
     marginTop: 15,
   },
 
-  // Reminder Page All
   container: { flex: 1 },
   headerContainer: {
     width: "100%",
