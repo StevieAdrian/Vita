@@ -12,40 +12,29 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
+import { useMonthlyReport } from "@/hooks/useMonthlyReport";
+import { calculateAge } from "@/utils/dateUtils";
+import dayjs from "dayjs";
 
 export default function MonthlyReport() {
   const insets = useSafeAreaInsets();
-  const [month, setMonth] = useState("September");
-  const { loading } = useUserProfile();
+  const [month, setMonth] = useState(dayjs().format("MMMM"));
+  const { data: user } = useUserProfile();
+  const { reportData, loading } = useMonthlyReport(month);
 
   const handleDownload = async () => {
+    if (!reportData) return;
+
+    const age = calculateAge(user.dateOfBirth);
+
     await generateReportPDF({
-      name: "Alicia Felisha",
-      dob: "August 25, 2005",
-      age: 20,
-      gender: "Female",
-      bloodType: "B",
-      period: "September 1, 2025 - September 30, 2025",
-      bloodSugar: { avg: 120, high: 180, low: 60 },
-      bloodPressure: {
-        avg: "120/80 mmHg",
-        high: "160/100 mmHg",
-        low: "110/70 mmHg",
-      },
-      heartRate: { avg: 120, high: 180, low: 60 },
-      weight: { avg: 65, high: 68, low: 64 },
-      appointments: [
-        {
-          date: "September 1, 2025",
-          desc: "Control Checkup Mata - RS Bravia | Dr. Veni | 13.00",
-          status: "Confirmed",
-        },
-        {
-          date: "September 5, 2025",
-          desc: "Cabut Gigi - RS Bravia | Dr. Veni | 13.00",
-          status: "Not Confirmed",
-        },
-      ],
+      name: `${user.firstName} ${user.lastName}`,
+      dob: user.dateOfBirth ?? "—",
+      age,
+      gender: user.gender ?? "—",
+      bloodType: user.bloodType ?? "—",
+      period: reportData.period,
+      ...reportData,
     });
   };
 
@@ -66,7 +55,7 @@ export default function MonthlyReport() {
             <View style={styles.formContainer}>
               <View style={styles.dropdownContainer}>
                 <Text style={styles.label}>Month</Text>
-                <MonthDropdown />
+                <MonthDropdown onSelect={setMonth}/>
               </View>
 
               <View style={styles.previewSection}>
