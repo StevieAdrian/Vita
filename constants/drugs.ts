@@ -5,6 +5,7 @@ export interface DrugReminder {
   date: string;
   category: string;
   times: string[];
+  dateTime?: string;
   repeatDays: string[];
   isCompleted: boolean;
   createdAt: string;

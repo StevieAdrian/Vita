@@ -96,7 +96,10 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
   return (
     <TouchableOpacity
       style={[styles.container, { backgroundColor: cardBackground }]}
-      onPress={handleToggle}
+      onPress={() => {
+        handleToggle();
+        handleEditPress();
+      }}
     >
       <View style={styles.leftColumn}>
         <View>
@@ -121,7 +124,7 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
             numberOfLines={1}
             ellipsizeMode="tail"
           >
-            {reminder.title}
+            {truncateText(reminder.description, 10)}
           </Text>
 
           {showDescription && (
@@ -161,10 +164,7 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
             onPress={handleEditPress}
             style={styles.actionButton}
           >
-            <Image
-              source={require("@/assets/utilsIcon/arrow-left.png")}
-              style={styles.icon}
-            />
+            <Image source={require("@/assets/utilsIcon/arrow-right.svg")} />
           </TouchableOpacity>
         </View>
       )}

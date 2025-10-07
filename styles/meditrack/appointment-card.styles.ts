@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
   },
   leftColumn: {
     flexDirection: "row",
+    alignItems: "center",
     gap: 12,
     flex: 1,
   },
@@ -85,10 +86,10 @@ export const styles = StyleSheet.create({
   actionButton: {
     padding: 8,
   },
-  icon: {
-    width: 20,
-    height: 20,
-  },
+  // icon: {
+  //   width: 15,
+  //   height: 15,
+  // },
   rightColumn: {
     alignItems: "flex-end",
     gap: 8,
