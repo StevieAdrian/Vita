@@ -8,11 +8,17 @@ import ListItem from "../utils/ListItem";
 import AvatarPicker from "./AvatarPicker";
 import SectionCard from "./SectionCard";
 import StatsRow from "./StatsRow";
+import { useLastHealthSync } from "@/hooks/useLastHealthSync";
+import { useRecordedDays } from "@/hooks/useRecordedDays";
+import { useReminderRecords } from "@/hooks/useReminderRecords";
 
 export default function GeneralForm() {
   const { image, pickPhoto } = useAvatarPicker();
   const { data } = useUserProfile();
   const { logout } = useAuth();
+  const { lastSync, loading } = useLastHealthSync();
+  const { recordedDays, loading: loadingRecorded } = useRecordedDays();
+  const { reminderCount, loading: loadingReminder } = useReminderRecords();
 
   return (
     <>
@@ -35,8 +41,8 @@ export default function GeneralForm() {
       >
         <StatsRow
           stats={[
-            { value: 28, label: "Recorded Days" },
-            { value: 30, label: "Reminder Record" },
+            { value: loadingRecorded ? "..." : recordedDays, label: "Recorded Days" },
+            { value: loadingRecorded ? "..." : reminderCount, label: "Reminder Record" },
           ]}
         />
         <View style={{ height: 12 }} />
@@ -61,7 +67,7 @@ export default function GeneralForm() {
         />
         <ListItem
           title="Digital Biomarker"
-          subtitle="Last sync 15/09/2025"
+          subtitle={loading ? "Loading..." : `Last sync ${lastSync}`}
           leftIcon={require("@/assets/images/digital-bio-icon.png")}
           onPress={() => router.push("/profile/digitalBiomarker")}
         />
