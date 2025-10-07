@@ -1,4 +1,5 @@
 import OptionField from "@/components/utils/OptionField";
+import { CHRONIC_OPTIONS } from "@/constants/chronic";
 import { COLORS } from "@/constants/colors";
 import { useSignupContext } from "@/context/SignupContext";
 import { useChronic } from "@/utils/chronicValidation";
@@ -20,7 +21,6 @@ import { styles } from "../../../styles/auth/signup/chronic.style";
 
 const Chronic: React.FC = () => {
   const {
-    CHRONIC_OPTIONS,
     otherCondition,
     setOtherCondition,
     handleConditionSelect,

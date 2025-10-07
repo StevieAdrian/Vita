@@ -1,4 +1,4 @@
-import { CHRONIC_OPTIONS, Chronic } from "@/constants/chronic";
+import { Chronic } from "@/constants/chronic";
 import { useState } from "react";
 
 export const useChronic = () => {
@@ -6,12 +6,22 @@ export const useChronic = () => {
   const [otherCondition, setOtherCondition] = useState("");
 
   const handleConditionSelect = (condition: Chronic) => {
-    if (selectedConditions.includes(condition)) {
+    if (condition === "There is no chronic situation") {
       setSelectedConditions(
-        selectedConditions.filter((item) => item !== condition)
+        selectedConditions.includes(condition) ? [] : [condition]
       );
     } else {
-      setSelectedConditions([...selectedConditions, condition]);
+      const filteredConditions = selectedConditions.filter(
+        (item) => item !== "There is no chronic situation"
+      );
+
+      if (selectedConditions.includes(condition)) {
+        setSelectedConditions(
+          filteredConditions.filter((item) => item !== condition)
+        );
+      } else {
+        setSelectedConditions([...filteredConditions, condition]);
+      }
     }
   };
 
@@ -30,7 +40,6 @@ export const useChronic = () => {
   };
 
   return {
-    CHRONIC_OPTIONS,
     selectedConditions,
     otherCondition,
     setOtherCondition,
