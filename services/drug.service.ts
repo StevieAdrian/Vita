@@ -11,11 +11,38 @@ import {
 } from "firebase/firestore";
 import { db } from "../config/firebaseConfig";
 import { DrugReminder } from "../constants/drugs";
+import { addNotification } from "./notification.service";
+import { toTimeLabel, toDateTimeISO } from "@/utils/dateUtils"
+import dayjs from "dayjs";
 
 const drugsCollection = collection(db, "drugs");
 
 export const createDrug = async (data: Omit<DrugReminder, "id">) => {
   const docRef = await addDoc(drugsCollection, data);
+
+  const normalizedDate = dayjs(data.date).isValid()? dayjs(data.date).format("YYYY-MM-DD") : data.date;
+ 
+  const timeLabel = toTimeLabel(data.times);
+  const dateTimeISO = toDateTimeISO(normalizedDate, data.times);
+  const message = `Time to take your medicine:\n${data.drugName} — ${data.description} at ${timeLabel}.`;
+
+  try {
+    await addNotification({
+      toUid: data.userId ?? "",
+      type: "MEDICINE_REMINDER",
+      message,
+      extraData: {
+        drugName: data.drugName,
+        description: data.description,
+        timeLabel,
+        ...(dateTimeISO ? { dateTime: dateTimeISO } : {}),
+      },
+    });
+  } catch (err) {
+    console.log("tes masuk", err);
+    throw new Error;
+  }
+
   return docRef.id;
 };
 

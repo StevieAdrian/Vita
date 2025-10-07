@@ -8,7 +8,7 @@ export const NotificationMeta: Record<NotificationType, { icon: any; color: stri
     color: COLORS.primary,   
   },
   MEDICINE_REMINDER: {
-    icon: require("@/assets/hcd/healthWarning.png"),
+    icon: require("@/assets/notifications/medicine-reminder.png"),
     color: COLORS.primary,
   },
   EARLY_WARNING: {
@@ -16,7 +16,7 @@ export const NotificationMeta: Record<NotificationType, { icon: any; color: stri
     color: COLORS.primary,
   },
   APPOINTMENT: {
-    icon: require("@/assets/hcd/healthWarning.png"),
+    icon: require("@/assets/notifications/appointment-reminder.png"),
     color: COLORS.primary,
   },
 };
