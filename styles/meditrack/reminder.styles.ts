@@ -35,9 +35,7 @@ export const styles = StyleSheet.create({
     fontFamily: "Inter-Medium",
     marginTop: 2,
   },
-  icon: {
-    transform: [{ rotate: "180deg" }],
-  },
+
   checkbox: {
     width: 32,
     height: 32,

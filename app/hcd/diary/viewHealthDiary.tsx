@@ -6,7 +6,6 @@ import {
 } from "@/components/meditrack-forms/Reminder";
 import { convertAppointment } from "@/components/utils/DateUtils";
 import TitleBack from "@/components/utils/TitleBack";
-import { initialReminders } from "@/constants/initialData";
 import { Reminder } from "@/constants/reminder";
 import { useAppointments } from "@/context/AppointmentContext";
 import { useDrugs } from "@/context/DrugContext";
@@ -36,7 +35,7 @@ export default function HealthDiary() {
   const { user } = useAuthState();
   const uid = paramUid || user?.uid;
 
-  const [reminders, setReminders] = useState<Reminder[]>(initialReminders);
+  const [reminders, setReminders] = useState<Reminder[]>([]);
   const [symptoms, setSymptoms] = useState("");
   const [mood, setMood] = useState("");
   const [activities, setActivities] = useState("");
@@ -55,7 +54,11 @@ export default function HealthDiary() {
   const monitoring =
     isMonitoring === "1" || (paramUid && paramUid !== user?.uid);
 
-  // Fetching data firebase
+  const [selectedDateKey, setSelectedDateKey] = useState(
+    selected
+      ? formatDateLocal(new Date(selected as Date))
+      : formatDateLocal(new Date())
+  );
 
   const { drugs } = useDrugs();
   const { appointments, remove } = useAppointments();
@@ -67,38 +70,40 @@ export default function HealthDiary() {
       day: "numeric",
     });
   }
-  const selectedDateKey = selected
-    ? formatDateLocal(new Date(selected as Date))
-    : formatDateLocal(new Date());
-
-  const todayDrugReminders = drugs
-    .filter((d) => d.date === selectedDateKey)
-    .map(convertDrugToReminder);
-
-  const todayAppointmentReminders: Reminder[] = appointments
-    .filter((a) => a.date === selectedDateKey)
-    .map((a) => ({
-      ...convertAppointment(a),
-      id: `appt-${a.id}`,
-      category: "appointment",
-      description: a.description ?? "",
-      completed: a.status === "done",
-    }));
-
-  const todayReminders: Reminder[] = [
-    ...todayDrugReminders,
-    ...todayAppointmentReminders,
-  ].sort((a, b) => a.timeLabel.localeCompare(b.timeLabel));
-  // console.log(todayAppointmentReminders);
-  console.log(selectedDateKey);
-  console.log(todayDrugReminders);
-  console.log("All drugs:", drugs);
-  // console.log("All appointments:", appointments);
 
   // Fetching Diary
   useEffect(() => {
     if (!uid) return;
 
+    setSelectedDateKey(
+      selected
+        ? formatDateLocal(new Date(selected as Date))
+        : formatDateLocal(new Date())
+    );
+
+    // Update reminders
+    const todayDrugReminders = drugs
+      .filter((d) => d.date === selectedDateKey)
+      .map(convertDrugToReminder);
+
+    const todayAppointmentReminders: Reminder[] = appointments
+      .filter((a) => a.date === selectedDateKey)
+      .map((a) => ({
+        ...convertAppointment(a),
+        id: `appt-${a.id}`,
+        category: "appointment",
+        description: a.description ?? "",
+        completed: a.status === "done",
+      }));
+
+    const allReminders: Reminder[] = [
+      ...todayDrugReminders,
+      ...todayAppointmentReminders,
+    ].sort((a, b) => a.timeLabel.localeCompare(b.timeLabel));
+
+    setReminders(allReminders);
+
+    // Fetch diary
     const fetchDiary = async () => {
       setLoading(true);
       const res = await fetchDiariesByDate(selectedDateKey, uid);
@@ -111,7 +116,7 @@ export default function HealthDiary() {
     };
 
     fetchDiary();
-  }, [selected, uid]);
+  }, [selected, uid, drugs, appointments, selected]);
 
   const diaryData = diaries[0];
 
@@ -155,9 +160,6 @@ export default function HealthDiary() {
       },
     });
   }, []);
-  const handleToggleReminder = useCallback((id: string) => {
-    console.log(id);
-  }, []);
   const handleDeleteAppointment = async (appointment: any) => {
     Alert.alert("Delete Appointment", `Delete "${appointment.title}"?`, [
       { text: "Cancel", style: "cancel" },
@@ -170,6 +172,9 @@ export default function HealthDiary() {
       },
     ]);
   };
+  const handleToggleReminder = useCallback((id: string) => {
+    console.log(id);
+  }, []);
 
   return (
     <SafeAreaView style={styles.dashboardContainer}>
@@ -203,7 +208,8 @@ export default function HealthDiary() {
           </TouchableOpacity>
         )}
 
-        <View>
+        <View style={{ width: "100%" }}>
+          {/* Date */}
           <View style={styles.dateBg}>
             <DateTimePicker
               mode="single"
@@ -213,6 +219,7 @@ export default function HealthDiary() {
             />
           </View>
 
+          {/* Schedule Header */}
           <View>
             {/* Schedeule */}
             <View style={styles.containerReminder}>
@@ -232,12 +239,12 @@ export default function HealthDiary() {
 
           {/* --- Map Reminder--- */}
           <View style={styles.section}>
-            {todayReminders.length === 0 ? (
+            {reminders.length === 0 ? (
               <Text style={{ textAlign: "center", color: "gray" }}>
                 No reminders today
               </Text>
             ) : (
-              todayReminders.map((reminder) => (
+              reminders.slice(0, 3).map((reminder) => (
                 <View key={reminder.id} style={styles.reminderRow}>
                   {/* Time label di kiri */}
                   <View style={styles.reminderTimesCard}>
@@ -267,6 +274,7 @@ export default function HealthDiary() {
                         showTime={false}
                         showLocation={false}
                         showDetails={false}
+                        showArrow={true}
                       />
                     )}
                   </View>
@@ -275,9 +283,16 @@ export default function HealthDiary() {
             )}
 
             {/* View All */}
-            {todayReminders.length > 0 && (
+            {reminders.length > 3 && (
               <TouchableOpacity
-                onPress={() => router.push("/hcd/diary/remindersAll")}
+                onPress={() =>
+                  router.push({
+                    pathname: "/hcd/diary/remindersAll",
+                    params: {
+                      date: selectedDateKey,
+                    },
+                  })
+                }
                 style={{ marginTop: 8 }}
               >
                 <Text style={styles.seeAllReminder}>View All</Text>
