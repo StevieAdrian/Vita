@@ -1,8 +1,14 @@
-import { initialReminders } from "@/./constants/initialData";
 import { EarlyGoodCard } from "@/components/analysis/EarlyCard";
 import UpHeader from "@/components/hcd/UpHeader";
-import { ReminderCard } from "@/components/meditrack-forms/Reminder";
+import { AppointmentCard } from "@/components/meditrack-forms/AppointmentCard";
+import {
+  convertDrugToReminder,
+  ReminderCard,
+} from "@/components/meditrack-forms/Reminder";
+import { convertAppointment } from "@/components/utils/DateUtils";
 import { Reminder } from "@/constants/reminder";
+import { useAppointments } from "@/context/AppointmentContext";
+import { useDrugs } from "@/context/DrugContext";
 import { useAuthState } from "@/hooks/useAuthState";
 import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
 import { useEarlyWarning } from "@/hooks/useEarlyWarning";
@@ -12,9 +18,9 @@ import { styles } from "@/styles/hcd/dashboard.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
 import { getEarlyWarning } from "@/utils/getEarlyWarning";
 import dayjs from "dayjs";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Text, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import {
   SafeAreaView,
@@ -24,13 +30,17 @@ import DateTimePicker, { DateType } from "react-native-ui-datepicker";
 
 export default function DashboardHome() {
   const insets = useSafeAreaInsets();
+  const { user } = useAuthState();
+  const { uid: paramUid, isMonitoring } = useLocalSearchParams<{
+    uid?: string;
+    isMonitoring?: string;
+  }>();
+  const uid = paramUid || user?.uid;
   const [selected, setSelected] = useState<DateType>(new Date());
   const datePickerStyle = useDatePickerStyles(
     selected instanceof Date ? selected : new Date()
   );
-  const [reminders, setReminders] = useState<Reminder[]>(initialReminders);
   const { data } = useUserProfile();
-  const { user } = useAuthState();
   const { warnings, loading: loadingWarning } = useEarlyWarning(
     user?.uid ?? ""
   );
@@ -40,6 +50,18 @@ export default function DashboardHome() {
     attention: 0,
     total: 0,
   });
+
+  const [reminders, setReminders] = useState<Reminder[]>([]);
+
+  const { drugs } = useDrugs();
+  const { appointments, remove } = useAppointments();
+  function formatDateLocals(date: Date) {
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  }
 
   useEffect(() => {
     async function fetchFamilyStats() {
@@ -65,7 +87,51 @@ export default function DashboardHome() {
       setFamilyStats({ healthy, attention, total: members.length });
     }
     fetchFamilyStats();
-  }, [members]);
+
+    if (!uid) return;
+
+    setSelectedDateKey(
+      selected
+        ? formatDateLocals(new Date(selected as Date))
+        : formatDateLocals(new Date())
+    );
+
+    const allReminders: Reminder[] = [
+      ...drugs.map(convertDrugToReminder),
+      ...appointments.map(
+        (a): Reminder => ({
+          ...convertAppointment(a),
+          id: `appt-${a.id}`,
+          category: "appointment",
+          description: a.description ?? "",
+          completed: a.status === "done",
+        })
+      ),
+    ];
+    const now = new Date();
+    const upcomingReminders = allReminders
+      .filter((r) => {
+        if (!r.date) return "No Date";
+
+        const reminderDateTime = new Date(
+          `${r.date} ${r.timeLabel ?? "00:00"}`
+        );
+
+        return !isNaN(reminderDateTime.getTime()) && reminderDateTime >= now;
+      })
+      .sort((a, b) => {
+        const dateTimeA = new Date(
+          `${a.date ?? ""} ${a.timeLabel ?? "00:00"}`
+        ).getTime();
+        const dateTimeB = new Date(
+          `${b.date ?? ""} ${b.timeLabel ?? "00:00"}`
+        ).getTime();
+        return dateTimeA - dateTimeB;
+      })
+      .slice(0, 3);
+
+    setReminders(upcomingReminders);
+  }, [members, selected, uid, drugs, appointments]);
 
   const handleToggleReminder = useCallback((id: string) => {
     setReminders((prev) =>
@@ -77,13 +143,62 @@ export default function DashboardHome() {
     );
   }, []);
 
-  function formatDateLocal(date: Date) {
-    return date.toLocaleDateString("en-CA");
-  }
-
   const warningCount = warnings.filter(
     (warn) => warn.status && !warn.status.toLowerCase().includes("good")
   ).length;
+
+  function formatDateLocal(date: Date) {
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  }
+  const handleEditDrug = useCallback((reminder: Reminder) => {
+    router.push({
+      pathname: "/meditrack/drugForm",
+      params: {
+        editMode: "true",
+        drugId: reminder.id,
+      },
+    });
+  }, []);
+
+  const handleEditAppointment = useCallback((appointment: any) => {
+    router.push({
+      pathname: "/meditrack/appointmentForm",
+      params: {
+        editMode: "true",
+        appointmentId: appointment.id,
+      },
+    });
+  }, []);
+  const handleSeeDetail = useCallback((appointment: any) => {
+    router.push({
+      pathname: "/meditrack/appointmentForm",
+      params: {
+        editMode: "true",
+        appointmentId: appointment.id,
+      },
+    });
+  }, []);
+  const handleDeleteAppointment = async (appointment: any) => {
+    Alert.alert("Delete Appointment", `Delete "${appointment.title}"?`, [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: async () => {
+          await remove(appointment.id);
+        },
+      },
+    ]);
+  };
+  const [selectedDateKey, setSelectedDateKey] = useState(
+    selected
+      ? formatDateLocal(new Date(selected as Date))
+      : formatDateLocal(new Date())
+  );
 
   return (
     <SafeAreaView style={styles.dashboardContainer}>
@@ -92,6 +207,7 @@ export default function DashboardHome() {
           styles.scrollContent,
           { paddingBottom: NAV_ITEMS + insets.bottom + 16 },
         ]}
+        style={{ flex: 1, backgroundColor: "transparent" }}
         showsVerticalScrollIndicator={false}
       >
         <UpHeader title="" showProfile={true} />
@@ -139,7 +255,7 @@ export default function DashboardHome() {
           <View>
             <View style={styles.containerReminder}>
               <View style={styles.captionSubtitle}>
-                <Text style={styles.subtitle}>Upcoming Reminder</Text>
+                <Text style={styles.subtitle}>Upcoming Reminders</Text>
                 <TouchableOpacity style={styles.subtitleContainerText}>
                   <Text
                     style={styles.seeAllContainer}
@@ -148,25 +264,77 @@ export default function DashboardHome() {
                     See All
                   </Text>
                   <Image
-                    source={require("@/assets/utilsIcon/arrow-left.png")}
-                    style={styles.icon}
+                    source={require("@/assets/utilsIcon/arrow-right-white.svg")}
                   />
                 </TouchableOpacity>
               </View>
 
-              <Text style={styles.reminderText}>2 Reminder</Text>
+              <Text style={styles.reminderText}>
+                {reminders.length} Reminders
+              </Text>
             </View>
 
             {/* --- Map Reminder Max 3--- */}
             <View style={styles.containerContent}>
-              {reminders.map((reminder) => (
-                <ReminderCard
-                  key={reminder.id}
-                  reminder={reminder}
-                  onToggle={handleToggleReminder}
-                  showDescription={false}
-                />
-              ))}
+              {reminders.length === 0 ? (
+                <Text style={{ textAlign: "center", color: "gray" }}>
+                  No reminders today
+                </Text>
+              ) : (
+                reminders.slice(0, 3).map((reminder) => (
+                  <View key={reminder.id} style={styles.reminderRow}>
+                    {/* Time label di kiri */}
+                    <View style={styles.reminderTimesCard}>
+                      <Text style={styles.reminderTime}>
+                        {reminder.timeLabel}
+                      </Text>
+                    </View>
+
+                    {/* Card */}
+                    <View style={styles.reminderCardS}>
+                      {reminder.category === "drug" ? (
+                        <ReminderCard
+                          key={reminder.id}
+                          reminder={reminder}
+                          onToggle={handleToggleReminder}
+                          showActions={true}
+                          onEdit={handleEditDrug}
+                        />
+                      ) : (
+                        <AppointmentCard
+                          key={reminder.id}
+                          appointment={reminder}
+                          onPressDetail={() => handleSeeDetail(reminder)}
+                          onEdit={handleEditAppointment}
+                          onDelete={handleDeleteAppointment}
+                          showActions={true}
+                          showTime={false}
+                          showLocation={false}
+                          showDetails={false}
+                          showArrow={true}
+                        />
+                      )}
+                    </View>
+                  </View>
+                ))
+              )}
+
+              {/* View All */}
+              {reminders.length > 3 && (
+                <TouchableOpacity
+                  onPress={() =>
+                    router.push({
+                      pathname: "/hcd/diary/remindersAll",
+                      params: {
+                        date: selectedDateKey,
+                      },
+                    })
+                  }
+                  style={{ marginTop: 8 }}
+                >
+                  <Text style={styles.seeAllReminder}>View All</Text>
+                </TouchableOpacity>
+              )}
             </View>
 
             {/* Digital Biomarker */}
@@ -243,10 +411,10 @@ export default function DashboardHome() {
                   <View style={styles.titleHealth}>
                     <View style={styles.containerDigit}>
                       <Image
-                        source={require("@/assets/hcd/healthWarning.png")}
+                        source={require("@/assets/hcd/healthWarning.svg")}
                         style={{ width: 34, height: 35 }}
                       />
-                      <Text style={styles.titleDigitBio}>
+                      <Text style={styles.titleDigitWarning}>
                         {warningCount > 0
                           ? `${warningCount} Health Early Warning`
                           : "No Health Early Warning"}

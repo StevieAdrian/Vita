@@ -1,3 +1,4 @@
+import { COLORS } from "@/constants/colors";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
@@ -14,15 +15,17 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
-    zIndex:1
+    zIndex: 1,
   },
   icon: {
     width: 24,
     height: 24,
     resizeMode: "contain",
+    transform: [{ rotate: "180deg" }],
   },
 
   title: {
+    color: COLORS.white,
     fontSize: 24,
     fontWeight: 600,
     textAlign: "center",

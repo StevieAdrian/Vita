@@ -3,22 +3,21 @@ import { COLORS } from "../../constants/colors";
 
 export const styles = StyleSheet.create({
   container: {
-    borderRadius: 18,
+    borderRadius: 10,
     padding: 16,
-    marginBottom: 12,
     flexDirection: "row",
     justifyContent: "flex-start",
     gap: 12,
   },
   leftColumn: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     gap: 12,
     flex: 1,
   },
   iconWrapper: {
     backgroundColor: COLORS.white,
-    borderRadius: 12,
+    borderRadius: 100,
     width: 36,
     height: 36,
     alignItems: "center",
@@ -86,10 +85,6 @@ export const styles = StyleSheet.create({
   actionButton: {
     padding: 8,
   },
-  // icon: {
-  //   width: 15,
-  //   height: 15,
-  // },
   rightColumn: {
     alignItems: "flex-end",
     gap: 8,

@@ -221,7 +221,7 @@ export default function HealthDiary() {
 
           {/* Schedule Header */}
           <View>
-            {/* Schedeule */}
+            {/* Schedule */}
             <View style={styles.containerReminder}>
               <View style={styles.captionSubtitle}>
                 <Text style={styles.subtitle}>Schedule</Text>

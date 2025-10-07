@@ -76,4 +76,12 @@ export const styles = StyleSheet.create({
     height: "100%",
     resizeMode: "contain",
   },
+  forgotContainer: {
+    alignSelf: "flex-end", 
+    marginBottom: 10
+  },
+  forgotText: {
+    color: COLORS.primary, 
+    fontWeight: "500"
+  }
 });

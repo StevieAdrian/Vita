@@ -7,10 +7,16 @@ import { DrugProvider } from "@/context/DrugContext";
 import { FamilyViewProvider } from "@/context/FamilyViewContext";
 import { useAuthState } from "@/hooks/useAuthState";
 import { useFonts } from "expo-font";
-import { Slot, SplashScreen, usePathname, useRouter } from "expo-router";
+import { Slot, usePathname, useRouter } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+
+SplashScreen.setOptions({
+  duration: 1000,
+  fade: true,
+});
 
 SplashScreen.preventAutoHideAsync();
 
@@ -31,7 +37,10 @@ function RootContent() {
 
   useEffect(() => {
     if (fontsLoaded) {
+      console.log("✅ Fonts loaded, hiding splash screen...");
       SplashScreen.hideAsync();
+    } else {
+      console.log("⏳ Fonts not loaded yet, splash still showing...");
     }
   }, [fontsLoaded]);
 

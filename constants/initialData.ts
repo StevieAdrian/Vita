@@ -1,5 +1,4 @@
 import { Appointment } from "./appointment";
-import { Reminder } from "./reminder";
 export const initialAppointments: Appointment[] = [
   {
     id: "app-1",
@@ -36,32 +35,5 @@ export const initialAppointments: Appointment[] = [
     dateLabel: "Sept, 1",
     timeLabel: "15:00 PM",
     status: "history",
-  },
-];
-
-export const initialReminders: Reminder[] = [
-  {
-    id: "rem-1",
-    title: "Panadol 20mg",
-    description: "Pain relief",
-    timeLabel: "Today, 12:00 PM",
-    completed: false,
-    category: "drug",
-  },
-  {
-    id: "rem-2",
-    title: "Panadol 20mg",
-    description: "Pain relief",
-    timeLabel: "Today, 20:00 PM",
-    completed: false,
-    category: "drug",
-  },
-  {
-    id: "rem-3",
-    title: "Control Checkup",
-    description: "Dr. Veni",
-    timeLabel: "Tomorrow, 13:00 PM",
-    completed: false,
-    category: "appointment",
   },
 ];

@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   containerButton: { paddingTop: 20 },
   buttonStyle: {
     borderRadius: 5,
-    backgroundColor: COLORS.primary3rd,
+    backgroundColor: COLORS.gray2,
     paddingVertical: 15,
     paddingHorizontal: 5,
   },
@@ -16,6 +16,6 @@ export const styles = StyleSheet.create({
     textAlign: "center",
   },
   buttonActive: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.black,
   },
 });

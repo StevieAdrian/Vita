@@ -17,7 +17,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
 }) => {
   return (
     <View style={styles.container}>
-      <View>
+      <View style={styles.subText}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.subtitle}>{countLabel}</Text>
       </View>
