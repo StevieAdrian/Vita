@@ -1,5 +1,5 @@
-import { Dimensions, StyleSheet } from "react-native";
 import { COLORS } from "@/constants/colors";
+import { Dimensions, StyleSheet } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
@@ -13,8 +13,8 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.primary,
   },
-  content: {
-    flex: 1,
+  scrollContent: {
+    flexGrow: 1,
     paddingHorizontal: scaleWidth(24),
     paddingTop: scaleHeight(40),
     paddingBottom: scaleHeight(30),
@@ -51,8 +51,7 @@ export const styles = StyleSheet.create({
     borderRadius: scaleHeight(4),
   },
   selectionContainer: {
-    flex: 1,
-    justifyContent: "center",
+    justifyContent: "space-between",
     gap: scaleHeight(16),
   },
   optionsContainer: {

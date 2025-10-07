@@ -13,9 +13,11 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.primary,
   },
-  scrollContainer: {
+  scrollContent: {
     flexGrow: 1,
-    paddingBottom: scaleHeight(20),
+    paddingHorizontal: scaleWidth(24),
+    paddingTop: scaleHeight(40),
+    paddingBottom: scaleHeight(30),
   },
   header: {
     backgroundColor: COLORS.primary,
@@ -91,7 +93,7 @@ export const styles = StyleSheet.create({
     height: 0.1,
     backgroundColor: COLORS.gray1,
     width: "100%",
-    marginTop: scaleHeight(12), 
+    marginTop: scaleHeight(12),
     marginBottom: scaleHeight(12),
   },
   label: {
