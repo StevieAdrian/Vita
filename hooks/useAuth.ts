@@ -9,6 +9,7 @@ import {
 } from "firebase/auth";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { useState } from "react";
+import { sendPasswordResetEmail } from "firebase/auth";
 
 async function checkUserExistsInDatabase(email: string): Promise<boolean> {
   try {
@@ -91,5 +92,15 @@ export function useAuth() {
     }
   };
 
-  return { signIn, signInWithGoogle, loading, logout };
+  const resetPassword = async (email: string) => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+      return true;
+    } catch (err) {
+      console.error("Error resetting password:", err);
+      return false;
+    }
+  };
+
+  return { signIn, signInWithGoogle, loading, logout, resetPassword };
 }
