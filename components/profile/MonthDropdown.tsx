@@ -1,3 +1,4 @@
+import { MONTHS } from "@/constants/months";
 import { styles } from "@/styles/component/monthdropdown.styles";
 import React, { useState } from "react";
 import {
@@ -9,28 +10,14 @@ import {
   View,
 } from "react-native";
 
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
-export default function MonthDropdown() {
+export default function MonthDropdown({onSelect}: { onSelect?: (month: string) => void}) {
   const [selectedMonth, setSelectedMonth] = useState("January");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleSelectMonth = (month: string) => {
     setSelectedMonth(month);
     setIsModalVisible(false);
+    onSelect?.(month);
   };
 
   return (
