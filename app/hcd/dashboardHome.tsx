@@ -207,6 +207,7 @@ export default function DashboardHome() {
           styles.scrollContent,
           { paddingBottom: NAV_ITEMS + insets.bottom + 16 },
         ]}
+        style={{ flex: 1, backgroundColor: "transparent" }}
         showsVerticalScrollIndicator={false}
       >
         <UpHeader title="" showProfile={true} />
@@ -263,8 +264,7 @@ export default function DashboardHome() {
                     See All
                   </Text>
                   <Image
-                    source={require("@/assets/utilsIcon/arrow-left.png")}
-                    style={styles.icon}
+                    source={require("@/assets/utilsIcon/arrow-right-white.svg")}
                   />
                 </TouchableOpacity>
               </View>
@@ -411,10 +411,10 @@ export default function DashboardHome() {
                   <View style={styles.titleHealth}>
                     <View style={styles.containerDigit}>
                       <Image
-                        source={require("@/assets/hcd/healthWarning.png")}
+                        source={require("@/assets/hcd/healthWarning.svg")}
                         style={{ width: 34, height: 35 }}
                       />
-                      <Text style={styles.titleDigitBio}>
+                      <Text style={styles.titleDigitWarning}>
                         {warningCount > 0
                           ? `${warningCount} Health Early Warning`
                           : "No Health Early Warning"}

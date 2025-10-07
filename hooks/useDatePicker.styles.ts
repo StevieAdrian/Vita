@@ -2,8 +2,6 @@ import { useDefaultStyles } from "react-native-ui-datepicker";
 
 export const useDatePickerStyles = (selectedDate: Date) => {
   const defaultStyles = useDefaultStyles();
-
-  const today = new Date();
   return {
     ...defaultStyles,
     day_label: { color: "black" },

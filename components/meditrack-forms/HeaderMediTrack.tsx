@@ -40,7 +40,7 @@ export const ReminderToggle: React.FC<ReminderToggleProps> = ({
               styles.button,
               {
                 backgroundColor:
-                  option.id === "appointment" ? COLORS.primary : COLORS.white,
+                  option.id === "appointment" ? COLORS.black : COLORS.white,
               },
             ]}
             onPress={() => handlePress(option.id)}

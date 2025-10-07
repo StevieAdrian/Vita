@@ -73,7 +73,7 @@ export const styles = StyleSheet.create({
   },
 
   subtitle: {
-    color: COLORS.black,
+    color: COLORS.white,
     fontFamily: "Inter-SemiBold",
     fontSize: 20,
   },
@@ -88,8 +88,8 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   seeAllContainer: {
-    color: COLORS.primary,
-    fontFamily: "Inter-Medium",
+    color: COLORS.white,
+    fontFamily: "Inter-Regular",
     fontSize: 16,
   },
   seeAllReminder: {
@@ -105,7 +105,7 @@ export const styles = StyleSheet.create({
   },
   reminderListContainer: {
     marginTop: 10,
-    gap: 12, // Jarak antar item
+    gap: 12, 
   },
   icon: {
     transform: [{ rotate: "180deg" }],
@@ -317,7 +317,7 @@ export const styles = StyleSheet.create({
     marginTop: 10,
   },
   latestText: {
-    color: COLORS.gray1,
+    color: COLORS.gray4,
     fontFamily: "Inter-Regular",
     fontSize: 14,
     marginTop: 2,

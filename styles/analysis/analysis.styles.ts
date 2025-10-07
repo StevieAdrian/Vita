@@ -6,13 +6,13 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.primary,
     position: "absolute",
+    paddingHorizontal: 20,
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
   },
   scrollContent: {
-    paddingHorizontal: 35,
     paddingBottom: 24,
     flexGrow: 1,
   },
@@ -59,7 +59,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     padding: 16,
-    marginVertical: 10,
+    marginVertical: 5,
   },
   goodCard: {
     width: "100%",
@@ -68,17 +68,20 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     padding: 16,
-    marginVertical: 10,
+    marginTop: 10,
   },
   warningHeader: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
-    gap: 10,
+    gap: 20,
+  },
+  warningText: {
+    gap: 1,
   },
   warningIcon: {
-    width: 28,
-    height: 28,
+    width: 35,
+    height: 35,
   },
   warningTitle: {
     fontFamily: "Inter-SemiBold",
@@ -87,7 +90,7 @@ export const styles = StyleSheet.create({
   },
   warningStatus: {
     fontFamily: "Inter-Regular",
-    fontSize: 13,
+    fontSize: 14,
     color: COLORS.red,
   },
   goodStatus: {

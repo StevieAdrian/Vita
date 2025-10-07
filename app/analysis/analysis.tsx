@@ -41,6 +41,7 @@ export default function Analysis() {
           styles.scrollContent,
           { paddingBottom: NAV_ITEMS + insets.bottom + 16 },
         ]}
+        showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
           <UpHeader title="Health Analysis" showProfile={false} />

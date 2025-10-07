@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 16,
     marginHorizontal: 6,
-    borderRadius: 12,
+    borderRadius: 10,
     backgroundColor: COLORS.white,
     width: "48%",
     shadowColor: "#000",
@@ -28,9 +28,8 @@ export const styles = StyleSheet.create({
   label: {
     marginTop: 8,
     textAlign: "center",
-    color: COLORS.black,
-    fontWeight: "500",
+    color: COLORS.black,  
     fontSize: 14,
-    fontFamily: "Inter-Regular",
+    fontFamily: "Inter-Medium",
   },
 });

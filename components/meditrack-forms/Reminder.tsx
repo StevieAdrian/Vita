@@ -61,11 +61,11 @@ const getCardBackground = (reminderType: ReminderCategory | "other") => {
 const getReminderIcon = (reminderType: ReminderCategory | "other") => {
   switch (reminderType) {
     case "drug":
-      return require("@/assets/mediTrack/pill.png");
+      return require("@/assets/mediTrack/pill.svg");
     case "appointment":
-      return require("@/assets/mediTrack/medicalCheckUp.png");
+      return require("@/assets/mediTrack/medicalCheckUp.svg");
     default:
-      return require("@/assets/mediTrack/pill.png");
+      return require("@/assets/mediTrack/pill.svg");
   }
 };
 

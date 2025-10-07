@@ -3,27 +3,28 @@ import { COLORS } from "../../constants/colors";
 
 export const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 6,
     paddingBottom: 12,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-end",
+    alignItems: "center",
+  },
+  subText: {
+    gap: 2,
   },
   title: {
     color: COLORS.black,
-    fontSize: 18,
-    fontWeight: "500",
-    fontFamily: "Inter-Bold",
+    fontSize: 16,
+    fontFamily: "Inter-SemiBold",
   },
   subtitle: {
     color: COLORS.primary,
-    fontSize: 13,
-    fontFamily: "Inter-Bold",
+    fontSize: 14,
+    fontFamily: "Inter-Regular",
   },
   subtext: {
     color: COLORS.black,
-    fontSize: 13,
-    fontFamily: "Inter-SemiBold",
+    fontSize: 14,
+    fontFamily: "Inter-Medium",
   },
   actionRow: {
     flexDirection: "row",

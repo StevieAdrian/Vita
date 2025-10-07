@@ -9,7 +9,6 @@ export const styles = StyleSheet.create({
     width: "100%",
     paddingTop: 50,
     paddingBottom: 25,
-    backgroundColor: COLORS.background2nd,
   },
   notifications: {},
   leftSide: {
@@ -35,7 +34,7 @@ export const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     zIndex: 1,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.black,
     borderRadius: 41,
     width: 20,
     height: 20,
@@ -48,7 +47,7 @@ export const styles = StyleSheet.create({
     fontSize: 12,
   },
   textHeader: {
-    color: COLORS.black,
+    color: COLORS.white,
     fontFamily: "Inter-SemiBold",
     fontSize: 24,
   },

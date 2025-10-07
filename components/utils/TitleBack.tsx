@@ -18,7 +18,7 @@ export default function TitleBack({ title, onPress }: TitleBackProps) {
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={handlePress}>
         <Image
-          source={require("@/assets/utilsIcon/arrow-left.png")}
+          source={require("@/assets/utilsIcon/arrow-right-white.svg")}
           style={styles.icon}
         />
       </TouchableOpacity>

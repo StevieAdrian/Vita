@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
-    borderRadius: 10,
+    borderRadius: 5,
     paddingHorizontal: 20,
     paddingVertical: 20,
     flexDirection: "row",
@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
   },
   leftColumn: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     gap: 12,
     flex: 1,
   } as const,

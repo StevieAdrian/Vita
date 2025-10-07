@@ -11,6 +11,9 @@ export const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
+  header: {
+    width: "100%",
+  },
   scrollContent: {
     paddingHorizontal: 16,
     paddingBottom: 24,
@@ -60,7 +63,7 @@ export const styles = StyleSheet.create({
   section: {
     marginTop: 24,
     padding: 18,
-    borderRadius: 20,
+    borderRadius: 10,
     backgroundColor: COLORS.white,
     shadowColor: "#000",
     shadowOpacity: 0.05,

@@ -33,6 +33,6 @@ export const COLORS = {
   // Other Neutrals
   white: "#FFFFFF",
   black: "#181818",
-  background2nd: "#E9F3FF",
+  background2nd: "#1A73E8",
   tosca: "#0D887C",
 };

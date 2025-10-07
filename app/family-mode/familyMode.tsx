@@ -1,20 +1,20 @@
 import UpHeader from "@/components/hcd/UpHeader";
+import { useFamilyView } from "@/context/FamilyViewContext";
+import { useAuthState } from "@/hooks/useAuthState";
+import { useEarlyWarning } from "@/hooks/useEarlyWarning";
 import { useFamilyMembers } from "@/hooks/useFamilyMembers";
 import { useIncomingRequests } from "@/hooks/useIncomingRequest";
+import { useLatestHealthDiary } from "@/hooks/useLatestHealthDiary";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
 import { router } from "expo-router";
+import { useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
+import { useFamilyActions } from "../../hooks/useFamilyActions";
 import { styles } from "../../styles/family-mode/familyMode.styles";
-import { useState } from "react";
-import { useFamilyActions } from "../../hooks/useFamilyActions"
-import { useFamilyView } from "@/context/FamilyViewContext";
-import { useAuthState } from "@/hooks/useAuthState";
-import { useLatestHealthDiary } from "@/hooks/useLatestHealthDiary";
-import { useEarlyWarning } from "@/hooks/useEarlyWarning";
 
 export default function FamilyMode() {
   const insets = useSafeAreaInsets();
@@ -44,7 +44,7 @@ export default function FamilyMode() {
             <Text style={styles.requestSubtitle}>{count} Request(s)</Text>
           </View>
           <Image
-            source={require("@/assets/utilsIcon/chevron-right-black.png")}
+            source={require("@/assets/mediTrack/arrow-right.svg")}
             style={styles.chevron}
           />
         </TouchableOpacity>
@@ -56,7 +56,7 @@ export default function FamilyMode() {
             {editMode ? (
               <TouchableOpacity onPress={() => setEditMode(false)}>
                 <Image
-                  source={require("@/assets/family/red-decline.png")}
+                  source={require("@/assets/mediTrack/remove.svg")}
                   style={styles.memberIcon}
                   resizeMode="contain"
                 />
@@ -67,14 +67,14 @@ export default function FamilyMode() {
                   onPress={() => router.push("/family-mode/addFamily")}
                 >
                   <Image
-                    source={require("@/assets/utilsIcon/add-icon.png")}
+                    source={require("@/assets/mediTrack/plus.svg")}
                     style={styles.memberIcon}
                     resizeMode="contain"
                   />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => setEditMode(true)}>
                   <Image
-                    source={require("@/assets/utilsIcon/edit-icon.png")}
+                    source={require("@/assets/mediTrack/edit.svg")}
                     style={styles.memberIcon}
                     resizeMode="contain"
                   />
@@ -107,12 +107,20 @@ type MemberStatCardProps = {
   router: any;
 };
 
-function MemberStatCard({ m, editMode, removeMember, setViewingUid, router }: MemberStatCardProps) {
-  const { data: latestDiary, loading: loadingDiary } = useLatestHealthDiary(m.uid);
+function MemberStatCard({
+  m,
+  editMode,
+  removeMember,
+  setViewingUid,
+  router,
+}: MemberStatCardProps) {
+  const { data: latestDiary, loading: loadingDiary } = useLatestHealthDiary(
+    m.uid
+  );
   const { warnings = [], loading: loadingWarning } = useEarlyWarning(m.uid);
 
   const warningCount = warnings.filter(
-    warn => warn.status && !warn.status.toLowerCase().includes("good")
+    (warn) => warn.status && !warn.status.toLowerCase().includes("good")
   ).length;
 
   return (
@@ -120,7 +128,9 @@ function MemberStatCard({ m, editMode, removeMember, setViewingUid, router }: Me
       <View style={styles.memberHeader}>
         <Image
           source={{
-            uri: m.avatarUrl || "https://ui-avatars.com/api/?name=" + m.displayName,
+            uri:
+              m.avatarUrl ||
+              "https://ui-avatars.com/api/?name=" + m.displayName,
           }}
           style={styles.memberAvatar}
         />
@@ -131,11 +141,17 @@ function MemberStatCard({ m, editMode, removeMember, setViewingUid, router }: Me
       </View>
 
       {editMode && (
-        <TouchableOpacity style={styles.deleteBtn} onPress={async () => {
-          const res = await removeMember(m.uid, m.relation);
-          if (!res?.success) console.log("debug err: ", res?.message)
-        }}>
-          <Image source={require("@/assets/family/delete-icon.png")} style={styles.deleteIcon}/>
+        <TouchableOpacity
+          style={styles.deleteBtn}
+          onPress={async () => {
+            const res = await removeMember(m.uid, m.relation);
+            if (!res?.success) console.log("debug err: ", res?.message);
+          }}
+        >
+          <Image
+            source={require("@/assets/family/delete-icon.png")}
+            style={styles.deleteIcon}
+          />
         </TouchableOpacity>
       )}
 
@@ -147,8 +163,10 @@ function MemberStatCard({ m, editMode, removeMember, setViewingUid, router }: Me
               {loadingDiary
                 ? "-"
                 : latestDiary
-                  ? `${latestDiary.systolic ?? "-"} / ${latestDiary.diastolic ?? "-"}`
-                  : "-"}
+                ? `${latestDiary.systolic ?? "-"} / ${
+                    latestDiary.diastolic ?? "-"
+                  }`
+                : "-"}
             </Text>
             <Text style={styles.statLabel}>Blood Pressure</Text>
           </View>
@@ -160,8 +178,8 @@ function MemberStatCard({ m, editMode, removeMember, setViewingUid, router }: Me
               {loadingDiary
                 ? "-"
                 : latestDiary
-                  ? `${latestDiary.heartRate ?? "-"} bpm`
-                  : "-"}
+                ? `${latestDiary.heartRate ?? "-"} bpm`
+                : "-"}
             </Text>
             <Text style={styles.statLabel}>Heart Rate</Text>
           </View>
@@ -175,17 +193,18 @@ function MemberStatCard({ m, editMode, removeMember, setViewingUid, router }: Me
             style={styles.alertIcon}
           />
           <Text style={[styles.alertText, { color: "red" }]}>
-            {loadingWarning
-              ? "-"
-              : `${warningCount} Alert Need Attentions`}
+            {loadingWarning ? "-" : `${warningCount} Alert Need Attentions`}
           </Text>
         </View>
       )}
 
-      <TouchableOpacity style={styles.monitorBtn} onPress={() => {
-        setViewingUid(m.uid);
-        router.push("/family-mode/monitorDashboard")
-      }}>
+      <TouchableOpacity
+        style={styles.monitorBtn}
+        onPress={() => {
+          setViewingUid(m.uid);
+          router.push("/family-mode/monitorDashboard");
+        }}
+      >
         <Text style={styles.monitorBtnText}>Monitor Account</Text>
       </TouchableOpacity>
     </View>
