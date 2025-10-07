@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
-import { useAuthState } from "./useAuthState";
-import { getHealthDiaries } from "../services/healthDiary.service";
-import { getAppointmentsByUser } from "../services/appointment.service";
-import { Timestamp } from "firebase/firestore";
 import dayjs from "dayjs";
-import { filterDataByMonth, calcMetric } from "../utils/reportUtils";
+import { useEffect, useState } from "react";
+import { getAppointmentsByUser } from "../services/appointment.service";
+import { getHealthDiaries } from "../services/healthDiary.service";
+import { calcMetric, filterDataByMonth, formatDate } from "../utils/reportUtils";
+import { useAuthState } from "./useAuthState";
 
 export function useMonthlyReport(selectedMonth: string) {
   const { user } = useAuthState();
@@ -22,7 +21,8 @@ export function useMonthlyReport(selectedMonth: string) {
           getAppointmentsByUser(user.uid),
         ]);
 
-        const { strt, end, filteredDiaries, filteredAppointments } = filterDataByMonth(selectedMonth, diaries, appointments);
+        const { strt, end, filteredDiaries, filteredAppointments } =
+          filterDataByMonth(selectedMonth, diaries, appointments);
 
         const bloodSugar = calcMetric(filteredDiaries, "bloodSugar");
         const heartRate = calcMetric(filteredDiaries, "heartRate");
@@ -37,17 +37,38 @@ export function useMonthlyReport(selectedMonth: string) {
         };
 
         setReportData({
-          bloodSugar,
-          bloodPressure,
-          heartRate,
-          weight,
+          bloodSugar: {
+            ...bloodSugar,
+            highDate: bloodSugar.highDate,
+            lowDate: bloodSugar.lowDate,
+          },
+          bloodPressure: {
+            ...bloodPressure,
+            systolicHighDate: systolic.highDate,
+            systolicLowDate: systolic.lowDate,
+            diastolicHighDate: diastolic.highDate,
+            diastolicLowDate: diastolic.lowDate,
+          },
+          heartRate: {
+            ...heartRate,
+            highDate: heartRate.highDate,
+            lowDate: heartRate.lowDate,
+          },
+          weight: {
+            ...weight,
+            highDate: weight.highDate,
+            lowDate: weight.lowDate,
+          },
           appointments: filteredAppointments.map((a: any) => ({
             date: dayjs(a.date).format("MMMM D, YYYY"),
-            desc: `${a.title || a.desc || "Appointment"} - ${
-              a.location || ""
-            }`,
+            desc: `${a.title || a.desc || "Appointment"} - ${a.location || ""}`,
             status: a.status || "—",
           })),
+          update: filteredDiaries[0]?.updatedAt
+            ? formatDate(filteredDiaries[0].updatedAt)
+            : filteredDiaries[0]?.createdAt
+            ? formatDate(filteredDiaries[0].createdAt)
+            : "",
           period: `${strt.format("MMMM D, YYYY")} - ${end.format(
             "MMMM D, YYYY"
           )}`,
