@@ -112,7 +112,7 @@ export const AppointmentProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useAppointments = () => {
   const context = useContext(AppointmentContext);
   if (!context) {
-    throw new Error(context);
+    throw new Error("Error");
   }
   return context;
 };

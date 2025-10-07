@@ -42,6 +42,7 @@ export const DrugProvider: React.FC<{ children: React.ReactNode }> = ({
       try {
         const data = await getDrugByUser(user.uid);
         setDrugs(data);
+        console.log(data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -131,7 +132,7 @@ export const DrugProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useDrugs = () => {
   const context = useContext(DrugContext);
   if (!context) {
-    throw new Error(context);
+    throw new Error("ErrorDrug");
   }
   return context;
 };

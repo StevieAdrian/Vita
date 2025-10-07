@@ -1,7 +1,9 @@
 import BottomNav from "@/components/utils/BottomNav";
 import { Fonts } from "@/constants/fonts";
 import { NAV_ITEMS } from "@/constants/navItems";
+import { AppointmentProvider } from "@/context/AppointmentContext";
 import { AuthContext } from "@/context/AuthContext";
+import { DrugProvider } from "@/context/DrugContext";
 import { FamilyViewProvider } from "@/context/FamilyViewContext";
 import { useAuthState } from "@/hooks/useAuthState";
 import { useFonts } from "expo-font";
@@ -66,7 +68,11 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <AuthContext>
         <FamilyViewProvider>
-          <RootContent />
+          <AppointmentProvider>
+            <DrugProvider>
+              <RootContent />
+            </DrugProvider>
+          </AppointmentProvider>
         </FamilyViewProvider>
       </AuthContext>
     </GestureHandlerRootView>

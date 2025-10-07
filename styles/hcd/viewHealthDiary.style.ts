@@ -358,25 +358,29 @@ export const styles = StyleSheet.create({
   reminderRow: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    marginBottom: 14,
-    borderRadius: 10,
+    justifyContent: "flex-start",
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    marginBottom: 10,
+    borderRadius: 8,
     borderWidth: 1,
     borderColor: COLORS.gray3,
+    width: "100%",
   },
+
   reminderCardS: {
+    flex: 1,
+    marginLeft: 8,
     justifyContent: "flex-start",
   },
   reminderTimesCard: {
-    width: 100,
+    alignItems: "flex-start",
   },
   section: {
     alignItems: "center",
     marginTop: 20,
     marginBottom: 16,
-    paddingHorizontal: 16,
+
     paddingVertical: 30,
     borderRadius: 12,
     backgroundColor: COLORS.white,

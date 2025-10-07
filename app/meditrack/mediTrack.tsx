@@ -248,7 +248,7 @@ const ScheduleScreen: React.FC = () => {
     if (section === "today-reminders") {
       router.push("/meditrack/alltodayreminder");
     } else if (section === "all-medications") {
-      router.push("/meditrack/allReminderCard");
+      router.push("/meditrack/allremindercard");
     } else if (section === "upcoming-appointments") {
       router.push("/meditrack/allupcomingappointment");
     } else if (section === "history-appointments") {
