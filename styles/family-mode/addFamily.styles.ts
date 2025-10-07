@@ -105,9 +105,9 @@ export const styles = StyleSheet.create({
     },
     otherInput: {
         backgroundColor: "rgba(255, 255, 255, 0.85)",
-        borderRadius: scaleWidth(12),
-        paddingVertical: scaleHeight(14),
-        paddingHorizontal: scaleWidth(16),
+        borderRadius: 12,
+        paddingVertical: 14,
+        paddingHorizontal: 16,
         fontSize: moderateScale(16),
         color: COLORS.black,
         shadowColor: COLORS.white,
@@ -115,7 +115,7 @@ export const styles = StyleSheet.create({
         shadowOpacity: 0.6,
         shadowRadius: 6,
         elevation: 4,
-        minHeight: scaleHeight(60),
+        minHeight: 60,
     },
     reqNotes: {
         alignSelf: "flex-start",
