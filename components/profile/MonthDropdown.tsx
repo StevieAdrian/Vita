@@ -1,6 +1,7 @@
 import { MONTHS } from "@/constants/months";
 import { styles } from "@/styles/component/monthdropdown.styles";
-import React, { useState } from "react";
+import dayjs from "dayjs";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   Image,
@@ -11,8 +12,14 @@ import {
 } from "react-native";
 
 export default function MonthDropdown({onSelect}: { onSelect?: (month: string) => void}) {
-  const [selectedMonth, setSelectedMonth] = useState("January");
+  const [selectedMonth, setSelectedMonth] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  useEffect(() => {
+    const currentMonth = dayjs().format("MMMM");
+    setSelectedMonth(currentMonth);
+    onSelect?.(currentMonth);
+  }, [onSelect]);
 
   const handleSelectMonth = (month: string) => {
     setSelectedMonth(month);

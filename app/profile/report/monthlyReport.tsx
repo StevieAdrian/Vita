@@ -73,14 +73,14 @@ export default function MonthlyReport() {
           <View style={styles.contentWrapper}>
             <View style={styles.formContainer}>
               <View style={styles.dropdownContainer}>
-                <Text style={styles.label}>Month</Text>
+                <Text style={styles.label}></Text>
                 <MonthDropdown onSelect={setMonth} />
               </View>
 
               <View style={styles.previewSection}>
                 <Text style={styles.warningText}>Preview Content</Text>
                 <Image
-                  source={require("@/assets/images/report-preview.png")}
+                  source={require("@/assets/images/ReportTemplateCard.svg")}
                   style={styles.previewImage}
                 />
               </View>
