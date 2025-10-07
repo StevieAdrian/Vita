@@ -4,20 +4,6 @@ export const useDatePickerStyles = (selectedDate: Date) => {
   const defaultStyles = useDefaultStyles();
 
   const today = new Date();
-
-  const safeSelected =
-    selectedDate instanceof Date
-      ? selectedDate
-      : selectedDate
-      ? new Date(selectedDate)
-      : today;
-
-  const isTodaySelected = safeSelected.toDateString() === today.toDateString();
-
-  console.log("Selected Date:", safeSelected.toDateString());
-  console.log("Today:", today.toDateString());
-  console.log("Is today selected?", isTodaySelected);
-
   return {
     ...defaultStyles,
     day_label: { color: "black" },

@@ -11,6 +11,9 @@ type AppointmentCardProps = {
   onEdit?: (appointment: any) => void;
   onDelete?: (appointment: any) => void;
   showActions?: boolean;
+  showTime?: boolean;
+  showLocation?: boolean;
+  showDetails?: boolean;
 };
 
 export const AppointmentCard: React.FC<AppointmentCardProps> = ({
@@ -19,6 +22,9 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
   onEdit,
   onDelete,
   showActions = false,
+  showTime = true,
+  showLocation = true,
+  showDetails = true,
 }) => {
   const isUpcoming = appointment.status === "upcoming";
   const backgroundColor = isUpcoming
@@ -50,30 +56,38 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
           <Text style={styles.subtitle}>{appointment.provider}</Text>
 
           <View style={styles.metaRow}>
-            <View style={styles.metaBlock}>
-              <Text style={styles.metaLabel}>Location</Text>
-              <Text style={styles.metaValue}>{appointment.location}</Text>
-            </View>
-            <View style={styles.metaBlock}>
-              <Text style={styles.metaLabel}>Date</Text>
-              <Text style={styles.metaValue}>{appointment.dateLabel}</Text>
-            </View>
-            <View style={styles.metaBlock}>
-              <Text style={styles.metaLabel}>Time</Text>
-              <Text style={styles.metaValue}>{appointment.timeLabel}</Text>
-            </View>
+            {showLocation && appointment.location && (
+              <View style={styles.metaBlock}>
+                <Text style={styles.metaLabel}>Location</Text>
+                <Text style={styles.metaValue}>{appointment.location}</Text>
+              </View>
+            )}
+            {appointment.dateLabel && (
+              <View style={styles.metaBlock}>
+                <Text style={styles.metaLabel}>Date</Text>
+                <Text style={styles.metaValue}>{appointment.dateLabel}</Text>
+              </View>
+            )}
+            {showTime && appointment.timeLabel && (
+              <View style={styles.metaBlock}>
+                <Text style={styles.metaLabel}>Time</Text>
+                <Text style={styles.metaValue}>{appointment.timeLabel}</Text>
+              </View>
+            )}
           </View>
         </View>
       </View>
 
       <View style={styles.rightColumn}>
-        <TouchableOpacity
-          style={styles.cta}
-          onPress={handleSeeDetailPress}
-          activeOpacity={0.82}
-        >
-          <Text style={styles.ctaLabel}>See Detail</Text>
-        </TouchableOpacity>
+        {showDetails && (
+          <TouchableOpacity
+            style={styles.cta}
+            onPress={handleSeeDetailPress}
+            activeOpacity={0.82}
+          >
+            <Text style={styles.ctaLabel}>See Detail</Text>
+          </TouchableOpacity>
+        )}
 
         {showActions && (
           <View style={styles.actionButtons}>
