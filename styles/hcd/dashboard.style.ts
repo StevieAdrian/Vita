@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   dashboardContainer: {
-    backgroundColor: COLORS.background2nd,
     flex: 1,
     paddingHorizontal: 20,
     position: "absolute",
@@ -11,15 +10,15 @@ export const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+    backgroundColor: COLORS.background2nd,
   },
   scrollContent: {
     flexGrow: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    backgroundColor: COLORS.background2nd,
   },
   greetings: {
-    color: COLORS.black,
+    color: COLORS.white,
     fontFamily: "Inter-SemiBold",
     fontSize: 28,
     paddingBottom: 20,
@@ -29,7 +28,7 @@ export const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   greetingsBlue: {
-    color: COLORS.primary,
+    color: COLORS.white,
     fontFamily: "Inter-SemiBold",
     fontSize: 28,
     paddingBottom: 20,
@@ -45,7 +44,7 @@ export const styles = StyleSheet.create({
     transform: [{ rotate: "180deg" }],
   },
   subtitle: {
-    color: COLORS.black,
+    color: COLORS.white,
     fontFamily: "Inter-SemiBold",
     fontSize: 20,
   },
@@ -60,12 +59,12 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   seeAllContainer: {
-    color: COLORS.black,
+    color: COLORS.white,
     fontFamily: "Inter-Medium",
     fontSize: 14,
   },
   reminderText: {
-    color: COLORS.primary,
+    color: COLORS.gray5,
     fontFamily: "Inter-Medium",
     fontSize: 14,
   },
@@ -78,7 +77,7 @@ export const styles = StyleSheet.create({
     gap: 5,
   },
   containerContent: {
-    marginVertical: 20,
+    marginTop: 15,
     gap: 5,
   },
   reminderItem: {
@@ -97,6 +96,11 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   titleDigitBio: {
+    color: COLORS.black,
+    fontFamily: "Inter-SemiBold",
+    fontSize: 16,
+  },
+  titleDigitWarning: {
     color: COLORS.black,
     fontFamily: "Inter-SemiBold",
     fontSize: 16,
@@ -173,13 +177,13 @@ export const styles = StyleSheet.create({
   containerHealthWarning: {
     width: "100%",
     height: "auto",
-    backgroundColor: COLORS.red3rd,
+    backgroundColor: COLORS.red4th,
     borderColor: COLORS.red,
     borderWidth: 1,
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 10,
-    marginVertical: 15,
+    marginVertical: 10,
   },
   descHealthWarning: {
     color: COLORS.black,
@@ -188,6 +192,7 @@ export const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   titleHealth: {
+    
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -245,5 +250,37 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: "center",
     justifyContent: "center",
+  },
+  reminderRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    marginBottom: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: COLORS.gray3,
+    width: "100%",
+    backgroundColor: "white",
+  },
+  reminderTimesCard: {
+    alignItems: "flex-start",
+  },
+  reminderTime: {
+    fontSize: 14,
+    color: "#666",
+    marginTop: 4,
+  },
+  reminderCardS: {
+    marginLeft: 8,
+    justifyContent: "flex-start",
+    width: "60%",
+  },
+  seeAllReminder: {
+    color: COLORS.primary,
+    fontFamily: "Inter-Medium",
+    fontSize: 14,
+    paddingVertical: 10,
   },
 });

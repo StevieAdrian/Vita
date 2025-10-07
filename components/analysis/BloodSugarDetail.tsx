@@ -27,9 +27,10 @@ export default function MetricDetailCard({
   return (
     <View style={styles.barContainer}>
       <Text style={styles.barTitle}>{title}</Text>
-      <Text style={styles.barNumber}>
-        {summary.avg} {unit}
-      </Text>
+      <View style={styles.bsTitle}>
+        <Text style={styles.barNumber}>{summary.avg}</Text>
+        <Text style={styles.barSatuan}>{unit}</Text>
+      </View>
 
       <VictoryChart
         width={screenWidth - 32}
@@ -50,9 +51,14 @@ export default function MetricDetailCard({
       </VictoryChart>
 
       {summary.highestValue && (
-        <Text style={styles.highestText}>
-          Highest this week: {summary.highestValue} on {summary.highestDay}
-        </Text>
+        <>
+          <View>
+            <Text style={styles.highestText}>
+              Highest this week: {summary.highestValue} mg/dL
+            </Text>
+            <Text style={styles.highestDay}>on {summary.highestDay}</Text>
+          </View>
+        </>
       )}
     </View>
   );

@@ -1,3 +1,4 @@
+import UpHeader from "@/components/hcd/UpHeader";
 import { AppointmentCard } from "@/components/meditrack-forms/AppointmentCard";
 import { ReminderToggle } from "@/components/meditrack-forms/HeaderMediTrack";
 import { HistoryCard } from "@/components/meditrack-forms/HistoryCard";
@@ -20,11 +21,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
-  Image,
   ScrollView,
   StatusBar,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 import {
@@ -344,15 +343,8 @@ const ScheduleScreen: React.FC = () => {
           { paddingBottom: NAV_ITEMS + insets.bottom + 16 },
         ]}
       >
-        <View style={styles.headerRow}>
-          <Text style={styles.title}>Schedule</Text>
-          <TouchableOpacity style={styles.notifications}>
-            <Image
-              source={require("@/assets/utilsIcon/notification.png")}
-              style={{ width: 41, height: 41 }}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
+        <View style={styles.header}>
+          <UpHeader title="Schedule" showProfile={false} />
         </View>
         <ReminderToggle
           selected={selectedCategory}

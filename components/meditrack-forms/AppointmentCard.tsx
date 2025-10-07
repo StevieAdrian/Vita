@@ -1,7 +1,6 @@
 import type { Appointment } from "@/constants/appointment";
 import { COLORS } from "@/constants/colors";
 import { styles } from "@/styles/meditrack/appointment-card.styles";
-import { Ionicons } from "@expo/vector-icons";
 import type React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
@@ -57,7 +56,10 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
       <View style={[styles.container, { backgroundColor }]}>
         <View style={styles.leftColumn}>
           <View style={styles.iconWrapper}>
-            <Ionicons name="calendar-outline" size={18} color={COLORS.black} />
+            <Image
+              source={require("@/assets/mediTrack/medicalCheckUp.svg")}
+              style={{ width: 35, height: 35 }}
+            />
           </View>
           <View style={styles.infoWrapper}>
             <Text style={styles.title} numberOfLines={1}>
