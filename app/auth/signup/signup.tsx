@@ -2,6 +2,7 @@ import Calender from "@/components/hcd/Calender";
 import InputField from "@/components/utils/InputField";
 import { COLORS } from "@/constants/colors";
 import { useSignupContext } from "@/context/SignupContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useCheckEmail } from "@/hooks/useCheckEmail";
 import { useCheckUsername } from "@/hooks/useCheckUsername";
 import { mapperSignupValues } from "@/utils/mapper";
@@ -21,7 +22,6 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Feather";
 import { styles } from "../../../styles/auth/signup/singup.styles";
-import { useAuth } from "@/hooks/useAuth";
 
 export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");

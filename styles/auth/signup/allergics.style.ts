@@ -13,8 +13,8 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.primary,
   },
-  content: {
-    flex: 1,
+  scrollContent: {
+    flexGrow: 1,
     paddingHorizontal: scaleWidth(24),
     paddingTop: scaleHeight(40),
     paddingBottom: scaleHeight(30),
@@ -58,7 +58,6 @@ export const styles = StyleSheet.create({
     opacity: 0.9,
   },
   selectionContainer: {
-    flex: 1,
     justifyContent: "space-between",
   },
   optionsContainer: {

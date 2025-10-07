@@ -89,11 +89,11 @@ export const styles = StyleSheet.create({
   required: {
     color: COLORS.red,
   },
-    dobWrapper: {
-      width: "100%",
-      position: "relative",
-      marginBottom: 15,
-    },
+  dobWrapper: {
+    width: "100%",
+    position: "relative",
+    marginBottom: 15,
+  },
   calendarIcon: {
     position: "absolute",
     right: 12,
