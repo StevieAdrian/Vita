@@ -1,4 +1,5 @@
 import OptionField from "@/components/utils/OptionField";
+import { CHRONIC_OPTIONS } from "@/constants/chronic";
 import { COLORS } from "@/constants/colors";
 import { useSignupContext } from "@/context/SignupContext";
 import { useChronic } from "@/utils/chronicValidation";
@@ -6,6 +7,9 @@ import { router } from "expo-router";
 import React from "react";
 import {
   Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
   StatusBar,
   Text,
   TextInput,
@@ -17,7 +21,6 @@ import { styles } from "../../../styles/auth/signup/chronic.style";
 
 const Chronic: React.FC = () => {
   const {
-    CHRONIC_OPTIONS,
     otherCondition,
     setOtherCondition,
     handleConditionSelect,
@@ -42,61 +45,72 @@ const Chronic: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
-
-      <View style={styles.content}>
-        <View style={styles.logoContainer}>
-          <Image
-            source={require("../../../assets/images/Logo Vita.png")}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-        </View>
-
-        <Text style={styles.title}>Is there any{"\n"}Chronic Conditions?</Text>
-
-        <View style={styles.progressBarContainer}>
-          <View style={styles.progressBar}>
-            <View style={[styles.progressFill, { width: "60%" }]} />
-          </View>
-        </View>
-
-        <Text style={styles.subtitle}>You can choose multiple option</Text>
-
-        <View style={styles.selectionContainer}>
-          <View style={styles.optionsContainer}>
-            {CHRONIC_OPTIONS.map((condition) => (
-              <OptionField
-                key={condition}
-                label={condition}
-                isSelected={isSelected(condition)}
-                onPress={() => handleConditionSelect(condition)}
-                type="checkbox"
-              />
-            ))}
-
-            <TextInput
-              style={styles.otherInput}
-              placeholder="Other Chronic Conditions...."
-              placeholderTextColor={COLORS.gray2}
-              value={otherCondition}
-              onChangeText={setOtherCondition}
-              multiline
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View style={styles.logoContainer}>
+            <Image
+              source={require("../../../assets/images/Logo Vita.png")}
+              style={styles.logo}
+              resizeMode="contain"
             />
           </View>
 
-          <TouchableOpacity
-            style={[
-              styles.continueButton,
-              !canContinue && styles.continueButtonDisabled,
-            ]}
-            onPress={onContinue}
-            disabled={!canContinue}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.continueButtonText}>Continue</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+          <Text style={styles.title}>
+            Is there any{"\n"}Chronic Conditions?
+          </Text>
+
+          <View style={styles.progressBarContainer}>
+            <View style={styles.progressBar}>
+              <View style={[styles.progressFill, { width: "60%" }]} />
+            </View>
+          </View>
+
+          <Text style={styles.subtitle}>You can choose multiple option</Text>
+
+          <View style={styles.selectionContainer}>
+            <View style={styles.optionsContainer}>
+              {CHRONIC_OPTIONS.map((condition) => (
+                <OptionField
+                  key={condition}
+                  label={condition}
+                  isSelected={isSelected(condition)}
+                  onPress={() => handleConditionSelect(condition)}
+                  type="checkbox"
+                />
+              ))}
+
+              <TextInput
+                style={styles.otherInput}
+                placeholder="Other Chronic Conditions...."
+                placeholderTextColor={COLORS.gray2}
+                value={otherCondition}
+                onChangeText={setOtherCondition}
+                multiline
+              />
+            </View>
+
+            <TouchableOpacity
+              style={[
+                styles.continueButton,
+                !canContinue && styles.continueButtonDisabled,
+              ]}
+              onPress={onContinue}
+              disabled={!canContinue}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.continueButtonText}>Continue</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

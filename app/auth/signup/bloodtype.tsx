@@ -3,7 +3,16 @@ import { COLORS } from "@/constants/colors";
 import { useSignupContext } from "@/context/SignupContext";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { Image, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "../../../styles/auth/signup/bloodtype.style";
 
@@ -32,62 +41,71 @@ const BloodType: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
-
-      <View style={styles.content}>
-        <View style={styles.logoContainer}>
-          <Image
-            source={require("../../../assets/images/Logo Vita.png")}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-        </View>
-
-        <Text style={styles.title}>What is your{"\n"}Blood Type</Text>
-
-        <View style={styles.progressBarContainer}>
-          <View style={styles.progressBar}>
-            <View style={[styles.progressFill, { width: "20%" }]} />
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View style={styles.logoContainer}>
+            <Image
+              source={require("../../../assets/images/Logo Vita.png")}
+              style={styles.logo}
+              resizeMode="contain"
+            />
           </View>
-        </View>
 
-        <View style={styles.selectionContainer}>
-          <View style={styles.optionsContainer}>
-            {BLOODTYPE_OPTIONS.map((type) => (
-              <TouchableOpacity
-                key={type}
-                style={[
-                  styles.optionButton,
-                  selectedBloodType === type && styles.selectedOption,
-                ]}
-                onPress={() => handleBloodTypeSelect(type)}
-                activeOpacity={0.7}
-              >
-                <Text
+          <Text style={styles.title}>What is your{"\n"}Blood Type</Text>
+
+          <View style={styles.progressBarContainer}>
+            <View style={styles.progressBar}>
+              <View style={[styles.progressFill, { width: "20%" }]} />
+            </View>
+          </View>
+
+          <View style={styles.selectionContainer}>
+            <View style={styles.optionsContainer}>
+              {BLOODTYPE_OPTIONS.map((type) => (
+                <TouchableOpacity
+                  key={type}
                   style={[
-                    styles.optionText,
-                    selectedBloodType === type && styles.selectedOptionText,
+                    styles.optionButton,
+                    selectedBloodType === type && styles.selectedOption,
                   ]}
+                  onPress={() => handleBloodTypeSelect(type)}
+                  activeOpacity={0.7}
                 >
-                  {type}
-                </Text>
-              </TouchableOpacity>
-            ))}
+                  <Text
+                    style={[
+                      styles.optionText,
+                      selectedBloodType === type && styles.selectedOptionText,
+                    ]}
+                  >
+                    {type}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+            <TouchableOpacity
+              style={[
+                styles.continueButton,
+                !selectedBloodType && styles.continueButtonDisabled,
+              ]}
+              onPress={handleContinue}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.continueButtonText}>Continue</Text>
+            </TouchableOpacity>
           </View>
-
-          {error ? <Text style={styles.errorText}>{error}</Text> : null}
-
-          <TouchableOpacity
-            style={[
-              styles.continueButton,
-              !selectedBloodType && styles.continueButtonDisabled,
-            ]}
-            onPress={handleContinue}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.continueButtonText}>Continue</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

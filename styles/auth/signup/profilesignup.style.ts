@@ -13,12 +13,12 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.primary,
   },
-  content: {
-    flex: 1,
+  scrollContent: {
+    flexGrow: 1,
     paddingHorizontal: scaleWidth(24),
-    paddingTop: scaleHeight(80),
+    paddingTop: scaleHeight(40),
+    paddingBottom: scaleHeight(30),
   },
-
   mainWrapper: {
     alignItems: "center",
     justifyContent: "flex-start",
