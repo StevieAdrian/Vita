@@ -17,7 +17,6 @@ export const styles = StyleSheet.create({
     width: "100%",
   },
   scrollWrapper: {
-    // flex: 1,
     position: "absolute",
     top: 0,
     left: 0,
