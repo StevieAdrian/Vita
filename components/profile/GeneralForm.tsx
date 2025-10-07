@@ -5,9 +5,9 @@ import { styles } from "@/styles/profile/general-form.styles";
 import { router } from "expo-router";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import ListItem from "../utils/ListItem";
+import AvatarPicker from "./AvatarPicker";
 import SectionCard from "./SectionCard";
 import StatsRow from "./StatsRow";
-import AvatarPicker from "./AvatarPicker";
 
 export default function GeneralForm() {
   const { image, pickPhoto } = useAvatarPicker();
@@ -40,12 +40,16 @@ export default function GeneralForm() {
           ]}
         />
         <View style={{ height: 12 }} />
-        <TouchableOpacity style={styles.downloadBtn} activeOpacity={0.8}>
+        <TouchableOpacity
+          style={styles.downloadBtn}
+          activeOpacity={1}
+          onPress={() => router.push("/profile/report/monthlyReport")}
+        >
+          <Text style={styles.downloadText}>Download </Text>
           <Image
-            source={require("@/assets/images/download-icon.png")}
-            style={styles.downloadIcon}
+            source={require("@/assets/utilsIcon/arrow-left.png")}
+            style={[styles.downloadIcon, { transform: [{ scaleX: -1 }] }]}
           />
-          <Text style={styles.downloadText}>Download</Text>
         </TouchableOpacity>
       </SectionCard>
 

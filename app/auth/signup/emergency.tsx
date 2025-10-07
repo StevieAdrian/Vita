@@ -2,6 +2,7 @@ import InputField from "@/components/utils/InputField";
 import { COLORS } from "@/constants/colors";
 import { Relation, RELATION_OPTIONS } from "@/constants/relations";
 import { useSignupContext } from "@/context/SignupContext";
+import { useAuthState } from "@/hooks/useAuthState";
 import { useSignup } from "@/hooks/useSignup";
 import {
   EmergencyValues,
@@ -31,7 +32,8 @@ export default function EmergencyContact() {
   const [errors, setErrors] = useState<ValidationErrors>({});
 
   const { data, setField } = useSignupContext();
-  const { signup, loading, error } = useSignup();
+  const { signup, signupWithGoogle, loading, error } = useSignup();
+  const { user } = useAuthState();
 
   const handleRelationsPress = () => {
     setShowRelationsDropdown(!showRelationsDropdown);
@@ -53,16 +55,36 @@ export default function EmergencyContact() {
 
     if (Object.keys(newErrors).length === 0) {
       const finalContacts = [...(data.emergencyContacts || []), values];
-      setField("emergencyContacts", finalContacts);
 
       try {
-        const uid = await signup({
-          ...data,
-          emergencyContacts: finalContacts,
-        } as any);
+        if (user) {
+          const isGoogleUser = user.providerData.some(
+            (provider) => provider.providerId === "google.com"
+          );
 
-        console.log("debug uid:", uid);
-        router.push("/");
+          if (isGoogleUser) {
+            await signupWithGoogle(user, {
+              username: data.username!,
+              firstName: data.firstName!,
+              lastName: data.lastName!,
+              phoneNumber: data.phoneNumber,
+              dateOfBirth: data.dateOfBirth,
+              gender: data.gender,
+              bloodType: data.bloodType,
+              allergies: data.allergies,
+              chronicConditions: data.chronicConditions,
+              emergencyContacts: finalContacts,
+              avatarUrl: data.avatarUrl || user.photoURL || undefined,
+            });
+          } else {
+            const uid = await signup({
+              ...data,
+              emergencyContacts: finalContacts,
+            } as any);
+            console.log("debug uid:", uid);
+          }
+          router.push("/");
+        }
       } catch (err) {
         console.error("Signup failed:", err);
       }

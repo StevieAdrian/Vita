@@ -1,9 +1,9 @@
-import { View, Text, Dimensions } from "react-native";
-import { VictoryBar, VictoryChart, VictoryAxis, VictoryLine, VictoryScatter } from "victory";
+import { COLORS } from "@/constants/colors";
 import { useAuthState } from "@/hooks/useAuthState";
 import { useMetricSummary } from "@/hooks/useMetricSummary";
 import { styles } from "@/styles/analysis/analysis.styles";
-import { COLORS } from "@/constants/colors";
+import { Dimensions, Text, View } from "react-native";
+import { VictoryAxis, VictoryBar, VictoryChart } from "victory";
 
 interface Props {
   field: "bloodSugar" | "heartRate" | "systolic" | "diastolic";
@@ -12,7 +12,12 @@ interface Props {
   chartType?: "bar" | "line";
 }
 
-export default function MetricDetailCard({ field, title, unit, chartType = "bar" }: Props) {
+export default function MetricDetailCard({
+  field,
+  title,
+  unit,
+  chartType = "bar",
+}: Props) {
   const { user } = useAuthState();
   const { summary, loading } = useMetricSummary(user?.uid ?? "", field);
   const screenWidth = Dimensions.get("window").width;
@@ -26,10 +31,14 @@ export default function MetricDetailCard({ field, title, unit, chartType = "bar"
         {summary.avg} {unit}
       </Text>
 
-      <VictoryChart width={screenWidth - 32} height={220} domainPadding={{ x: 20 }}>
-        <VictoryAxis 
-          tickValues={summary.dailyValues.map((d: { day: any; }) => d.day)} 
-          tickFormat={summary.dailyValues.map((d: { day: any; }) => d.day)} 
+      <VictoryChart
+        width={screenWidth - 32}
+        height={220}
+        domainPadding={{ x: 20 }}
+      >
+        <VictoryAxis
+          tickValues={summary.dailyValues.map((d: { day: any }) => d.day)}
+          tickFormat={summary.dailyValues.map((d: { day: any }) => d.day)}
         />
         <VictoryAxis dependentAxis />
         <VictoryBar

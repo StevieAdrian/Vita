@@ -2,12 +2,13 @@ import Calender from "@/components/hcd/Calender";
 import InputField from "@/components/utils/InputField";
 import { COLORS } from "@/constants/colors";
 import { useSignupContext } from "@/context/SignupContext";
-import { useCheckEmail } from "@/hooks/useCheckEmail";
+import { useAuthState } from "@/hooks/useAuthState";
 import { useCheckUsername } from "@/hooks/useCheckUsername";
+import { useSignup } from "@/hooks/useSignup";
 import { mapperSignupValues } from "@/utils/mapper";
 import { SignupValues, validateField } from "@/utils/signUpValidation";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -21,44 +22,48 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Feather";
 import { styles } from "../../../styles/auth/signup/singup.styles";
-import { useAuth } from "@/hooks/useAuth";
 
-export default function Signup() {
-  const [confirmPassword, setConfirmPassword] = useState("");
+export default function SignupGoogle() {
+  const { user } = useAuthState();
   const { data, setField } = useSignupContext();
-  const { signInWithGoogle, loading } = useAuth();
+  const { loading: signupLoading } = useSignup();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const {
     exists: usernameExists,
     isChecking: checkingUsername,
     verifyUsername,
   } = useCheckUsername();
-  const {
-    exists: emailExists,
-    isChecking: checkingEmail,
-    verifyEmail,
-  } = useCheckEmail();
+
+  useEffect(() => {
+    if (user) {
+      setField("email", user.email || "");
+    }
+  }, [setField, user]);
 
   const handleChange = (field: keyof SignupValues, value: string) => {
-    if (field === "confirmPassword") {
-      setConfirmPassword(value);
-      const safeData = mapperSignupValues(data, value);
-      const errMsg = validateField(field, value, safeData);
-      setErrors((prev) => ({ ...prev, [field]: errMsg }));
-    } else {
-      setField(field as keyof typeof data, value);
-      const safeData = mapperSignupValues(data, confirmPassword);
-      const errMsg = validateField(field, value, safeData);
-      setErrors((prev) => ({ ...prev, [field]: errMsg }));
-    }
+    setField(field as keyof typeof data, value);
+
+    const safeData = mapperSignupValues(data, "");
+    const errMsg = validateField(field, value, safeData);
+    setErrors((prev) => ({ ...prev, [field]: errMsg }));
   };
 
-  const handleContinue = () => {
-    const safeData = mapperSignupValues(data, confirmPassword);
+  const handleContinue = async () => {
+    const requiredFields: (keyof SignupValues)[] = [
+      "username",
+      "firstName",
+      "lastName",
+      "phoneNumber",
+      "dateOfBirth",
+      "gender",
+    ];
 
     let newErrors: { [key: string]: string } = {};
-    (Object.keys(safeData) as (keyof SignupValues)[]).forEach((field) => {
-      const errMsg = validateField(field, safeData[field], safeData);
+
+    requiredFields.forEach((field) => {
+      const value = data[field as keyof typeof data];
+      const safeData = mapperSignupValues(data, "");
+      const errMsg = validateField(field, value, safeData);
       if (errMsg) {
         newErrors[field] = errMsg;
       }
@@ -69,11 +74,6 @@ export default function Signup() {
     if (Object.keys(newErrors).length === 0) {
       if (usernameExists) {
         alert("Username is already taken");
-        return;
-      }
-
-      if (emailExists) {
-        alert("Email is already registered");
         return;
       }
 
@@ -106,9 +106,10 @@ export default function Signup() {
               style={styles.logo}
               resizeMode="contain"
             />
-            <Text style={styles.title}>Get Started Now</Text>
+            <Text style={styles.title}>Complete Your Profile</Text>
             <Text style={styles.subtitle}>
-              Create an account and start your{"\n"}healthy journey together.
+              Just a few more steps and start your{"\n"}healthy journey
+              together.
             </Text>
           </View>
 
@@ -156,53 +157,6 @@ export default function Signup() {
                 onChangeText={(text) => handleChange("lastName", text)}
                 required
                 error={errors.lastName}
-                placeholderTextColor={COLORS.gray2}
-              />
-              <InputField
-                label="Email"
-                placeholder="johndoe@gmail.com"
-                value={data.email}
-                onChangeText={(text) => {
-                  handleChange("email", text);
-                  if (text.includes("@")) {
-                    verifyEmail(text.trim());
-                  } else {
-                    verifyEmail("");
-                  }
-                }}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                required
-                error={errors.email}
-                placeholderTextColor={COLORS.gray2}
-                rightIcon={
-                  checkingEmail ? (
-                    <Icon name="loader" size={20} color={COLORS.gray2} />
-                  ) : emailExists === true ? (
-                    <Icon name="x-circle" size={20} color="red" />
-                  ) : emailExists === false ? (
-                    <Icon name="check-circle" size={20} color="green" />
-                  ) : null
-                }
-              />
-              <InputField
-                label="Password"
-                placeholder="***********"
-                value={data.password}
-                onChangeText={(text) => handleChange("password", text)}
-                secureTextEntry
-                required
-                error={errors.password}
-                placeholderTextColor={COLORS.gray2}
-              />
-              <InputField
-                label="Confirm Password"
-                placeholder="***********"
-                value={confirmPassword}
-                onChangeText={(text) => handleChange("confirmPassword", text)}
-                secureTextEntry
-                required
-                error={errors.confirmPassword}
                 placeholderTextColor={COLORS.gray2}
               />
               <InputField
@@ -279,36 +233,9 @@ export default function Signup() {
                 style={styles.continueButton}
                 activeOpacity={0.8}
                 onPress={handleContinue}
+                disabled={signupLoading}
               >
                 <Text style={styles.continueText}>Continue</Text>
-              </TouchableOpacity>
-              <Text style={styles.loginText}>
-                Already have an account?{" "}
-                <Text
-                  style={styles.loginLink}
-                  onPress={() => router.push("/auth/login/login")}
-                >
-                  Log In
-                </Text>
-              </Text>
-            </View>
-            <View style={styles.bottomContainer}>
-              <View style={styles.dividerContainer}>
-                <View style={styles.dividerLine} />
-                <Text style={styles.dividerText}>Or Continue With</Text>
-                <View style={styles.dividerLine} />
-              </View>
-              <TouchableOpacity
-                style={styles.googleButton}
-                activeOpacity={0.7}
-                onPress={signInWithGoogle}
-                disabled={loading}
-              >
-                <Image
-                  source={require("../../../assets/images/Logo Google.png")}
-                  style={styles.googleIcon}
-                />
-                <Text style={styles.googleText}>Google</Text>
               </TouchableOpacity>
             </View>
           </View>
