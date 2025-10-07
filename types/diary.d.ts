@@ -28,3 +28,63 @@ export interface DiaryInput {
   activities: string;
   notes: string;
 }
+
+export interface DateDigitalBiomarker {
+  month: string;
+  year: number;
+  monthName: string;
+  metrics: {
+    bloodSugar: {
+      highest: {
+        value: number;
+        date: string;
+      };
+      lowest: {
+        value: number;
+        date: string;
+      };
+    };
+    bloodPressure: {
+      systolic: {
+        highest: {
+          value: number;
+          date: string;
+        };
+        lowest: {
+          value: number;
+          date: string;
+        };
+      };
+      diastolic: {
+        highest: {
+          value: number;
+          date: string;
+        };
+        lowest: {
+          value: number;
+          date: string;
+        };
+      };
+    };
+    heartRate: {
+      highest: {
+        value: number;
+        date: string;
+      };
+      lowest: {
+        value: number;
+        date: string;
+      };
+    };
+    weight: {
+      highest: {
+        value: number;
+        date: string;
+      };
+      lowest: {
+        value: number;
+        date: string;
+      };
+    };
+  };
+}

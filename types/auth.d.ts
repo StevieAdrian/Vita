@@ -44,6 +44,7 @@ export interface EmergencyContact {
 }
 
 export interface UserProfile {
+  updatedAt: any;
   username: string;
   firstName: string;
   lastName: string;

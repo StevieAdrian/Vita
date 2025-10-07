@@ -41,7 +41,18 @@ export default function MonthlyReport() {
       bloodType: user.bloodType ?? "—",
       allergics: user.allergies ?? "-",
       chronic: user.chronic ?? "-",
+      updatedAt: reportData.update,
       period: reportData.period,
+      bloodSugarHighDate: reportData.bloodSugarHighDate,
+      bloodSugarLowDate: reportData.bloodSugarLowDate,
+      systolicHighDate: reportData.systolicHighDate,
+      systolicLowDate: reportData.systolicLowDate,
+      diastolicHighDate: reportData.diastolicHighDate,
+      diastolicLowDate: reportData.diastolicLowDate,
+      heartRateHighDate: reportData.heartRateHighDate,
+      heartRateLowDate: reportData.heartRateLowDate,
+      weightHighDate: reportData.weightHighDate,
+      weightLowDate: reportData.weightLowDate,
       ...reportData,
     });
   };

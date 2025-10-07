@@ -13,19 +13,20 @@ interface ReportData {
   gender: string;
   bloodType: string;
   period: string;
-  bloodSugar: { avg: number; high: number; low: number };
-  bloodPressure: { avg: string; high: string; low: string };
-  heartRate: { avg: number; high: number; low: number };
-  weight: { avg: number; high: number; low: number };
+  bloodSugar: { avg: number; high: number; low: number; highDate: Date; lowDate: Date };
+  bloodPressure: { avg: string; high: string; low: string; systolicHighDate: string; systolicLowDate: string; diastolicHighDate: string; diastolicLowDate: string };
+  heartRate: { avg: number; high: number; low: number; highDate: string; lowDate: string };
+  weight: { avg: number; high: number; low: number; highDate: string; lowDate: string };
   appointments: { date: string; desc: string; status: string }[];
   allergics: Allergic;
   chronic: Chronic;
+  update: string;
 }
 
 export async function generateReportPDF(data: ReportData) {
   try {
     const asset = Asset.fromModule(
-      require("../assets/utilsIcon/vita-generate.png")
+      require("../assets/utilsIcon/vita-logo.svg")
     );
     await asset.downloadAsync();
 
@@ -44,7 +45,7 @@ export async function generateReportPDF(data: ReportData) {
                 box-sizing: border-box;
             }
             body { 
-                font-family: 'Segoe UI', Arial, sans-serif; 
+                font-family: Inter, Arial, sans-serif; 
                 background: white;
                 color: black;
                 font-size: 12px;
@@ -340,13 +341,13 @@ export async function generateReportPDF(data: ReportData) {
                                 <span class="vital-label">Highest</span>
                                 <span class="vital-value">${
                                   data.bloodSugar.high
-                                } mg/dL<span class="vital-date">(September 20, 2025)</span></span>
+                                } mg/dL<span class="vital-date">${data.bloodSugar.highDate}</span></span>
                             </div>
                             <div class="vital-item">
                                 <span class="vital-label">Lowest</span>
                                 <span class="vital-value">${
                                   data.bloodSugar.low
-                                } mg/dL<span class="vital-date">(September 3, 2025)</span></span>
+                                } mg/dL<span class="vital-date">${data.bloodSugar.lowDate}</span></span>
                             </div>
                         </div>
 
@@ -362,13 +363,13 @@ export async function generateReportPDF(data: ReportData) {
                                 <span class="vital-label">Highest</span>
                                 <span class="vital-value">${
                                   data.heartRate.high
-                                } bpm<span class="vital-date">(September 20, 2025)</span></span>
+                                } bpm<span class="vital-date">${data.heartRate.highDate}</span></span>
                             </div>
                             <div class="vital-item">
                                 <span class="vital-label">Lowest</span>
                                 <span class="vital-value">${
                                   data.heartRate.low
-                                } bpm<span class="vital-date">(September 3, 2025)</span></span>
+                                } bpm<span class="vital-date">${data.heartRate.lowDate}</span></span>
                             </div>
                         </div>
 
@@ -382,19 +383,19 @@ export async function generateReportPDF(data: ReportData) {
                             </div>
                             <div class="vital-item">
                                 <span class="vital-label">Highest Systolic</span>
-                                <span class="vital-value">160 mmHg<span class="vital-date">(September 20, 2025)</span></span>
+                                <span class="vital-value">160 mmHg<span class="vital-date">${data.bloodPressure.systolicHighDate}</span></span>
                             </div>
                             <div class="vital-item">
                                 <span class="vital-label">Lowest Systolic</span>
-                                <span class="vital-value">50 mmHg<span class="vital-date">(September 3, 2025)</span></span>
+                                <span class="vital-value">50 mmHg<span class="vital-date">${data.bloodPressure.systolicLowDate}</span></span>
                             </div>
                             <div class="vital-item">
                                 <span class="vital-label">Highest Diastolic</span>
-                                <span class="vital-value">160 mmHg<span class="vital-date">(September 20, 2025)</span></span>
+                                <span class="vital-value">160 mmHg<span class="vital-date">${data.bloodPressure.diastolicHighDate}</span></span>
                             </div>
                             <div class="vital-item">
                                 <span class="vital-label">Lowest Diastolic</span>
-                                <span class="vital-value">50 mmHg<span class="vital-date">(September 3, 2025)</span></span>
+                                <span class="vital-value">50 mmHg<span class="vital-date">${data.bloodPressure.diastolicLowDate}</span></span>
                             </div>
                         </div>
 
@@ -410,17 +411,17 @@ export async function generateReportPDF(data: ReportData) {
                                 <span class="vital-label">Highest</span>
                                 <span class="vital-value">${
                                   data.weight.high
-                                }kg<span class="vital-date">(September 20, 2025)</span></span>
+                                }kg<span class="vital-date">${data.weight.highDate}</span></span>
                             </div>
                             <div class="vital-item">
                                 <span class="vital-label">Lowest</span>
                                 <span class="vital-value">${
                                   data.weight.low
-                                }kg<span class="vital-date">(September 3, 2025)</span></span>
+                                }kg<span class="vital-date">${data.weight.lowDate}</span></span>
                             </div>
                         </div>
                     </div>
-                    <div class="note-text">Data Recorded Last Update 30 September, 2025</div>
+                    <div class="note-text">Data Recorded Last Update ${data.update}</div>
                 </div>
 
                 <div class="section-title">Appointment Tracker</div>
@@ -453,7 +454,7 @@ export async function generateReportPDF(data: ReportData) {
                     `
                       )
                       .join("")}
-                      <div class="note-text">Data Recorded Last Update 30 September, 2025</div>
+                      <div class="note-text">Data Recorded Last Update ${data.update}</div>
                 </div>
 
                 <div class="footer">
