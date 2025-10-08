@@ -26,7 +26,9 @@ export default function MonitorDashboard() {
   const isMonitoring = viewingUid && viewingUid !== user?.uid;
   const { stats, loading } = useHealthStats(monitoringUid);
   const { futureHealth } = useFutureHealth(monitoringUid);
-  const datePickerStyle = useDatePickerStyles();
+  const datePickerStyle = useDatePickerStyles(
+    selected instanceof Date ? selected : new Date()
+  );
 
   function formatDateLocal(date: Date) {
     return date.toLocaleDateString("en-CA");
@@ -80,7 +82,7 @@ export default function MonitorDashboard() {
                 const selectedDate = formatDateLocal(jsDate);
 
                 router.push({
-                    pathname: "/hcd/diary/viewHealthDiary",
+                    pathname: "/family-mode/viewHealthDiaryMonitor",
                     params: { date: selectedDate, uid: monitoringUid, isMonitoring: isMonitoring ? "1" : "", },
                 });
             }

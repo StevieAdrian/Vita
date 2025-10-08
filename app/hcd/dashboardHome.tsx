@@ -28,6 +28,9 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
+import { useLatestHealthDiary } from "@/hooks/useLatestHealthDiary";
+import { useLastHealthSync } from "@/hooks/useLastHealthSync";
+
 export default function DashboardHome() {
   const insets = useSafeAreaInsets();
   const { user } = useAuthState();
@@ -50,6 +53,8 @@ export default function DashboardHome() {
     attention: 0,
     total: 0,
   });
+  const { data: biomarker, loading: loadingBiomarker } = useLatestHealthDiary(user?.uid);
+  const { lastSync, loading } = useLastHealthSync();
 
   const [reminders, setReminders] = useState<Reminder[]>([]);
 
@@ -392,7 +397,11 @@ export default function DashboardHome() {
                 <View style={styles.containerTitle}>
                   <Text style={styles.titleDigitBio}>Digital Biomarker</Text>
                   <Text style={styles.captionDigitBio}>
-                    All indicators are in good condition
+                    {loadingBiomarker
+                      ? "Loading..."
+                      : !biomarker
+                      ? "No data"
+                      : "All indicators are in good condition"}
                   </Text>
                 </View>
               </View>
@@ -404,7 +413,11 @@ export default function DashboardHome() {
                   <View style={styles.containerStatus}>
                     <View style={styles.bulletin}></View>
                     <View>
-                      <Text style={styles.captionNumber}>120/80 mmHg</Text>
+                      <Text style={styles.captionNumber}>
+                        {biomarker
+                          ? `${biomarker.systolic ?? "-"} / ${biomarker.diastolic ?? "-"} mmHg`
+                          : "-"}
+                      </Text>
                       <Text style={styles.captionName}>Blood Pressure</Text>
                     </View>
                   </View>
@@ -413,7 +426,7 @@ export default function DashboardHome() {
                   <View style={styles.containerStatus}>
                     <View style={styles.bulletin}></View>
                     <View>
-                      <Text style={styles.captionNumber}>72 mg/dL</Text>
+                      <Text style={styles.captionNumber}>{biomarker ? `${biomarker.bloodSugar ?? "-"} mg/dL` : "-"}</Text>
                       <Text style={styles.captionName}>Blood Sugar</Text>
                     </View>
                   </View>
@@ -423,7 +436,7 @@ export default function DashboardHome() {
                   <View style={styles.containerStatus}>
                     <View style={styles.bulletin}></View>
                     <View>
-                      <Text style={styles.captionNumber}>100 bpm</Text>
+                      <Text style={styles.captionNumber}>{biomarker ? `${biomarker.heartRate ?? "-"} bpm` : "-"}</Text>
                       <Text style={styles.captionName}>Heart Rate</Text>
                     </View>
                   </View>
@@ -432,7 +445,7 @@ export default function DashboardHome() {
                   <View style={styles.containerStatus}>
                     <View style={styles.bulletin}></View>
                     <View>
-                      <Text style={styles.captionNumber}>60 kg</Text>
+                      <Text style={styles.captionNumber}>{biomarker ? `${biomarker.weight ?? "-"} kg` : "-"}</Text>
                       <Text style={styles.captionName}>Weight</Text>
                     </View>
                   </View>
@@ -441,7 +454,9 @@ export default function DashboardHome() {
 
               {/* Latest Update */}
               <View style={styles.LatestContainer}>
-                <Text style={styles.latestText}>Latest update 15/09/2025</Text>
+                <Text style={styles.latestText}>Latest update{" "}
+                  {loading ? "Loading..." : `${lastSync}`}
+                </Text>
 
                 <TouchableOpacity
                   style={styles.updateButton}

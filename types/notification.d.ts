@@ -5,6 +5,7 @@ export interface Notification {
   type: NotificationType;
   message: string;
   createdAt: any;
+  dateTime?: string | Date;
   read: boolean;
   extraData?: Record<string, any>;
 }

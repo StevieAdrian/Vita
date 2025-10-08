@@ -10,29 +10,24 @@ import {
 } from "react-native-safe-area-context";
 import { styles } from "../../styles/profile/digitalBiomarker.styles";
 import { LinearGradient } from "expo-linear-gradient";
+import { useDigitalBiomarker } from "@/hooks/useDigitalBiomarker";
+
 
 export default function DigitalBiomarker() {
   const insets = useSafeAreaInsets();
   const [hasInput, setHasInput] = useState(false);
-  const { data, setData, loading, saveProfile } = useUserProfile();
+  const { data, setData, saveProfile } = useUserProfile();
+  const { form, hasChanges, loading, handleChange, saveBiomarker } = useDigitalBiomarker();
 
-  const [formValues, setFormValues] = useState({
-    systolic: "",
-    diastolic: "",
-    heartRate: "",
-    bloodSugar: "",
-    weight: "",
-  });
-
-  const handleInputChange = (field: keyof typeof formValues, value: string) => {
-    setFormValues((prev) => {
-      const updated = { ...prev, [field]: value };
-      // cek apakah ada salah satu field yg terisi
-      const anyFilled = Object.values(updated).some((v) => v.trim().length > 0);
-      setHasInput(anyFilled);
-      return updated;
-    });
-  };
+  // const handleInputChange = (field: keyof typeof formValues, value: string) => {
+  //   setFormValues((prev) => {
+  //     const updated = { ...prev, [field]: value };
+  //     // cek apakah ada salah satu field yg terisi
+  //     const anyFilled = Object.values(updated).some((v) => v.trim().length > 0);
+  //     setHasInput(anyFilled);
+  //     return updated;
+  //   });
+  // };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -58,17 +53,19 @@ export default function DigitalBiomarker() {
               <View style={styles.bpContainer}>
                 <View style={styles.bpInputWrapper}>
                   <TextInput
+                    value={form.systolic}
                     style={styles.bpInput}
-                    onChangeText={(text) => handleInputChange("systolic", text)}
+                    onChangeText={(text) => handleChange("systolic", text)}
                     keyboardType="numeric"
                   />
                   <Text style={styles.bpLabel}>Systolic</Text>
                 </View>
                 <View style={styles.bpInputWrapper}>
                   <TextInput
+                    value={form.diastolic}
                     style={styles.bpInput}
                     onChangeText={(text) =>
-                      handleInputChange("diastolic", text)
+                      handleChange("diastolic", text)
                     }
                     keyboardType="numeric"
                   />
@@ -80,30 +77,33 @@ export default function DigitalBiomarker() {
             <View style={styles.bottomInputCont}>
               <Text style={styles.inputTitle}>Heart Rate (bpm)</Text>
               <TextInput
+                value={form.heartRate}
                 style={styles.fullInput}
-                onChangeText={(text) => handleInputChange("heartRate", text)}
+                onChangeText={(text) => handleChange("heartRate", text)}
                 keyboardType="numeric"
               />
             </View>
             <View style={styles.bottomInputCont}>
               <Text style={styles.inputTitle}>Blood Sugar (mg/dL)</Text>
               <TextInput
+                value={form.bloodSugar}
                 style={styles.fullInput}
-                onChangeText={(text) => handleInputChange("bloodSugar", text)}
+                onChangeText={(text) => handleChange("bloodSugar", text)}
                 keyboardType="numeric"
               />
             </View>
             <View style={styles.bottomInputCont}>
               <Text style={styles.inputTitle}>Weight (kg)</Text>
               <TextInput
+                value={form.weight}
                 style={styles.fullInput}
-                onChangeText={(text) => handleInputChange("weight", text)}
+                onChangeText={(text) => handleChange("weight", text)}
                 keyboardType="numeric"
               />
             </View>
           </View>
 
-          <PrimaryButtonColorForm text="Save Changes" active={hasInput} />
+          <PrimaryButtonColorForm text="Save Changes" active={hasChanges} onPress={saveBiomarker} />
         </ScrollView>
       </View>
     </SafeAreaView>
