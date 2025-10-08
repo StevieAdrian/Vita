@@ -4,16 +4,14 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: COLORS.white,
-    borderRadius: 14,
-    overflow: "hidden",
-    borderWidth: 1,
-    borderColor: COLORS.background2nd,
+    borderRadius: 10,
   },
   container: {
     flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
   },
   leftIcon: {
     width: 22,
@@ -40,5 +38,10 @@ export const styles = StyleSheet.create({
     marginLeft: 8,
     tintColor: COLORS.gray1,
     resizeMode: "contain",
+  },
+  contContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 });

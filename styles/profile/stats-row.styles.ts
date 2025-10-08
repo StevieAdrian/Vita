@@ -9,20 +9,21 @@ export const styles = StyleSheet.create({
   box: {
     flex: 1,
     borderRadius: 10,
-    backgroundColor: COLORS.background2nd,
+    backgroundColor: COLORS.primary5th,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.primary,
     alignItems: "center",
     paddingVertical: 12,
   },
   value: {
-    fontSize: 18,
-    fontWeight: "700",
+    fontSize: 16,
+    fontFamily: "Inter-Semibold",
     color: COLORS.black,
   },
   label: {
-    marginTop: 4,
     fontSize: 12,
+    marginTop: 4,
+    fontFamily: "Inter-Regular",
     color: COLORS.gray2,
   },
 });

@@ -1,4 +1,4 @@
-import { Text, TextInput, TextInputProps, View } from "react-native";
+import { Pressable, Text, TextInput, TextInputProps, View } from "react-native";
 import { styles } from "../../styles/utils/input.styles";
 
 interface InputFieldProps extends TextInputProps {
@@ -6,6 +6,7 @@ interface InputFieldProps extends TextInputProps {
   required?: boolean;
   error?: string;
   rightIcon?: React.ReactNode;
+  onPressContainer?: () => void;
 }
 
 export default function InputField({
@@ -13,18 +14,31 @@ export default function InputField({
   required,
   error,
   rightIcon,
+  onPressContainer,
   ...props
 }: InputFieldProps) {
   return (
     <>
-      <Text style={styles.label}>
-        {label} {required && <Text style={styles.required}>*</Text>}
-      </Text>
-      <View style={styles.innerContainer}>
-        <TextInput {...props} style={styles.input} />
-        {rightIcon && <View style={{ marginLeft: 8 }}>{rightIcon}</View>}
+      <View style={styles.container}>
+        <Text style={styles.label}>
+          {label} {required && <Text style={styles.required}>*</Text>}
+        </Text>
+        <Pressable
+          onPress={onPressContainer}
+          style={({ pressed }) => [
+            styles.innerContainer,
+            pressed && { opacity: 0.8 },
+          ]}
+        >
+          <TextInput
+            {...props}
+            style={[styles.input, { flex: 1 }]}
+            pointerEvents="auto"
+          />
+          {rightIcon && <View style={{ marginLeft: 8 }}>{rightIcon}</View>}
+        </Pressable>
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
       </View>
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
     </>
   );
 }

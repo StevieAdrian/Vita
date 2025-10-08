@@ -22,6 +22,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Feather";
 import { styles } from "../../../styles/auth/signup/singup.styles";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -88,6 +89,10 @@ export default function Signup() {
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
+        <LinearGradient
+          colors={["#1A73E8", "#21E2CF"]}
+          style={styles.dashboardContainerLinear}
+        ></LinearGradient>
         <ScrollView
           style={{
             position: "absolute",

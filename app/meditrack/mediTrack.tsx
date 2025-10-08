@@ -15,6 +15,7 @@ import { useAppointments } from "@/context/AppointmentContext";
 import { useDrugs } from "@/context/DrugContext";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -316,6 +317,10 @@ const ScheduleScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <LinearGradient
+        colors={["#E9F3FF", "#1A73E8"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
       <StatusBar
         barStyle="dark-content"
         backgroundColor={COLORS.background2nd}

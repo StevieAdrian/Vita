@@ -6,9 +6,22 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background2nd,
   },
+  headerContainer: {
+    width: "100%",
+    backgroundColor: COLORS.background2nd,
+  },
+  dashboardContainerLinear: {
+    flex: 1,
+    paddingHorizontal: 20,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: "70%",
+  },
   scrollView: {
     position: "absolute",
-    top: 60,
+    top: 90,
     left: 0,
     right: 0,
     bottom: 0,
@@ -21,6 +34,7 @@ export const styles = StyleSheet.create({
   keyboardAvoid: {
     flex: 1,
   },
+
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -30,6 +44,8 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 0,
     zIndex: 1,
     height: 80,
+    paddingTop: 50,
+    marginBottom: 37,
   },
   backButton: {
     padding: 8,
@@ -42,7 +58,6 @@ export const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 24,
-    fontWeight: "600",
     color: COLORS.black,
     fontFamily: "Inter-Semibold",
   },
@@ -57,7 +72,7 @@ export const styles = StyleSheet.create({
   card: {
     backgroundColor: COLORS.white,
     borderRadius: 16,
-    padding: 20,
+    paddingHorizontal: 20,
     marginHorizontal: 16,
     marginTop: 16,
     marginBottom: 20,
@@ -66,26 +81,28 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 4,
+    paddingVertical: 35,
   },
   titleInput: {
-    fontSize: 20,
-    fontWeight: "600",
+    fontSize: 16,
+    fontFamily: "Inter-Medium",
     color: COLORS.black,
-    borderWidth: 0,
-    backgroundColor: "transparent",
-    paddingVertical: 6,
+    borderWidth: 1,
+    borderColor: COLORS.gray2,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 15,
   },
   separator: {
     height: 1,
-    backgroundColor: COLORS.gray2,
-    marginVertical: 16,
+    backgroundColor: COLORS.gray4,
+    marginVertical: 10,
   },
   section: {
-    marginBottom: 20,
+    marginBottom: 10,
   },
   label: {
-    fontSize: 14,
-    fontWeight: "600",
+    fontSize: 16,
     color: COLORS.black,
     marginBottom: 8,
     fontFamily: "Inter-Medium",
@@ -177,11 +194,13 @@ export const styles = StyleSheet.create({
     color: COLORS.black,
     textAlignVertical: "top",
     minHeight: 60,
+    borderRadius: 10,
   },
   titleHeader: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 8,
+    gap: 10,
   },
 });

@@ -8,6 +8,7 @@ export default function AvatarPicker({
   imageUrl,
   onChangeImage,
   size = 120,
+  onEdit = true,
 }: AvatarPickerProps) {
   const choosePhoto = () => {
     onChangeImage?.("");
@@ -26,9 +27,11 @@ export default function AvatarPicker({
           { width: size, height: size, borderRadius: size / 2 },
         ]}
       />
-      <TouchableOpacity style={styles.cameraButton} onPress={choosePhoto}>
-        <Ionicons name="camera" size={size * 0.15} color={COLORS.white} />
-      </TouchableOpacity>
+      {onEdit && (
+        <TouchableOpacity style={styles.cameraButton} onPress={choosePhoto}>
+          <Ionicons name="camera" size={size * 0.15} color={COLORS.white} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 }

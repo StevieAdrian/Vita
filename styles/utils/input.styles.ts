@@ -1,30 +1,29 @@
-import { StyleSheet } from "react-native";
 import { COLORS } from "@/constants/colors";
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  innerContainer: { 
+  innerContainer: {
     flexDirection: "row",
-    width: "100%",
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: COLORS.gray1,
-    borderRadius: 8,
+    borderRadius: 5,
     marginBottom: 4,
-    paddingHorizontal: 10,
-    backgroundColor: COLORS.white,
+    borderColor: COLORS.gray2,
+    borderWidth: 1,
+    width: "100%",
   },
   label: {
     alignSelf: "flex-start",
-    fontSize: 14,
+    fontSize: 16,
     color: COLORS.black,
     marginBottom: 5,
-    fontWeight: 500,
+    fontFamily: "Inter-Medium",
   },
   input: {
     flex: 1,
     height: 45,
     fontSize: 14,
     color: COLORS.black,
+    paddingHorizontal: 10,
   },
   required: {
     color: COLORS.red,
@@ -33,5 +32,9 @@ export const styles = StyleSheet.create({
     color: COLORS.red,
     fontSize: 12,
     marginTop: 4,
+  },
+  container: {
+    marginBottom: 10,
+    borderRadius: 10,
   },
 });

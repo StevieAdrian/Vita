@@ -1,5 +1,5 @@
-import { StyleSheet } from "react-native";
 import { COLORS } from "@/constants/colors";
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   safeArea: {
@@ -7,6 +7,19 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.background2nd,
   },
   header: {
+    width: "100%",
+  },
+  dashboardContainerLinear: {
+    flex: 1,
+    paddingHorizontal: 20,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: "70%",
+  },
+  container: {
+    flex: 1,
     width: "100%",
   },
   card: {
@@ -28,6 +41,13 @@ export const styles = StyleSheet.create({
     height: 50,
     borderRadius: 25,
     marginRight: 12,
+  },
+  noMembers: {
+    fontSize: 16,
+    marginTop: 10,
+    color: COLORS.gray1,
+    fontFamily: "Inter-Medium",
+    textAlign: "center",
   },
   name: {
     fontSize: 16,

@@ -16,6 +16,15 @@ export const styles = StyleSheet.create({
     zIndex: 1,
     height: 80,
   },
+  dashboardContainerLinear: {
+    flex: 1,
+    paddingHorizontal: 20,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: "70%",
+  },
   backButton: {
     padding: 8,
     borderRadius: 8,
@@ -36,7 +45,15 @@ export const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-    backgroundColor: COLORS.background2nd,
+  },
+  headerContainer: {
+    width: "100%",
+    paddingHorizontal: 16,
+  },
+  totalRem: {
+    fontSize: 16,
+    fontFamily: "Inter-Medium",
+    color: COLORS.primary,
   },
   contentContainer: {
     paddingTop: 20,
@@ -46,8 +63,13 @@ export const styles = StyleSheet.create({
   sectionHeaderWrapper: {
     marginBottom: 16,
   },
-  remindersContainer: {
-    gap: 12,
+  appointmentsContainer: {
+    gap: 10,
+    backgroundColor: COLORS.white,
+    paddingHorizontal: 15,
+    paddingBottom: 35,
+    borderRadius: 10,
+    paddingTop: 15,
   },
   emptyState: {
     alignItems: "center",
@@ -102,8 +124,5 @@ export const styles = StyleSheet.create({
   actionIcon: {
     width: 16,
     height: 16,
-  },
-  appointmentsContainer: {
-    gap: 12,
   },
 });

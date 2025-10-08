@@ -17,6 +17,7 @@ import { styles } from "@/styles/hcd/viewHealthDiary.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
 import { stylesMonitor } from "@/styles/utils/monitoring.styles";
 import { DiaryEntry } from "@/types/diary";
+import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -178,6 +179,10 @@ export default function HealthDiary() {
 
   return (
     <SafeAreaView style={styles.dashboardContainer}>
+      <LinearGradient
+        colors={["#E9F3FF", "#1A73E8"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,
@@ -230,7 +235,7 @@ export default function HealthDiary() {
                     style={styles.seeAllContainer}
                     onPress={() => router.push("/meditrack/mediTrack")}
                   >
-                    Add Event
+                    + Add Event
                   </Text>
                 </TouchableOpacity>
               </View>
