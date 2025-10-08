@@ -108,7 +108,7 @@ export const styles = StyleSheet.create({
         borderRadius: 12,
         paddingVertical: 14,
         paddingHorizontal: 16,
-        fontSize: moderateScale(16),
+        fontSize: 16,
         color: COLORS.black,
         shadowColor: COLORS.white,
         shadowOffset: { width: 0, height: 2 },
