@@ -24,7 +24,7 @@ export const validateField = (
       if (!value) return "Phone number is required";
       if (!/^\d{10,15}$/.test(value))
         return "Phone number must be 10-15 digits";
-      if (!/^0\d{9,14}$/.test(value)) return "Phone number must start with 0";
+      if (!/^08\d{8,13}$/.test(value)) return "Phone number must start with 08";
       break;
 
     case "relation":

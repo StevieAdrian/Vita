@@ -26,14 +26,33 @@ export default function MonthlyReport() {
     if (!reportData) return;
 
     const age = calculateAge(user.dateOfBirth);
+    const today = new Date().toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
 
     await generateReportPDF({
       name: `${user.firstName} ${user.lastName}`,
       dob: user.dateOfBirth ?? "—",
       age,
+      today,
       gender: user.gender ?? "—",
       bloodType: user.bloodType ?? "—",
+      allergics: user.allergies ?? "-",
+      chronic: user.chronic ?? "-",
+      updatedAt: reportData.update,
       period: reportData.period,
+      bloodSugarHighDate: reportData.bloodSugarHighDate,
+      bloodSugarLowDate: reportData.bloodSugarLowDate,
+      systolicHighDate: reportData.systolicHighDate,
+      systolicLowDate: reportData.systolicLowDate,
+      diastolicHighDate: reportData.diastolicHighDate,
+      diastolicLowDate: reportData.diastolicLowDate,
+      heartRateHighDate: reportData.heartRateHighDate,
+      heartRateLowDate: reportData.heartRateLowDate,
+      weightHighDate: reportData.weightHighDate,
+      weightLowDate: reportData.weightLowDate,
       ...reportData,
     });
   };
@@ -54,13 +73,14 @@ export default function MonthlyReport() {
           <View style={styles.contentWrapper}>
             <View style={styles.formContainer}>
               <View style={styles.dropdownContainer}>
+                <Text style={styles.label}></Text>
                 <MonthDropdown onSelect={setMonth} />
               </View>
 
               <View style={styles.previewSection}>
                 <Text style={styles.warningText}>Preview Content</Text>
                 <Image
-                  source={require("@/assets/images/report-preview.png")}
+                  source={require("@/assets/images/ReportTemplateCard.svg")}
                   style={styles.previewImage}
                 />
               </View>
