@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     zIndex: 1,
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.primary,
     borderRadius: 41,
     width: 20,
     height: 20,
@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
     fontSize: 12,
   },
   textHeader: {
-    color: COLORS.white,
+    color: COLORS.black,
     fontFamily: "Inter-SemiBold",
     fontSize: 24,
   },

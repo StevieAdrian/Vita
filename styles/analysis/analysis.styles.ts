@@ -4,13 +4,22 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.background2nd,
     position: "absolute",
     paddingHorizontal: 20,
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
+  },
+  dashboardContainerLinear: {
+    flex: 1,
+    paddingHorizontal: 20,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: "70%",
   },
   scrollContent: {
     paddingBottom: 24,
@@ -54,12 +63,12 @@ export const styles = StyleSheet.create({
   },
   warningCard: {
     width: "100%",
-    backgroundColor: COLORS.red4th,
+    backgroundColor: COLORS.red3rd,
     borderColor: COLORS.red2nd,
     borderWidth: 1,
     borderRadius: 10,
     padding: 16,
-    marginVertical: 5,
+    marginBottom: 5,
   },
   goodCard: {
     width: "100%",
@@ -68,7 +77,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     padding: 16,
-    marginTop: 10,
+    marginBottom: 5,
   },
   warningHeader: {
     flexDirection: "row",

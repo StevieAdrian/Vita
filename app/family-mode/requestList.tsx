@@ -3,6 +3,7 @@ import { useAuthState } from "@/hooks/useAuthState";
 import { useFamilyRequests } from "@/hooks/useFamilyRequests";
 import { useIncomingRequests } from "@/hooks/useIncomingRequest";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
+import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import {
   Image,
@@ -63,6 +64,10 @@ export default function RequestList() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <LinearGradient
+        colors={["#E9F3FF", "#1A73E8"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
@@ -74,60 +79,64 @@ export default function RequestList() {
           <TitleBack title="Request List" />
         </View>
 
-        {loading && <Text>Loading...</Text>}
+        <View style={styles.container}>
+          {loading && <Text>Loading...</Text>}
 
-        {!loading && requests.length === 0 && <Text>No requests found</Text>}
+          {!loading && requests.length === 0 && (
+            <Text style={styles.noMembers}>No Requests List</Text>
+          )}
 
-        {requests.map((r) => (
-          <View key={r.id} style={styles.card}>
-            <View style={styles.headerRow}>
-              <Image source={{ uri: r.avatarUrl }} style={styles.avatar} />
-              <View style={{ flex: 1 }}>
-                <Text style={styles.name}>{r.displayName}</Text>
+          {requests.map((r) => (
+            <View key={r.id} style={styles.card}>
+              <View style={styles.headerRow}>
+                <Image source={{ uri: r.avatarUrl }} style={styles.avatar} />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.name}>{r.displayName}</Text>
+                </View>
               </View>
-            </View>
 
-            {r.notes ? (
+              {r.notes ? (
+                <View style={{ marginTop: 8 }}>
+                  <Text style={styles.label}>Description</Text>
+                  <Text style={styles.value}>{r.notes}</Text>
+                </View>
+              ) : null}
+
               <View style={{ marginTop: 8 }}>
-                <Text style={styles.label}>Description</Text>
-                <Text style={styles.value}>{r.notes}</Text>
+                <Text style={styles.label}>Request Relations</Text>
+                <Text style={styles.value}>{r.relation}</Text>
               </View>
-            ) : null}
 
-            <View style={{ marginTop: 8 }}>
-              <Text style={styles.label}>Request Relations</Text>
-              <Text style={styles.value}>{r.relation}</Text>
+              <View style={styles.actionRow}>
+                <TouchableOpacity
+                  style={styles.acceptBtn}
+                  onPress={() => handleAccept(r)}
+                >
+                  <View style={styles.actionContent}>
+                    <Image
+                      source={require("@/assets/family/accept-icon.png")}
+                      style={styles.actionIcon}
+                    />
+                    <Text style={styles.acceptText}>Accept</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.declineBtn}
+                  onPress={() => handleDecline(r)}
+                >
+                  <View style={styles.actionContent}>
+                    <Image
+                      source={require("@/assets/family/decline-icon.png")}
+                      style={styles.actionIconDecline}
+                    />
+                    <Text style={styles.declineText}>Decline</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
-
-            <View style={styles.actionRow}>
-              <TouchableOpacity
-                style={styles.acceptBtn}
-                onPress={() => handleAccept(r)}
-              >
-                <View style={styles.actionContent}>
-                  <Image
-                    source={require("@/assets/family/accept-icon.png")}
-                    style={styles.actionIcon}
-                  />
-                  <Text style={styles.acceptText}>Accept</Text>
-                </View>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.declineBtn}
-                onPress={() => handleDecline(r)}
-              >
-                <View style={styles.actionContent}>
-                  <Image
-                    source={require("@/assets/family/decline-icon.png")}
-                    style={styles.actionIconDecline}
-                  />
-                  <Text style={styles.declineText}>Decline</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </View>
-        ))}
+          ))}
+        </View>
 
         <Modal
           transparent={true}

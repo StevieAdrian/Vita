@@ -11,6 +11,15 @@ export const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
+  dashboardContainerLinear: {
+    flex: 1,
+    paddingHorizontal: 20,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: "70%",
+  },
   scrollContent: {
     paddingHorizontal: 25,
     paddingBottom: 24,
@@ -29,13 +38,13 @@ export const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   requestTitle: {
-    color: COLORS.white,
+    color: COLORS.black,
     fontSize: 16,
     fontFamily: "Inter-SemiBold",
   },
   requestSubtitle: {
     fontSize: 14,
-    color: COLORS.gray5,
+    color: COLORS.gray1,
     fontFamily: "Inter-Regular",
   },
   chevron: {
@@ -51,8 +60,14 @@ export const styles = StyleSheet.create({
     paddingBottom: 14,
     backgroundColor: COLORS.background2nd,
   },
+  cont: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
+  },
   textHeader: {
-    color: COLORS.white,
+    color: COLORS.black,
     fontFamily: "Inter-SemiBold",
     fontSize: 20,
   },
@@ -159,5 +174,24 @@ export const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 15,
     fontWeight: "600",
+  },
+  noMembers: {
+    fontSize: 16,
+    marginTop: 10,
+    color: COLORS.black,
+    fontFamily: "Inter-Medium",
+  },
+  buttonAdd: {
+    fontSize: 14,
+    paddingVertical: 5,
+    color: COLORS.white,
+    fontFamily: "Inter-Regular",
+  },
+  addMember: {
+    marginTop: 10,
+    backgroundColor: COLORS.primary,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 10,
   },
 });

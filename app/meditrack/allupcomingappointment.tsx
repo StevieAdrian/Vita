@@ -1,17 +1,11 @@
 import { AppointmentCard } from "@/components/meditrack-forms/AppointmentCard";
-import { SectionHeader } from "@/components/meditrack-forms/TextMediTrack";
 import { convertAppointment } from "@/components/utils/DateUtils";
+import TitleBack from "@/components/utils/TitleBack";
 import { useAppointments } from "@/context/AppointmentContext";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useCallback, useMemo } from "react";
-import {
-  Alert,
-  Image,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "../../styles/meditrack/all-upcoming-appointment.styles";
 
@@ -82,15 +76,13 @@ const AllUpcomingAppointmentScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-          <Image
-            source={require("../../assets/utilsIcon/arrow-left.png")}
-            style={styles.backIcon}
-          />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Upcoming Appointments</Text>
-        <View style={styles.headerSpacer} />
+      <LinearGradient
+        colors={["#E9F3FF", "#1A73E8"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
+      {/* Header */}
+      <View style={styles.headerContainer}>
+        <TitleBack title="Upcoming Reminder" />
       </View>
 
       <ScrollView
@@ -98,18 +90,10 @@ const AllUpcomingAppointmentScreen: React.FC = () => {
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.sectionHeaderWrapper}>
-          <SectionHeader
-            title="Upcoming Appointments"
-            subtitle=""
-            onPressSeeAll={() => {}}
-            countLabel={`${upcomingAppointments.length} appointment${
-              upcomingAppointments.length !== 1 ? "s" : ""
-            }`}
-          />
-        </View>
-
         <View style={styles.appointmentsContainer}>
+          <Text style={styles.totalRem}>
+            {upcomingAppointments.length} upcoming appointments
+          </Text>
           {upcomingAppointments.length === 0 ? (
             <View style={styles.emptyState}>
               <Text style={styles.emptyTitle}>No Upcoming Appointments</Text>

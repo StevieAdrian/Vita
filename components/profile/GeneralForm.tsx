@@ -1,5 +1,8 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useAvatarPicker } from "@/hooks/useAvatarPicker";
+import { useLastHealthSync } from "@/hooks/useLastHealthSync";
+import { useRecordedDays } from "@/hooks/useRecordedDays";
+import { useReminderRecords } from "@/hooks/useReminderRecords";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { styles } from "@/styles/profile/general-form.styles";
 import { router } from "expo-router";
@@ -8,9 +11,6 @@ import ListItem from "../utils/ListItem";
 import AvatarPicker from "./AvatarPicker";
 import SectionCard from "./SectionCard";
 import StatsRow from "./StatsRow";
-import { useLastHealthSync } from "@/hooks/useLastHealthSync";
-import { useRecordedDays } from "@/hooks/useRecordedDays";
-import { useReminderRecords } from "@/hooks/useReminderRecords";
 
 export default function GeneralForm() {
   const { image, pickPhoto } = useAvatarPicker();
@@ -27,6 +27,7 @@ export default function GeneralForm() {
           imageUrl={image || data.avatarUrl || undefined}
           onChangeImage={() => pickPhoto("gallery")}
           size={120}
+          onEdit={false}
         />
         <Text style={styles.name}>
           {data.firstName} {data.lastName}
@@ -41,8 +42,14 @@ export default function GeneralForm() {
       >
         <StatsRow
           stats={[
-            { value: loadingRecorded ? "..." : recordedDays, label: "Recorded Days" },
-            { value: loadingRecorded ? "..." : reminderCount, label: "Reminder Record" },
+            {
+              value: loadingRecorded ? "..." : recordedDays,
+              label: "Recorded Days",
+            },
+            {
+              value: loadingRecorded ? "..." : reminderCount,
+              label: "Reminder Record",
+            },
           ]}
         />
         <View style={{ height: 12 }} />
@@ -59,7 +66,7 @@ export default function GeneralForm() {
         </TouchableOpacity>
       </SectionCard>
 
-      <View style={{ gap: 10, marginTop: 18 }}>
+      <View style={styles.choiceSettingContainer}>
         <ListItem
           title="Profile Settings"
           leftIcon={require("@/assets/images/settings-icon.png")}
@@ -83,7 +90,7 @@ export default function GeneralForm() {
         />
         <ListItem
           title="Log Out"
-          leftIcon={require("@/assets/images/logout-icon.png")}
+          leftIcon={require("@/assets/images/logout-icon.svg")}
           onPress={logout}
           danger
         />

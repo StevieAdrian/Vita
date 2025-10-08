@@ -1,6 +1,7 @@
 import InputField from "@/components/utils/InputField";
 import { COLORS } from "@/constants/colors";
 import { useAuth } from "@/hooks/useAuth";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
@@ -13,6 +14,10 @@ export default function Login() {
 
   return (
     <View style={styles.container}>
+      <LinearGradient
+        colors={["#1A73E8", "#21E2CF"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
       <Image
         source={require("@/assets/images/welcome-logo.png")}
         style={styles.welcomeImage}

@@ -12,23 +12,32 @@ export const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: COLORS.background2nd,
   },
+  dashboardContainerLinear: {
+    flex: 1,
+    paddingHorizontal: 20,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: "70%",
+  },
   scrollContent: {
     flexGrow: 1,
     alignItems: "center",
     justifyContent: "flex-start",
   },
   greetings: {
-    color: COLORS.white,
-    fontFamily: "Inter-SemiBold",
-    fontSize: 28,
-    paddingBottom: 20,
+    color: COLORS.black,
+    fontFamily: "Inter-Regular",
+    fontSize: 16,
   },
   greetingsContainer: {
-    flexDirection: "row",
-    alignItems: "flex-end",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    gap: 1,
   },
   greetingsBlue: {
-    color: COLORS.white,
+    color: COLORS.black,
     fontFamily: "Inter-SemiBold",
     fontSize: 28,
     paddingBottom: 20,
@@ -37,8 +46,9 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderRadius: 10,
     zIndex: 1,
-    paddingTop: 10,
-    paddingHorizontal: 20,
+    paddingVertical: 10,
+
+    marginBottom: 10,
   },
   icon: {
     transform: [{ rotate: "180deg" }],
@@ -46,7 +56,7 @@ export const styles = StyleSheet.create({
   subtitle: {
     color: COLORS.white,
     fontFamily: "Inter-SemiBold",
-    fontSize: 20,
+    fontSize: 16,
   },
   captionSubtitle: {
     flexDirection: "row",
@@ -60,22 +70,29 @@ export const styles = StyleSheet.create({
   },
   seeAllContainer: {
     color: COLORS.white,
-    fontFamily: "Inter-Medium",
+    fontFamily: "Inter-Regular",
     fontSize: 14,
   },
   reminderText: {
-    color: COLORS.gray5,
-    fontFamily: "Inter-Medium",
-    fontSize: 14,
+    color: COLORS.white,
+    fontFamily: "Inter-Regular",
+    fontSize: 12,
   },
   reminderListContainer: {
     marginTop: 10,
-    gap: 12, // Jarak antar item
+    gap: 12,
   },
   containerReminder: {
-    marginTop: 20,
     gap: 5,
   },
+  remCont: {
+    marginHorizontal: 10,
+    paddingVertical: 20,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    backgroundColor: COLORS.primary,
+  },
+
   containerContent: {
     marginTop: 15,
     gap: 5,
@@ -120,6 +137,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 10,
+    marginTop: 10,
   },
   squaresContainer: {
     flexDirection: "row",
@@ -183,7 +201,6 @@ export const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 10,
-    marginVertical: 10,
   },
   descHealthWarning: {
     color: COLORS.black,
@@ -192,7 +209,6 @@ export const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   titleHealth: {
-    
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",

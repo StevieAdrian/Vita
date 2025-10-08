@@ -1,5 +1,5 @@
-import { StyleSheet } from "react-native";
 import { COLORS } from "@/constants/colors";
+import { StyleSheet } from "react-native";
 
 export const NAV_ITEMS = 107;
 
@@ -42,9 +42,8 @@ export const styles = StyleSheet.create({
     color: COLORS.black,
   },
   activeLabel: {
-    color: "#007bff",
-    fontWeight: "600",
-    fontFamily: "Inter-Regular",
+    color: COLORS.primary,
+    fontFamily: "Inter-Medium",
   },
   notesItem: {
     marginTop: -35,

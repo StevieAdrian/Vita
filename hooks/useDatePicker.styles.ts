@@ -8,17 +8,17 @@ export const useDatePickerStyles = (selectedDate: Date) => {
     day: {
       width: 45,
       height: 55,
-      borderRadius: 100,
+      borderRadius: 100 as const,
     },
     today: {
       borderColor: "blue",
       borderWidth: 2,
-      borderRadius: 100,
+      borderRadius: 100 as const,
     },
     today_label: { color: "black" },
     selected: {
       backgroundColor: "blue",
-      borderRadius: 100,
+      borderRadius: 100 as const,
     },
     selected_label: { color: "white" },
     month_label: { color: "black" },

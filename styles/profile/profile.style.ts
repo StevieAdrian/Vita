@@ -4,12 +4,21 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.background2nd,
+    backgroundColor: COLORS.primary5th,
     position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
+  },
+  dashboardContainerLinear: {
+    flex: 1,
+    paddingHorizontal: 20,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: "50%",
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -21,11 +30,11 @@ export const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    width: "100%",
   },
   tabContainer: {
     justifyContent: "center",
     flexDirection: "row",
-    marginTop: 16,
   },
   titleContainer: {
     flexDirection: "row",
@@ -50,5 +59,5 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     flex: 1,
-  }
+  },
 });

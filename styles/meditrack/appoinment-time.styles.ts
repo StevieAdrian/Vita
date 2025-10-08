@@ -3,8 +3,7 @@ import { COLORS } from "../../constants/colors";
 
 export const styles = StyleSheet.create({
   label: {
-    fontSize: 14,
-    fontWeight: "600",
+    fontSize: 16,
     color: COLORS.black,
     marginBottom: 8,
     fontFamily: "Inter-Medium",
@@ -21,13 +20,13 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderWidth: 1,
     borderColor: COLORS.gray2,
-    borderRadius: 12,
+    borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 14,
     backgroundColor: COLORS.white,
   },
   timeText: {
-    fontSize: 14,
+    fontSize: 16,
     color: COLORS.black,
     fontWeight: "500",
   },
@@ -39,7 +38,7 @@ export const styles = StyleSheet.create({
   separatorLine: {
     width: 16,
     height: 2,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.black,
     borderRadius: 1,
   },
 });
@@ -124,6 +123,6 @@ export const timePickerStyles = StyleSheet.create({
     fontWeight: "600",
   },
   scrollableList: {
-    maxHeight: 200, 
+    maxHeight: 200,
   },
 });

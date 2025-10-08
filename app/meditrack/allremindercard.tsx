@@ -1,18 +1,12 @@
 import { ReminderCard } from "@/components/meditrack-forms/Reminder";
-import { SectionHeader } from "@/components/meditrack-forms/TextMediTrack";
+import TitleBack from "@/components/utils/TitleBack";
 import { useDrugs } from "@/context/DrugContext";
 import { router } from "expo-router";
 import React, { useMemo } from "react";
-import {
-  Alert,
-  Image,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "../../styles/meditrack/all-reminder-card.styles";
+import { LinearGradient } from "expo-linear-gradient";
 
 const AllRemindersScreen: React.FC = () => {
   const { drugs, remove } = useDrugs();
@@ -108,7 +102,6 @@ const AllRemindersScreen: React.FC = () => {
               await remove(reminder.drugId);
             } catch (err) {
               console.error(err);
-           
             }
           },
         },
@@ -121,7 +114,7 @@ const AllRemindersScreen: React.FC = () => {
       pathname: "/meditrack/drugForm",
       params: {
         editMode: "true",
-        drugId: reminder.drugId, 
+        drugId: reminder.drugId,
       },
     });
   };
@@ -132,15 +125,14 @@ const AllRemindersScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-          <Image
-            source={require("../../assets/utilsIcon/arrow-left.png")}
-            style={styles.backIcon}
-          />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>All Reminders</Text>
-        <View style={styles.headerSpacer} />
+      <LinearGradient
+        colors={["#E9F3FF", "#1A73E8"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
+
+      {/* Header */}
+      <View style={styles.headerContainer}>
+        <TitleBack title="All Medicine Reminder" />
       </View>
 
       <ScrollView
@@ -148,18 +140,10 @@ const AllRemindersScreen: React.FC = () => {
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.sectionHeaderWrapper}>
-          <SectionHeader
-            title="All Reminders"
-            subtitle=""
-            onPressSeeAll={() => {}}
-            countLabel={`${filteredReminders.length} reminder${
-              filteredReminders.length !== 1 ? "s" : ""
-            }`}
-          />
-        </View>
-
         <View style={styles.remindersContainer}>
+          <Text style={styles.totalRem}>
+            {filteredReminders.length} reminders
+          </Text>
           {filteredReminders.length === 0 ? (
             <View style={styles.emptyState}>
               <Text style={styles.emptyTitle}>No Reminders Yet</Text>
@@ -186,7 +170,7 @@ const AllRemindersScreen: React.FC = () => {
                   createdAt: reminder.createdAt,
                   updatedAt: reminder.createdAt,
                   userId: "",
-                  drugId: reminder.drugId, 
+                  drugId: reminder.drugId,
                 }}
                 onToggle={handleToggleReminder}
                 onEdit={handleEditReminder}

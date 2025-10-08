@@ -5,6 +5,7 @@ import { getAppointmentStatus } from "@/components/utils/DateUtils";
 import InputField from "@/components/utils/InputField";
 import ModalError from "@/components/utils/ModalError";
 import ModalSuccess from "@/components/utils/ModalSuccess";
+import TitleBack from "@/components/utils/TitleBack";
 import { COLORS } from "@/constants/colors";
 import { useAppointments } from "@/context/AppointmentContext";
 import { useAuth } from "@/context/AuthContext";
@@ -14,19 +15,20 @@ import {
   validateTimeRange,
 } from "@/utils/appointment-cartegoryValidation";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "../../styles/meditrack/appointmentform.style";
 
 interface AppointmentFormProps {
@@ -217,32 +219,23 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <LinearGradient
+        colors={["#E9F3FF", "#1A73E8"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <View style={styles.header}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => router.push("/meditrack/mediTrack")}
-          >
-            <Image
-              source={require("../../assets/utilsIcon/arrow-left.png")}
-              style={styles.backIcon}
-            />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>
-            {actualEditMode ? "Edit Appointment" : "New Appointment"}
-          </Text>
-          <View style={styles.headerSpacer} />
-        </View>
-
         <ScrollView
-          style={styles.scrollView}
           contentContainerStyle={styles.scrollViewContent}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
+          {/* Header */}
+          <View style={styles.headerContainer}>
+            <TitleBack title="New Appointment" />
+          </View>
           <View style={styles.card}>
             <View style={styles.titleHeader}>
               <TextInput

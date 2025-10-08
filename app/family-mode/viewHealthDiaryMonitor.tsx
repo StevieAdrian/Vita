@@ -26,12 +26,16 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
+import { useDrugsByUid } from "@/hooks/useDrugsByUid";
+import { useAppointmentsByUid } from "@/hooks/useAppointmentsByUid";
 
 export default function HealthDiary() {
   const { uid: paramUid, isMonitoring } = useLocalSearchParams<{
     uid?: string;
     isMonitoring?: string;
   }>();
+  console.log("PARAMS:", { paramUid, isMonitoring });
+  
   const insets = useSafeAreaInsets();
   const { user } = useAuthState();
   const uid = paramUid || user?.uid;
@@ -60,9 +64,8 @@ export default function HealthDiary() {
       ? formatDateLocal(new Date(selected as Date))
       : formatDateLocal(new Date())
   );
-
-  const { drugs } = useDrugs();
-  const { appointments, remove } = useAppointments();
+    const { drugs } = useDrugsByUid(uid);
+    const { appointments } = useAppointmentsByUid(uid);
 
   function formatDateLocal(date: Date) {
     return date.toLocaleDateString("en-US", {
@@ -161,18 +164,18 @@ export default function HealthDiary() {
       },
     });
   }, []);
-  const handleDeleteAppointment = async (appointment: any) => {
-    Alert.alert("Delete Appointment", `Delete "${appointment.title}"?`, [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: async () => {
-          await remove(appointment.id);
-        },
-      },
-    ]);
-  };
+//   const handleDeleteAppointment = async (appointment: any) => {
+//     Alert.alert("Delete Appointment", `Delete "${appointment.title}"?`, [
+//       { text: "Cancel", style: "cancel" },
+//       {
+//         text: "Delete",
+//         style: "destructive",
+//         onPress: async () => {
+//           await remove(appointment.id);
+//         },
+//       },
+//     ]);
+//   };
   const handleToggleReminder = useCallback((id: string) => {
     console.log(id);
   }, []);
@@ -274,7 +277,7 @@ export default function HealthDiary() {
                         appointment={reminder}
                         onPressDetail={() => handleSeeDetail(reminder)}
                         onEdit={handleEditAppointment}
-                        onDelete={handleDeleteAppointment}
+                        onDelete={() => {}}
                         showActions={true}
                         showTime={false}
                         showLocation={false}

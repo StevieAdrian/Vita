@@ -7,6 +7,7 @@ import { useHealthDiary } from "@/hooks/useHealthDiary";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { styles } from "@/styles/hcd/editDiary.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
+import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -95,6 +96,10 @@ export default function EditDiary() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <LinearGradient
+        colors={["#E9F3FF", "#1A73E8"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,

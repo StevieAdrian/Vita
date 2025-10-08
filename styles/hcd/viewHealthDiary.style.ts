@@ -16,7 +16,15 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    backgroundColor: COLORS.background2nd,
+  },
+  dashboardContainerLinear: {
+    flex: 1,
+    paddingHorizontal: 20,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: "70%",
   },
   dateBg: {
     backgroundColor: COLORS.white,
@@ -38,7 +46,7 @@ export const styles = StyleSheet.create({
     gap: 5,
   },
   containerContentDiary: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.white,
     paddingVertical: 20,
     width: "100%",
     height: "auto",
@@ -49,7 +57,7 @@ export const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 8,
     fontSize: 14,
-    color: COLORS.white,
+    color: COLORS.gray1,
     fontFamily: "Inter-Regular",
   },
   containerContentEmpty: {
@@ -58,7 +66,7 @@ export const styles = StyleSheet.create({
   },
 
   createButton: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.primary,
     paddingVertical: 12,
     paddingHorizontal: 28,
     borderRadius: 5,
@@ -67,13 +75,13 @@ export const styles = StyleSheet.create({
   },
 
   createButtonText: {
-    color: COLORS.primary,
+    color: COLORS.white,
     fontSize: 14,
     fontFamily: "Inter-Medium",
   },
 
   subtitle: {
-    color: COLORS.white,
+    color: COLORS.black,
     fontFamily: "Inter-SemiBold",
     fontSize: 20,
   },
@@ -88,12 +96,12 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   seeAllContainer: {
-    color: COLORS.white,
-    fontFamily: "Inter-Regular",
+    color: COLORS.black,
+    fontFamily: "Inter-semiBold",
     fontSize: 16,
   },
   seeAllReminder: {
-    color: COLORS.primary,
+    color: COLORS.black,
     fontFamily: "Inter-Medium",
     fontSize: 14,
     paddingVertical: 10,
@@ -105,7 +113,7 @@ export const styles = StyleSheet.create({
   },
   reminderListContainer: {
     marginTop: 10,
-    gap: 12, 
+    gap: 12,
   },
   icon: {
     transform: [{ rotate: "180deg" }],
