@@ -18,69 +18,81 @@ export default function Login() {
         colors={["#1A73E8", "#21E2CF"]}
         style={styles.dashboardContainerLinear}
       ></LinearGradient>
-      <Image
-        source={require("@/assets/images/welcome-logo.png")}
-        style={styles.welcomeImage}
-      />
 
-      <View style={styles.boxContainer}>
-        <InputField
-          label="Email"
-          required
-          onChangeText={setEmail}
-          placeholder="johndoe@gmail.com"
-          placeholderTextColor={COLORS.gray2}
+      <View style={styles.header}>
+        <Image
+          source={require("../../../assets/images/Logo Vita.png")}
+          style={styles.logo}
+          resizeMode="contain"
         />
-        <InputField
-          label="Password"
-          required
-          secureTextEntry
-          onChangeText={setPassword}
-          placeholder="********"
-          placeholderTextColor={COLORS.gray2}
-        />
-
-        <TouchableOpacity
-          style={styles.continueButton}
-          onPress={() => signIn(email, password)}
-          disabled={loading}
-        >
-          <Text style={styles.continueText}>Log in</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => router.push("/auth/login/forgotPassword")} style={styles.forgotContainer}>
-          <Text style={styles.forgotText}>
-            Forgot Password?
-          </Text>
-        </TouchableOpacity>
-
-        <Text style={styles.signupText}>
-          Haven&apos;t create an account?{" "}
-          <Text
-            style={styles.signupLink}
-            onPress={() => router.push("/auth/signup/signup")}
-          >
-            Sign Up
-          </Text>
+        <Text style={styles.title}>Welcome Back</Text>
+        <Text style={styles.subtitle}>
+          Let's continue your health journey{"\n"}with us.
         </Text>
       </View>
-      <View style={styles.dividerWrapper}>
-        <View style={styles.divider} />
-        <Text style={styles.dividerText}>Or Continue With</Text>
-        <View style={styles.divider} />
-      </View>
 
-      <TouchableOpacity
-        style={styles.googleButton}
-        activeOpacity={0.7}
-        onPress={signInWithGoogle}
-        disabled={loading}
-      >
-        <Image
-          source={require("@/assets/images/google.png")}
-          style={styles.googleLogo}
-        />
-      </TouchableOpacity>
+      <View style={styles.upCont}>
+        <View style={styles.boxContainer}>
+          <InputField
+            label="Email"
+            required
+            onChangeText={setEmail}
+            placeholder="johndoe@gmail.com"
+            placeholderTextColor={COLORS.gray2}
+          />
+          <InputField
+            label="Password"
+            required
+            secureTextEntry
+            onChangeText={setPassword}
+            placeholder="********"
+            placeholderTextColor={COLORS.gray2}
+          />
+
+          <TouchableOpacity
+            style={styles.continueButton}
+            onPress={() => signIn(email, password)}
+            disabled={loading}
+          >
+            <Text style={styles.continueText}>Log in</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => router.push("/auth/login/forgotPassword")}
+            style={styles.forgotContainer}
+          >
+            <Text style={styles.forgotText}>Forgot Password?</Text>
+          </TouchableOpacity>
+
+          <Text style={styles.signupText}>
+            Haven&apos;t create an account?{" "}
+            <Text
+              style={styles.signupLink}
+              onPress={() => router.push("/auth/signup/signup")}
+            >
+              Sign Up
+            </Text>
+          </Text>
+        </View>
+        <View style={styles.dividerWrapper}>
+          <View style={styles.divider} />
+          <Text style={styles.dividerText}>Or Continue With</Text>
+          <View style={styles.divider} />
+        </View>
+
+        <TouchableOpacity
+          style={styles.googleButton}
+          activeOpacity={0.7}
+          onPress={signInWithGoogle}
+          disabled={loading}
+        >
+          <Image
+            source={require("../../../assets/images/Logo Google.png")}
+            style={styles.googleIcon}
+          />
+          <Text style={styles.googleText}>Google</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

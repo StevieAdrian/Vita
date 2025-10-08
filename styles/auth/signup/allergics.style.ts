@@ -15,9 +15,9 @@ export const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingHorizontal: scaleWidth(24),
-    paddingTop: scaleHeight(40),
-    paddingBottom: scaleHeight(30),
+    paddingHorizontal: 24,
+    paddingTop: 40,
+    paddingBottom: 30,
   },
   logoContainer: {
     alignItems: "center",
