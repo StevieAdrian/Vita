@@ -17,16 +17,14 @@ export default function ListItem({
       style={styles.wrapper}
     >
       <View style={styles.container}>
-        {leftIcon ? (
+        <View style={styles.container}>
           <Image source={leftIcon} style={styles.leftIcon} />
-        ) : (
-          <View style={{ width: 24 }} />
-        )}
-        <View style={styles.texts}>
-          <Text style={[styles.title, danger && { color: COLORS.red }]}>
-            {title}
-          </Text>
-          {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
+          <View style={styles.texts}>
+            <Text style={[styles.title, danger && { color: COLORS.red }]}>
+              {title}
+            </Text>
+            {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
+          </View>
         </View>
         <Image
           source={require("@/assets/images/chevron-right-icon.png")}

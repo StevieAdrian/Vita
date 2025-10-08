@@ -15,6 +15,7 @@ import { useEarlyWarning } from "@/hooks/useEarlyWarning";
 import { useFutureHealth } from "@/hooks/useFutureHealth";
 import { useHealthStats } from "@/hooks/useHealthStats";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
+import { LinearGradient } from "expo-linear-gradient";
 import { ScrollView, View } from "react-native";
 import {
   SafeAreaView,
@@ -36,6 +37,10 @@ export default function Analysis() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <LinearGradient
+        colors={["#E9F3FF", "#1A73E8"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,

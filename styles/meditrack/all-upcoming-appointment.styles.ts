@@ -4,7 +4,19 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.background2nd,
+  },
+  dashboardContainerLinear: {
+    flex: 1,
+    paddingHorizontal: 20,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: "70%",
+  },
+  headerContainer: {
+    width: "100%",
+    paddingHorizontal: 16,
   },
   header: {
     flexDirection: "row",
@@ -36,7 +48,6 @@ export const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-    backgroundColor: COLORS.background2nd,
   },
   contentContainer: {
     paddingTop: 20,
@@ -104,6 +115,16 @@ export const styles = StyleSheet.create({
     height: 16,
   },
   appointmentsContainer: {
-    gap: 12,
+    gap: 10,
+    backgroundColor: COLORS.white,
+    paddingHorizontal: 15,
+    paddingBottom: 35,
+    borderRadius: 10,
+    paddingTop: 15,
+  },
+  totalRem: {
+    fontSize: 16,
+    fontFamily: "Inter-Medium",
+    color: COLORS.primary,
   },
 });

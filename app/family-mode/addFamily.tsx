@@ -1,4 +1,6 @@
 import InputField from "@/components/utils/InputField";
+import ModalError from "@/components/utils/ModalError";
+import ModalSuccess from "@/components/utils/ModalSuccess";
 import PrimaryButtonColorForm from "@/components/utils/PrimaryButtonColorForm";
 import TitleBack from "@/components/utils/TitleBack";
 import { COLORS } from "@/constants/colors";
@@ -8,6 +10,7 @@ import { useCheckUsername } from "@/hooks/useCheckUsername";
 import { useFamilyRequests } from "@/hooks/useFamilyRequests";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
+import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import {
   ScrollView,
@@ -22,8 +25,6 @@ import {
 } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Feather";
 import { styles } from "../../styles/family-mode/addFamily.styles";
-import ModalError from "@/components/utils/ModalError";
-import ModalSuccess from "@/components/utils/ModalSuccess";
 
 export default function AddFamily() {
   const insets = useSafeAreaInsets();
@@ -84,6 +85,10 @@ export default function AddFamily() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <LinearGradient
+        colors={["#E9F3FF", "#1A73E8"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
       <View style={styles.scrollWrapper}>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -96,95 +101,99 @@ export default function AddFamily() {
             <TitleBack title="Add Family Member" />
           </View>
 
-          <InputField
-            label="Name"
-            placeholder={"John Doe"}
-            onChangeText={(text) => handleChange("name", text)}
-            required
-          />
+          <View style={styles.container}>
+            <InputField
+              label="Name"
+              placeholder={"John Doe"}
+              onChangeText={(text) => handleChange("name", text)}
+              required
+            />
 
-          <View>
-            <View style={styles.dropdownWrapper}>
-              <Text style={styles.label}>
-                Relations <Text style={styles.required}>*</Text>
-              </Text>
-              <TouchableOpacity
-                style={styles.dropdownButton}
-                onPress={handleRelationsPress}
-                activeOpacity={0.7}
-              >
-                <Text
-                  style={[
-                    styles.dropdownText,
-                    !form.relation && styles.placeholderText,
-                  ]}
-                >
-                  {form.relation || "Select relation"}
+            <View>
+              <View style={styles.dropdownWrapper}>
+                <Text style={styles.label}>
+                  Relations <Text style={styles.required}>*</Text>
                 </Text>
-                <Icon
-                  name={showRelationsDropdown ? "chevron-up" : "chevron-down"}
-                  size={20}
-                  color={COLORS.black}
-                />
-              </TouchableOpacity>
-
-              {showRelationsDropdown && (
-                <View style={styles.dropdownMenu}>
-                  <ScrollView
-                    style={styles.dropdownScroll}
-                    nestedScrollEnabled={true}
+                <TouchableOpacity
+                  style={styles.dropdownButton}
+                  onPress={handleRelationsPress}
+                  activeOpacity={0.7}
+                >
+                  <Text
+                    style={[
+                      styles.dropdownText,
+                      !form.relation && styles.placeholderText,
+                    ]}
                   >
-                    {RELATION_OPTIONS.map((option) => (
-                      <TouchableOpacity
-                        key={option}
-                        style={styles.dropdownOption}
-                        onPress={() => selectRelation(option)}
-                        activeOpacity={0.7}
-                      >
-                        <Text style={styles.dropdownOptionText}>{option}</Text>
-                      </TouchableOpacity>
-                    ))}
-                  </ScrollView>
-                </View>
-              )}
+                    {form.relation || "Select relation"}
+                  </Text>
+                  <Icon
+                    name={showRelationsDropdown ? "chevron-up" : "chevron-down"}
+                    size={20}
+                    color={COLORS.black}
+                  />
+                </TouchableOpacity>
+
+                {showRelationsDropdown && (
+                  <View style={styles.dropdownMenu}>
+                    <ScrollView
+                      style={styles.dropdownScroll}
+                      nestedScrollEnabled={true}
+                    >
+                      {RELATION_OPTIONS.map((option) => (
+                        <TouchableOpacity
+                          key={option}
+                          style={styles.dropdownOption}
+                          onPress={() => selectRelation(option)}
+                          activeOpacity={0.7}
+                        >
+                          <Text style={styles.dropdownOptionText}>
+                            {option}
+                          </Text>
+                        </TouchableOpacity>
+                      ))}
+                    </ScrollView>
+                  </View>
+                )}
+              </View>
             </View>
-          </View>
 
-          <InputField
-            label="Account Username"
-            placeholder={"John Doe"}
-            onChangeText={(text) => {
-              handleChange("username", text);
-              if (text.trim().length >= 3) {
-                verifyUsername(text.trim());
-              } else {
-                verifyUsername("");
+            <InputField
+              label="Account Username"
+              placeholder={"John Doe"}
+              onChangeText={(text) => {
+                handleChange("username", text);
+                if (text.trim().length >= 3) {
+                  verifyUsername(text.trim());
+                } else {
+                  verifyUsername("");
+                }
+              }}
+              required
+              rightIcon={
+                isChecking ? (
+                  <Icon name="loader" size={20} color={COLORS.gray2} />
+                ) : exists === true ? (
+                  <Icon name="check-circle" size={20} color="green" />
+                ) : exists === false ? (
+                  <Icon name="x-circle" size={20} color="red" />
+                ) : null
               }
-            }}
-            required
-            rightIcon={
-              isChecking ? (
-                <Icon name="loader" size={20} color={COLORS.gray2} />
-              ) : exists === true ? (
-                <Icon name="check-circle" size={20} color="green" />
-              ) : exists === false ? (
-                <Icon name="x-circle" size={20} color="red" />
-              ) : null
-            }
-          />
+            />
 
-          <Text style={styles.reqNotes}>
-            Request Notes
-            <Text style={styles.required}>*</Text>
-          </Text>
-          <TextInput
-            style={styles.otherInput}
-            placeholder="Input your notes here..."
-            placeholderTextColor={COLORS.gray2}
-            multiline
-            value={form.notes}
-            onChangeText={(text) => handleChange("notes", text)}
-          />
+            <Text style={styles.reqNotes}>
+              Request Notes
+              <Text style={styles.required}>*</Text>
+            </Text>
+            <TextInput
+              style={styles.otherInput}
+              placeholder="Input your notes here..."
+              placeholderTextColor={COLORS.gray2}
+              multiline
+              value={form.notes}
+              onChangeText={(text) => handleChange("notes", text)}
+            />
+          </View>
 
           <PrimaryButtonColorForm
             text={loading ? "Sending..." : "Send Request"}

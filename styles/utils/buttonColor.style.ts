@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   containerButton: { paddingTop: 20 },
   buttonStyle: {
     borderRadius: 5,
-    backgroundColor: COLORS.gray2,
+    backgroundColor: COLORS.gray3,
     paddingVertical: 15,
     paddingHorizontal: 5,
   },

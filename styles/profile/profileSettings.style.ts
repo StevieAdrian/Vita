@@ -13,6 +13,15 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background2nd,
   },
+  dashboardContainerLinear: {
+    flex: 1,
+    paddingHorizontal: 20,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: "70%",
+  },
   header: {
     width: "100%",
   },
@@ -29,8 +38,7 @@ export const styles = StyleSheet.create({
   },
   dobWrapper: {
     width: "100%",
-    position: "relative",
-    marginBottom: 15,
+    justifyContent: "space-between",
   },
   input: {
     borderWidth: 1,
@@ -46,7 +54,7 @@ export const styles = StyleSheet.create({
     marginBottom: 6,
   },
   radioGroup: {
-    marginVertical: 10,
+    marginVertical: 5,
   },
   genderContainer: {
     flexDirection: "row",
@@ -77,6 +85,7 @@ export const styles = StyleSheet.create({
     height: scaleWidth(8),
     borderRadius: scaleWidth(4),
     backgroundColor: COLORS.black,
+    borderColor: COLORS.gray2,
   },
   genderText: {
     fontSize: moderateScale(15),
@@ -84,7 +93,7 @@ export const styles = StyleSheet.create({
   },
   saveBtn: {
     marginTop: 30,
-    backgroundColor: "#4a90e2", 
+    backgroundColor: "#4a90e2",
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: "center",
@@ -96,16 +105,20 @@ export const styles = StyleSheet.create({
   },
   otherInput: {
     backgroundColor: "rgba(255, 255, 255, 0.85)",
-    borderRadius: scaleWidth(12),
+    borderRadius: 10,
     paddingVertical: scaleHeight(14),
     paddingHorizontal: scaleWidth(16),
     fontSize: moderateScale(16),
     color: COLORS.black,
-    shadowColor: COLORS.white,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.6,
-    shadowRadius: 6,
     elevation: 4,
     minHeight: scaleHeight(60),
+    borderWidth: 1,
+    borderColor: COLORS.gray2,
+  },
+  container: {
+    backgroundColor: COLORS.white,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    borderRadius: 10,
   },
 });

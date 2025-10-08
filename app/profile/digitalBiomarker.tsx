@@ -9,6 +9,7 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { styles } from "../../styles/profile/digitalBiomarker.styles";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function DigitalBiomarker() {
   const insets = useSafeAreaInsets();
@@ -35,6 +36,10 @@ export default function DigitalBiomarker() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+        <LinearGradient
+          colors={["#E9F3FF", "#1A73E8"]}
+          style={styles.dashboardContainerLinear}
+        ></LinearGradient>
       <View style={styles.scrollWrapper}>
         <ScrollView
           showsVerticalScrollIndicator={false}

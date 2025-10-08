@@ -4,22 +4,20 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.primary4th,
   },
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.primary4th,
   },
   scrollContent: {
     flexGrow: 1,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.primary4th,
   },
   headerContainer: {
     width: "100%",
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.primary4th,
     paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 24,
   },
   contentWrapper: {
     flex: 1,
@@ -27,7 +25,8 @@ export const styles = StyleSheet.create({
     backgroundColor: "white",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    paddingTop: 24,
+    paddingTop: 20,
+    marginTop: 20,
     paddingBottom: 40,
   },
   formContainer: {

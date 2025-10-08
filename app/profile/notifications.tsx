@@ -9,73 +9,86 @@ import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
 import { formatDate } from "@/utils/formatDate";
 import { useState } from "react";
 import { ActivityIndicator, ScrollView, View } from "react-native";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { styles } from "../../styles/profile/notifications.styles";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function Notifications() {
-    const insets = useSafeAreaInsets();
-    const [filter, setFilter] = useState("All");
-    const [search, setSearch] = useState("");
-    const { user } = useAuthState();
-    const { notifications, loading } = useNotifications(user?.uid ?? "");
+  const insets = useSafeAreaInsets();
+  const [filter, setFilter] = useState("All");
+  const [search, setSearch] = useState("");
+  const { user } = useAuthState();
+  const { notifications, loading } = useNotifications(user?.uid ?? "");
 
-    const filtered = notifications.filter((n) => {
-        const matchesSearch = n.message.toLowerCase().includes(search.toLowerCase());
-        const matchesFilter =
-        filter === "All" ? true : filter === "Not Read" ? !n.read : filter === "Newest"
-            ? true // udh di-orderby index db kita createdAt desc
-            : filter === "Oldest"
-            ? true // bisa diurut ulang di client ntar
-            : true;
+  const filtered = notifications.filter((n) => {
+    const matchesSearch = n.message
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    const matchesFilter =
+      filter === "All"
+        ? true
+        : filter === "Not Read"
+        ? !n.read
+        : filter === "Newest"
+        ? true // udh di-orderby index db kita createdAt desc
+        : filter === "Oldest"
+        ? true // bisa diurut ulang di client ntar
+        : true;
 
-        return matchesSearch && matchesFilter;
-    });
+    return matchesSearch && matchesFilter;
+  });
 
-    let sorted = filtered;
-    if (filter === "Newest") {
-        sorted = filtered;
-    } else if (filter === "Oldest") {
-        sorted = [...filtered].reverse();
-    }
+  let sorted = filtered;
+  if (filter === "Newest") {
+    sorted = filtered;
+  } else if (filter === "Oldest") {
+    sorted = [...filtered].reverse();
+  }
 
-    return (
-        <SafeAreaView style={styles.safeArea}>
-            <ScrollView
-            contentContainerStyle={[
-                styles.scrollContent,
-                { paddingBottom: NAV_ITEMS + insets.bottom + 16 },
-            ]}
-            >
-                <View style={styles.header}>
-                    <TitleBack title="Notifications" />
-                </View>
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <LinearGradient
+        colors={["#E9F3FF", "#1A73E8"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
+      <ScrollView
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingBottom: NAV_ITEMS + insets.bottom + 16 },
+        ]}
+      >
+        <View style={styles.header}>
+          <TitleBack title="Notifications" />
+        </View>
 
-                <NotificationHeader
-                    selectedFilter={filter}
-                    onSearch={setSearch}
-                    onFilterSelect={setFilter}
-                />
+        <NotificationHeader
+          selectedFilter={filter}
+          onSearch={setSearch}
+          onFilterSelect={setFilter}
+        />
 
-                {loading ? (
-                    <ActivityIndicator size="large" color="#000" />
-                ) : (
-                    sorted.map((notif) => {
-                        const meta = NotificationMeta[notif.type as NotificationType];
-                        const timeStr = notif.createdAt ? formatDate(notif.createdAt) : "";
-                        return (
-                            <NotificationItem
-                                key={notif.id}
-                                icon={meta.icon}
-                                message={notif.message}
-                                time={timeStr}
-                                isRead={notif.read}
-                                onPress={() => markAsRead(notif.id!)}
-                            />
-                        );
-                    })
-                )}
-
-            </ScrollView>
-        </SafeAreaView>
-    )
+        {loading ? (
+          <ActivityIndicator size="large" color="#000" />
+        ) : (
+          sorted.map((notif) => {
+            const meta = NotificationMeta[notif.type as NotificationType];
+            const timeStr = notif.createdAt ? formatDate(notif.createdAt) : "";
+            return (
+              <NotificationItem
+                key={notif.id}
+                icon={meta.icon}
+                message={notif.message}
+                time={timeStr}
+                isRead={notif.read}
+                onPress={() => markAsRead(notif.id!)}
+              />
+            );
+          })
+        )}
+      </ScrollView>
+    </SafeAreaView>
+  );
 }

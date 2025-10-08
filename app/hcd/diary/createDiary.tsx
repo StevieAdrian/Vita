@@ -10,6 +10,7 @@ import { styles } from "@/styles/hcd/createDiary.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
 import { DiaryInput } from "@/types/diary";
 import { validateDiary } from "@/utils/validateDiary";
+import { LinearGradient } from "expo-linear-gradient";
 import { Timestamp } from "firebase/firestore";
 import { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
@@ -26,7 +27,7 @@ export default function CreateDiary() {
   const insets = useSafeAreaInsets();
   const [selected, setSelected] = useState<Date | undefined>(new Date());
   const [showPicker, setShowPicker] = useState(false);
-  const datePickerStyles = useDatePickerStyles();
+  const datePickerStyles = useDatePickerStyles(selected instanceof Date ? selected : new Date());
   const [hasInput, setHasInput] = useState(false);
   const { loading } = useUserProfile();
   const [showSuccess, setShowSuccess] = useState(false);
@@ -139,6 +140,10 @@ export default function CreateDiary() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <LinearGradient
+        colors={["#E9F3FF", "#1A73E8"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,

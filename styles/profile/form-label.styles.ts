@@ -8,8 +8,8 @@ export const styles = StyleSheet.create({
     marginBottom: 6,
   },
   label: {
-    fontSize: 14,
-    fontWeight: "500",
+    fontSize: 16,
+    fontFamily: "Inter-Medium",
     color: COLORS.black,
   },
   required: {

@@ -6,8 +6,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   label: {
-    fontSize: 14,
-    fontWeight: "600",
+    fontSize: 16,
     color: COLORS.black,
     marginBottom: 8,
     fontFamily: "Inter-Medium",
@@ -44,7 +43,6 @@ export const styles = StyleSheet.create({
   },
   timeText: {
     fontSize: 16,
-    fontWeight: "500",
     color: COLORS.black,
     flex: 1,
   },
