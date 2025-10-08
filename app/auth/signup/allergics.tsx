@@ -3,6 +3,7 @@ import { ALLERGIC_OPTIONS } from "@/constants/allergic";
 import { COLORS } from "@/constants/colors";
 import { useSignupContext } from "@/context/SignupContext";
 import { useAllergics } from "@/utils/allergicValidation";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React from "react";
 import {
@@ -45,6 +46,10 @@ const Allergics: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <LinearGradient
+        colors={["#1A73E8", "#21E2CF"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
       <KeyboardAvoidingView
         style={{ flex: 1 }}

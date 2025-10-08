@@ -1,12 +1,5 @@
 import { COLORS } from "@/constants/colors";
-import { Dimensions, StyleSheet } from "react-native";
-
-const { width, height } = Dimensions.get("window");
-
-const scaleWidth = (size: number): number => (width / 375) * size;
-const scaleHeight = (size: number): number => (height / 812) * size;
-const moderateScale = (size: number, factor: number = 0.5): number =>
-  size + (scaleWidth(size) - size) * factor;
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
@@ -19,64 +12,73 @@ export const styles = StyleSheet.create({
     paddingTop: 40,
     paddingBottom: 30,
   },
+  dashboardContainerLinear: {
+    flex: 1,
+    paddingHorizontal: 20,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: "70%",
+  },
   logoContainer: {
     alignItems: "center",
-    marginBottom: scaleHeight(30),
+    marginBottom: 30,
   },
   logo: {
-    width: scaleWidth(80),
-    height: scaleHeight(80),
+    width: 80,
+    height: 80,
   },
   title: {
-    fontSize: moderateScale(32),
+    fontSize: 32,
     fontWeight: "bold",
     color: COLORS.white,
     textAlign: "center",
-    marginBottom: scaleHeight(40),
-    lineHeight: moderateScale(38),
+    marginBottom: 40,
+    lineHeight: 38,
   },
   progressBarContainer: {
-    marginBottom: scaleHeight(20),
-    paddingHorizontal: scaleWidth(20),
+    marginBottom: 20,
+    paddingHorizontal: 20,
   },
   progressBar: {
-    height: scaleHeight(8),
+    height: 8,
     backgroundColor: "rgba(255, 255, 255, 0.3)",
-    borderRadius: scaleHeight(4),
+    borderRadius: 4,
     overflow: "hidden",
   },
   progressFill: {
     height: "100%",
     backgroundColor: COLORS.white,
-    borderRadius: scaleHeight(4),
+    borderRadius: 4,
   },
   subtitle: {
-    fontSize: moderateScale(16),
+    fontSize: 16,
     color: "rgba(255, 255, 255, 0.85)",
     textAlign: "left",
-    marginBottom: scaleHeight(20),
+    marginBottom: 20,
     opacity: 0.9,
   },
   selectionContainer: {
     justifyContent: "space-between",
   },
   optionsContainer: {
-    gap: scaleHeight(12),
+    gap: 12,
   },
   continueButton: {
     backgroundColor: COLORS.black,
-    paddingVertical: scaleHeight(18),
-    paddingHorizontal: scaleWidth(24),
-    borderRadius: scaleWidth(12),
+    paddingVertical: 18,
+    paddingHorizontal: 24,
+    borderRadius: 12,
     alignItems: "center",
-    marginTop: scaleHeight(20),
+    marginTop: 20,
     shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
-      height: scaleHeight(4),
+      height: 4,
     },
     shadowOpacity: 0.3,
-    shadowRadius: scaleWidth(6),
+    shadowRadius: 6,
     elevation: 8,
   },
   continueButtonDisabled: {
@@ -85,22 +87,22 @@ export const styles = StyleSheet.create({
     elevation: 2,
   },
   continueButtonText: {
-    fontSize: moderateScale(18),
+    fontSize: 18,
     fontWeight: "600",
     color: COLORS.white,
   },
   otherInput: {
     backgroundColor: "rgba(255, 255, 255, 0.85)",
-    borderRadius: scaleWidth(12),
-    paddingVertical: scaleHeight(14),
-    paddingHorizontal: scaleWidth(16),
-    fontSize: moderateScale(16),
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    fontSize: 16,
     color: COLORS.black,
     shadowColor: COLORS.white,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.6,
     shadowRadius: 6,
     elevation: 4,
-    minHeight: scaleHeight(60),
+    minHeight: 60,
   },
 });

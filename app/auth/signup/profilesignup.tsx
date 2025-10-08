@@ -2,13 +2,13 @@ import AvatarPicker from "@/components/profile/AvatarPicker";
 import { COLORS } from "@/constants/colors";
 import { useSignupContext } from "@/context/SignupContext";
 import { useAvatarPicker } from "@/hooks/useAvatarPicker";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   ScrollView,
   StatusBar,
   Text,
@@ -16,6 +16,7 @@ import {
   View,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "../../../styles/auth/signup/profilesignup.style";
 
 const ProfileSignup: React.FC = () => {
@@ -31,6 +32,10 @@ const ProfileSignup: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <LinearGradient
+        colors={["#1A73E8", "#21E2CF"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -72,12 +77,8 @@ const ProfileSignup: React.FC = () => {
 
             <View style={styles.buttonContainer}>
               <TouchableOpacity
-                style={[
-                  styles.continueButton,
-                  // !canContinue && styles.continueButtonDisabled,
-                ]}
+                style={[styles.continueButton]}
                 onPress={handleContinue}
-                // disabled={!canContinue}
                 activeOpacity={0.8}
               >
                 <Text style={styles.continueButtonText}>Continue</Text>

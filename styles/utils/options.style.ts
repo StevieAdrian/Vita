@@ -1,26 +1,19 @@
 import { COLORS } from "@/constants/colors";
-import { Dimensions, StyleSheet } from "react-native";
-
-const { width, height } = Dimensions.get("window");
-
-const scaleWidth = (size: number): number => (width / 375) * size;
-const scaleHeight = (size: number): number => (height / 812) * size;
-const moderateScale = (size: number, factor: number = 0.5): number =>
-  size + (scaleWidth(size) - size) * factor;
+import { StyleSheet } from "react-native";
 
 export const allergicOptionStyles = StyleSheet.create({
   optionButton: {
     backgroundColor: COLORS.white,
-    paddingVertical: scaleHeight(16),
-    paddingHorizontal: scaleWidth(20),
-    borderRadius: scaleWidth(12),
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderRadius: 12,
     shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
-      height: scaleHeight(2),
+      height: 2,
     },
     shadowOpacity: 0.1,
-    shadowRadius: scaleWidth(4),
+    shadowRadius: 4,
     elevation: 3,
   },
   selectedOption: {
@@ -32,12 +25,12 @@ export const allergicOptionStyles = StyleSheet.create({
   optionContent: {
     flexDirection: "row",
     alignItems: "center",
-    gap: scaleWidth(12),
+    gap: 12,
   },
   checkbox: {
-    width: scaleWidth(20),
-    height: scaleHeight(20),
-    borderRadius: scaleWidth(4),
+    width: 20,
+    height: 20,
+    borderRadius: 4,
     borderWidth: 2,
     borderColor: COLORS.gray2,
     backgroundColor: "transparent",
@@ -51,11 +44,11 @@ export const allergicOptionStyles = StyleSheet.create({
   },
   checkmark: {
     color: COLORS.white,
-    fontSize: moderateScale(12),
+    fontSize: 12,
     fontWeight: "bold",
   },
   optionText: {
-    fontSize: moderateScale(16),
+    fontSize: 16,
     fontWeight: "500",
     color: COLORS.black,
     flex: 1,
