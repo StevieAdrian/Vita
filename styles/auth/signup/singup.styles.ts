@@ -11,17 +11,24 @@ const moderateScale = (size: number, factor = 0.5) =>
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.primary,
   },
   scrollView: {
     flex: 1,
+  },
+  dashboardContainerLinear: {
+    flex: 1,
+    paddingHorizontal: 20,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   scrollContainer: {
     flexGrow: 1,
     paddingBottom: scaleHeight(100),
   },
   header: {
-    backgroundColor: COLORS.primary,
     paddingTop: scaleHeight(40),
     paddingHorizontal: scaleWidth(25),
     paddingBottom: scaleHeight(18),

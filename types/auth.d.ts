@@ -44,6 +44,7 @@ export interface EmergencyContact {
 }
 
 export interface UserProfile {
+  updatedAt: any;
   username: string;
   firstName: string;
   lastName: string;
@@ -55,6 +56,7 @@ export interface UserProfile {
   hasAllergics: string;
   allergics?: string;
   allergies: string[];
+  chronic?: string[];
   avatarUrl?: string;
   emergencyContacts: EmergencyContact[];
 }

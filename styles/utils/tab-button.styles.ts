@@ -7,9 +7,9 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 14,
-    paddingHorizontal: 40,
     borderRadius: 10,
     marginHorizontal: 4,
+    flex: 1,
   },
   activeTab: {
     backgroundColor: COLORS.primary,
@@ -18,8 +18,6 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
   },
   icon: {
-    width: 18,
-    height: 18,
     marginRight: 6,
   },
   text: {

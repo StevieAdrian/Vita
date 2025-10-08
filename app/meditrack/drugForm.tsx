@@ -5,15 +5,25 @@ import TimeDrug from "@/components/meditrack-forms/DrugTime";
 import InputField from "@/components/utils/InputField";
 import ModalError from "@/components/utils/ModalError";
 import ModalSuccess from "@/components/utils/ModalSuccess";
+import TitleBack from "@/components/utils/TitleBack";
 import { COLORS } from "@/constants/colors";
 import { DrugReminder } from "@/constants/drugs";
 import { useAuth } from "@/context/AuthContext";
 import { useDrugs } from "@/context/DrugContext";
 import { getCategoryLabel, getRepeatLabel } from "@/utils/drugformValidation";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { Image, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "../../styles/meditrack/drugform.style";
@@ -147,32 +157,23 @@ const DrugForm: React.FC<DrugFormProps> = ({
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <LinearGradient
+        colors={["#E9F3FF", "#1A73E8"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <View style={styles.header}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => router.push("/meditrack/mediTrack")}
-          >
-            <Image
-              source={require("../../assets/utilsIcon/arrow-left.png")}
-              style={styles.backIcon}
-            />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>
-            {actualEditMode ? "Edit Reminder" : "Drugs Reminder"}
-          </Text>
-          <View style={styles.headerSpacer} />
-        </View>
-
         <ScrollView
-          style={styles.scrollView}
           contentContainerStyle={styles.scrollViewContent}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
+          {/* Header */}
+          <View style={styles.headerContainer}>
+            <TitleBack title="New Reminder" />
+          </View>
           <View style={styles.card}>
             <View style={styles.titleHeader}>
               <TextInput

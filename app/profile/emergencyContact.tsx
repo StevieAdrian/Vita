@@ -5,6 +5,7 @@ import { COLORS } from "@/constants/colors";
 import { Relation, RELATION_OPTIONS } from "@/constants/relations";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import {
@@ -66,6 +67,10 @@ export default function EmergencyContact() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <LinearGradient
+        colors={["#E9F3FF", "#1A73E8"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
       <View style={styles.scrollWrapper}>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -78,7 +83,7 @@ export default function EmergencyContact() {
             <TitleBack title="Emergency Contact" />
           </View>
 
-          <View>
+          <View style={styles.container}>
             <InputField
               label="Name"
               value={contact.name}
@@ -129,15 +134,15 @@ export default function EmergencyContact() {
                 </View>
               )}
             </View>
+            <InputField
+              label="Phone Number"
+              value={contact.phoneNumber}
+              keyboardType="phone-pad"
+              required
+              onChangeText={(text) => handleChange("phoneNumber", text)}
+            />
           </View>
 
-          <InputField
-            label="Phone Number"
-            value={contact.phoneNumber}
-            keyboardType="phone-pad"
-            required
-            onChangeText={(text) => handleChange("phoneNumber", text)}
-          />
           <PrimaryButtonColorForm
             text="Save Changes"
             active={hasInput}

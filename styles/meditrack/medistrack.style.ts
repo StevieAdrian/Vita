@@ -11,6 +11,15 @@ export const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
+  dashboardContainerLinear: {
+    flex: 1,
+    paddingHorizontal: 20,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: "70%",
+  },
   header: {
     width: "100%",
   },

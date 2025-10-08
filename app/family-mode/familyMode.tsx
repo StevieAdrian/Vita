@@ -6,6 +6,7 @@ import { useFamilyMembers } from "@/hooks/useFamilyMembers";
 import { useIncomingRequests } from "@/hooks/useIncomingRequest";
 import { useLatestHealthDiary } from "@/hooks/useLatestHealthDiary";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -27,6 +28,10 @@ export default function FamilyMode() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <LinearGradient
+        colors={["#E9F3FF", "#1A73E8"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,
@@ -48,52 +53,65 @@ export default function FamilyMode() {
             style={styles.chevron}
           />
         </TouchableOpacity>
-
         <View style={styles.separator} />
-        <View style={styles.container}>
-          <Text style={styles.textHeader}>Your Member</Text>
-          <View style={styles.imageContainer}>
-            {editMode ? (
-              <TouchableOpacity onPress={() => setEditMode(false)}>
-                <Image
-                  source={require("@/assets/mediTrack/remove.svg")}
-                  style={styles.memberIcon}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
-            ) : (
-              <>
-                <TouchableOpacity
-                  onPress={() => router.push("/family-mode/addFamily")}
-                >
-                  <Image
-                    source={require("@/assets/mediTrack/plus.svg")}
-                    style={styles.memberIcon}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setEditMode(true)}>
-                  <Image
-                    source={require("@/assets/mediTrack/edit.svg")}
-                    style={styles.memberIcon}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              </>
-            )}
-          </View>
-        </View>
+        {members.length > 0 ? (
+          <>
+            <View style={styles.container}>
+              <Text style={styles.textHeader}>Your Member</Text>
+              <View style={styles.imageContainer}>
+                {editMode ? (
+                  <TouchableOpacity onPress={() => setEditMode(false)}>
+                    <Image
+                      source={require("@/assets/mediTrack/remove.svg")}
+                      style={styles.memberIcon}
+                      resizeMode="contain"
+                    />
+                  </TouchableOpacity>
+                ) : (
+                  <>
+                    <TouchableOpacity
+                      onPress={() => router.push("/family-mode/addFamily")}
+                    >
+                      <Image
+                        source={require("@/assets/mediTrack/plus.svg")}
+                        style={styles.memberIcon}
+                        resizeMode="contain"
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setEditMode(true)}>
+                      <Image
+                        source={require("@/assets/mediTrack/edit.svg")}
+                        style={styles.memberIcon}
+                        resizeMode="contain"
+                      />
+                    </TouchableOpacity>
+                  </>
+                )}
+              </View>
+            </View>
 
-        {members.map((m) => (
-          <MemberStatCard
-            key={m.uid}
-            m={m}
-            editMode={editMode}
-            removeMember={removeMember}
-            setViewingUid={setViewingUid}
-            router={router}
-          />
-        ))}
+            {members.map((m) => (
+              <MemberStatCard
+                key={m.uid}
+                m={m}
+                editMode={editMode}
+                removeMember={removeMember}
+                setViewingUid={setViewingUid}
+                router={router}
+              />
+            ))}
+          </>
+        ) : (
+          <View style={styles.cont}>
+            <Text style={styles.noMembers}> No Family Member Added</Text>
+            <TouchableOpacity
+              style={styles.addMember}
+              onPress={() => router.push("/family-mode/addFamily")}
+            >
+              <Text style={styles.buttonAdd}>+ Add Member</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

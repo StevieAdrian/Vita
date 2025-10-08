@@ -20,7 +20,15 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    backgroundColor: COLORS.background2nd,
+  },
+  dashboardContainerLinear: {
+    flex: 1,
+    paddingHorizontal: 20,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: "70%",
   },
   formContainer: {
     alignItems: "flex-start",

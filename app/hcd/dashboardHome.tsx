@@ -18,6 +18,7 @@ import { styles } from "@/styles/hcd/dashboard.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
 import { getEarlyWarning } from "@/utils/getEarlyWarning";
 import dayjs from "dayjs";
+import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { Alert, Image, Text, TouchableOpacity, View } from "react-native";
@@ -206,6 +207,10 @@ export default function DashboardHome() {
 
   return (
     <SafeAreaView style={styles.dashboardContainer}>
+      <LinearGradient
+        colors={["#E9F3FF", "#1A73E8"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,
@@ -217,9 +222,9 @@ export default function DashboardHome() {
         <UpHeader title="" showProfile={true} />
         <View>
           <View style={styles.greetingsContainer}>
-            <Text style={styles.greetingsBlue}>Hey, </Text>
-            <Text style={styles.greetings}>
-              {data.firstName} {data.lastName}!
+            <Text style={styles.greetings}>Welcome,</Text>
+            <Text style={styles.greetingsBlue}>
+              {data.firstName} {data.lastName} 👋🏻
             </Text>
           </View>
 
@@ -254,92 +259,135 @@ export default function DashboardHome() {
               }}
               styles={datePickerStyle}
             />
+
+            <View style={styles.remCont}>
+              <View style={styles.containerReminder}>
+                <View style={styles.captionSubtitle}>
+                  <Text style={styles.subtitle}>Upcoming Reminders</Text>
+                  <TouchableOpacity style={styles.subtitleContainerText}>
+                    <Text
+                      style={styles.seeAllContainer}
+                      onPress={() => router.push("/meditrack/mediTrack")}
+                    >
+                      See All
+                    </Text>
+                    <Image
+                      source={require("@/assets/utilsIcon/arrow-right-white.svg")}
+                    />
+                  </TouchableOpacity>
+                </View>
+
+                <Text style={styles.reminderText}>
+                  {reminders.length} Reminders
+                </Text>
+              </View>
+
+              {/* --- Map Reminder Max 3--- */}
+              <View style={styles.containerContent}>
+                {reminders.length === 0 ? (
+                  <Text style={{ textAlign: "center", color: "white" }}>
+                    No reminders today
+                  </Text>
+                ) : (
+                  reminders.slice(0, 3).map((reminder) => (
+                    <View key={reminder.id} style={styles.reminderRow}>
+                      {/* Time label di kiri */}
+                      <View style={styles.reminderTimesCard}>
+                        <Text style={styles.reminderTime}>
+                          {reminder.timeLabel}
+                        </Text>
+                      </View>
+
+                      {/* Card */}
+                      <View style={styles.reminderCardS}>
+                        {reminder.category === "drug" ? (
+                          <ReminderCard
+                            key={reminder.id}
+                            reminder={reminder}
+                            onToggle={handleToggleReminder}
+                            showActions={true}
+                            onEdit={handleEditDrug}
+                          />
+                        ) : (
+                          <AppointmentCard
+                            key={reminder.id}
+                            appointment={reminder}
+                            onPressDetail={() => handleSeeDetail(reminder)}
+                            onEdit={handleEditAppointment}
+                            onDelete={handleDeleteAppointment}
+                            showActions={true}
+                            showTime={false}
+                            showLocation={false}
+                            showDetails={false}
+                            showArrow={true}
+                          />
+                        )}
+                      </View>
+                    </View>
+                  ))
+                )}
+
+                {/* View All */}
+                {reminders.length > 3 && (
+                  <TouchableOpacity
+                    onPress={() =>
+                      router.push({
+                        pathname: "/hcd/diary/remindersAll",
+                        params: {
+                          date: selectedDateKey,
+                        },
+                      })
+                    }
+                    style={{ marginTop: 8 }}
+                  >
+                    <Text style={styles.seeAllReminder}>View All</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
           </View>
 
           <View>
-            <View style={styles.containerReminder}>
-              <View style={styles.captionSubtitle}>
-                <Text style={styles.subtitle}>Upcoming Reminders</Text>
-                <TouchableOpacity style={styles.subtitleContainerText}>
-                  <Text
-                    style={styles.seeAllContainer}
-                    onPress={() => router.push("/meditrack/mediTrack")}
-                  >
-                    See All
-                  </Text>
-                  <Image
-                    source={require("@/assets/utilsIcon/arrow-right-white.svg")}
-                  />
-                </TouchableOpacity>
-              </View>
-
-              <Text style={styles.reminderText}>
-                {reminders.length} Reminders
-              </Text>
-            </View>
-
-            {/* --- Map Reminder Max 3--- */}
-            <View style={styles.containerContent}>
-              {reminders.length === 0 ? (
-                <Text style={{ textAlign: "center", color: "gray" }}>
-                  No reminders today
-                </Text>
-              ) : (
-                reminders.slice(0, 3).map((reminder) => (
-                  <View key={reminder.id} style={styles.reminderRow}>
-                    {/* Time label di kiri */}
-                    <View style={styles.reminderTimesCard}>
-                      <Text style={styles.reminderTime}>
-                        {reminder.timeLabel}
+            {!loadingWarning &&
+              (warningCount > 0 ? (
+                <TouchableOpacity style={styles.containerHealthWarning}>
+                  <View style={styles.titleHealth}>
+                    <View style={styles.containerDigit}>
+                      <Image
+                        source={require("@/assets/hcd/healthWarning.svg")}
+                        style={{ width: 34, height: 35 }}
+                      />
+                      <Text style={styles.titleDigitWarning}>
+                        {warningCount > 0
+                          ? `${warningCount} Health Early Warning`
+                          : "No Health Early Warning"}
                       </Text>
                     </View>
-
-                    {/* Card */}
-                    <View style={styles.reminderCardS}>
-                      {reminder.category === "drug" ? (
-                        <ReminderCard
-                          key={reminder.id}
-                          reminder={reminder}
-                          onToggle={handleToggleReminder}
-                          showActions={true}
-                          onEdit={handleEditDrug}
-                        />
-                      ) : (
-                        <AppointmentCard
-                          key={reminder.id}
-                          appointment={reminder}
-                          onPressDetail={() => handleSeeDetail(reminder)}
-                          onEdit={handleEditAppointment}
-                          onDelete={handleDeleteAppointment}
-                          showActions={true}
-                          showTime={false}
-                          showLocation={false}
-                          showDetails={false}
-                          showArrow={true}
-                        />
-                      )}
-                    </View>
+                    <Image
+                      source={require("@/assets/utilsIcon/arrow-right-red.png")}
+                    />
                   </View>
-                ))
-              )}
-
-              {/* View All */}
-              {reminders.length > 3 && (
-                <TouchableOpacity
-                  onPress={() =>
-                    router.push({
-                      pathname: "/hcd/diary/remindersAll",
-                      params: {
-                        date: selectedDateKey,
-                      },
-                    })
-                  }
-                  style={{ marginTop: 8 }}
-                >
-                  <Text style={styles.seeAllReminder}>View All</Text>
+                  <Text style={styles.descHealthWarning}>
+                    {warningCount > 0
+                      ? `Check the ${
+                          warningCount > 1
+                            ? warningCount + " warnings"
+                            : "warning"
+                        } that you should take attention. Don’t be late.`
+                      : "All good! No early health warnings at the moment."}
+                  </Text>
                 </TouchableOpacity>
-              )}
-            </View>
+              ) : (
+                <EarlyGoodCard
+                  title="All Good"
+                  status="Good"
+                  description={[
+                    {
+                      text: "Maintain your lifestyle and keep your body healthy now and later.",
+                    },
+                  ]}
+                />
+              ))}
 
             {/* Digital Biomarker */}
             <View style={styles.containerAllDigitBio}>
@@ -418,47 +466,6 @@ export default function DashboardHome() {
                 </TouchableOpacity>
               </View>
             </View>
-
-            {!loadingWarning &&
-              (warningCount > 0 ? (
-                <TouchableOpacity style={styles.containerHealthWarning}>
-                  <View style={styles.titleHealth}>
-                    <View style={styles.containerDigit}>
-                      <Image
-                        source={require("@/assets/hcd/healthWarning.svg")}
-                        style={{ width: 34, height: 35 }}
-                      />
-                      <Text style={styles.titleDigitWarning}>
-                        {warningCount > 0
-                          ? `${warningCount} Health Early Warning`
-                          : "No Health Early Warning"}
-                      </Text>
-                    </View>
-                    <Image
-                      source={require("@/assets/utilsIcon/arrow-right-red.png")}
-                    />
-                  </View>
-                  <Text style={styles.descHealthWarning}>
-                    {warningCount > 0
-                      ? `Check the ${
-                          warningCount > 1
-                            ? warningCount + " warnings"
-                            : "warning"
-                        } that you should take attention. Don’t be late.`
-                      : "All good! No early health warnings at the moment."}
-                  </Text>
-                </TouchableOpacity>
-              ) : (
-                <EarlyGoodCard
-                  title="All Good"
-                  status="Good"
-                  description={[
-                    {
-                      text: "Maintain your lifestyle and keep your body healthy now and later.",
-                    },
-                  ]}
-                />
-              ))}
 
             {/* Family Mode */}
             <TouchableOpacity style={styles.containerAllDigitBio}>
