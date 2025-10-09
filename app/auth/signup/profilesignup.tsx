@@ -50,7 +50,7 @@ const ProfileSignup: React.FC = () => {
           <View style={styles.mainWrapper}>
             <View style={styles.logoContainer}>
               <Image
-                source={require("../../../assets/images/Logo Vita.png")}
+                source={require("../../../assets/images/logo-vita.png")}
                 style={styles.logo}
                 resizeMode="contain"
               />

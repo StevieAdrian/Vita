@@ -13,7 +13,7 @@ export default function UpHeader({ title, showProfile = true }: UpHeaderProps) {
         {showProfile && (
           <TouchableOpacity style={styles.profilePict} onPress={() => router.push("/profile/profile")}>
             <Image
-              source={data.avatarUrl ? {uri: data.avatarUrl} : require("@/assets/images/Vita.png")}
+              source={data.avatarUrl ? {uri: data.avatarUrl} : require("@/assets/images/default-avatar.png")}
               style={{ width: 40, height: 40, borderRadius: 45 / 2 }}
               resizeMode="cover"
             />
