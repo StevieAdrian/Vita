@@ -1,12 +1,10 @@
 import BloodPressureDetail from "@/components/analysis/BloodPressureDetail";
-import MetricDetailCard from "@/components/analysis/BloodSugarDetail";
 import {
   EarlyGoodCard,
   EarlyWarningCard,
 } from "@/components/analysis/EarlyCard";
 import FutureHealthCard from "@/components/analysis/FutureHealthCard";
 import HealthStatisticsCard from "@/components/analysis/HealthStatisticsCard";
-import HeartRateDetail from "@/components/analysis/HeartRateDetail";
 import UpHeader from "@/components/hcd/UpHeader";
 import { HEALTH_RECOMMENDATION_PROMPT } from "@/constants/prompt";
 import { useAIRecommendation } from "@/hooks/useAIRecommendation";
@@ -83,7 +81,7 @@ export default function Analysis() {
               />
 
               <BloodPressureDetail />
-              <View style={styles.subStatContainer}>
+              {/* <View style={styles.subStatContainer}>
                 <View style={styles.halfChart}>
                   <MetricDetailCard
                     field="bloodSugar"
@@ -95,7 +93,7 @@ export default function Analysis() {
                 <View style={styles.halfChart}>
                   <HeartRateDetail />
                 </View>
-              </View>
+              </View> */}
             </View>
           </>
         )}
