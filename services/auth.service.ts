@@ -5,27 +5,34 @@ import {
   User,
 } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
-import { auth, firestore } from "../config/firebaseConfig";
+import { auth, db } from "../config/firebaseConfig";
 import { GoogleSignupData, SignupData } from "../types/auth";
 
 export async function signUpUser(data: SignupData) {
-  const userCred = await createUserWithEmailAndPassword(
-    auth,
-    data.email,
-    data.password
-  );
-  const uid = userCred.user.uid;
+  try {
+    const userCred = await createUserWithEmailAndPassword(
+      auth,
+      data.email,
+      data.password
+    );
 
-  const { password, ...safeData } = data;
+    const uid = userCred.user.uid;
+    const { password, ...safeData } = data;
 
-  await setDoc(doc(firestore, "users", uid), {
-    ...safeData,
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
-  });
+    await setDoc(doc(db, "users", uid), {
+      ...safeData,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
 
-  return uid;
+    console.log("✅ Firestore write done:", uid);
+    return uid;
+  } catch (err: any) {
+    console.error("🔥 signUpUser failed:", err.code, err.message);
+    throw err;
+  }
 }
+
 
 export async function signupGoogleUser(
   firebaseUser: User,
@@ -33,13 +40,13 @@ export async function signupGoogleUser(
 ) {
   const uid = firebaseUser.uid;
 
-  const userDoc = await getDoc(doc(firestore, "users", uid));
+  const userDoc = await getDoc(doc(db, "users", uid));
 
   if (userDoc.exists()) {
     return uid;
   }
 
-  await setDoc(doc(firestore, "users", uid), {
+  await setDoc(doc(db, "users", uid), {
     ...additionalData,
     email: firebaseUser.email,
     createdAt: serverTimestamp(),

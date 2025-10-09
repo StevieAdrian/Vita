@@ -23,6 +23,7 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import { styles } from "../../../styles/auth/signup/emergency.styles";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function EmergencyContact() {
   const [name, setName] = useState("");
@@ -33,6 +34,7 @@ export default function EmergencyContact() {
   const { data, setField } = useSignupContext();
   const { signup, signupWithGoogle, loading, error } = useSignup();
   const { user } = useAuthState();
+  const { signIn } = useAuth();
 
   const handleRelationsPress = () => {
     setShowRelationsDropdown(!showRelationsDropdown);
@@ -56,34 +58,33 @@ export default function EmergencyContact() {
       const finalContacts = [...(data.emergencyContacts || []), values];
 
       try {
-        if (user) {
-          const isGoogleUser = user.providerData.some(
-            (provider) => provider.providerId === "google.com"
-          );
+        if (user && user.providerData.some(p => p.providerId === "google.com")) {
+        await signupWithGoogle(user, {
+          username: data.username!,
+          firstName: data.firstName!,
+          lastName: data.lastName!,
+          phoneNumber: data.phoneNumber,
+          dateOfBirth: data.dateOfBirth,
+          gender: data.gender,
+          bloodType: data.bloodType,
+          allergies: data.allergies,
+          chronicConditions: data.chronicConditions,
+          emergencyContacts: finalContacts,
+          avatarUrl: data.avatarUrl || user.photoURL || undefined,
+        });
 
-          if (isGoogleUser) {
-            await signupWithGoogle(user, {
-              username: data.username!,
-              firstName: data.firstName!,
-              lastName: data.lastName!,
-              phoneNumber: data.phoneNumber,
-              dateOfBirth: data.dateOfBirth,
-              gender: data.gender,
-              bloodType: data.bloodType,
-              allergies: data.allergies,
-              chronicConditions: data.chronicConditions,
-              emergencyContacts: finalContacts,
-              avatarUrl: data.avatarUrl || user.photoURL || undefined,
-            });
-          } else {
-            const uid = await signup({
-              ...data,
-              emergencyContacts: finalContacts,
-            } as any);
-            console.log("debug uid:", uid);
-          }
-          router.push("/");
-        }
+        router.push("/"); 
+        return;
+      }
+      if (!data.email || !data.password) {
+        return;
+      }
+      const uid = await signup({
+        ...data,
+        emergencyContacts: finalContacts,
+      } as any);
+
+        router.push("/");
       } catch (err) {
         console.error("Signup failed:", err);
       }
