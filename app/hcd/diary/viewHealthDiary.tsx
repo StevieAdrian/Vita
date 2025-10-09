@@ -34,7 +34,7 @@ export default function HealthDiary() {
   }>();
   const insets = useSafeAreaInsets();
   const { user } = useAuthState();
-  const uid = paramUid || user?.uid;
+  const uid: string = paramUid || user?.uid || "";
 
   const [reminders, setReminders] = useState<Reminder[]>([]);
   const [symptoms, setSymptoms] = useState("");
@@ -72,23 +72,16 @@ export default function HealthDiary() {
     });
   }
 
-  // Fetching Diary
   useEffect(() => {
-    if (!uid) return;
+    if (!uid || !selected) return;
+    const dateKey = formatDateLocal(new Date(selected as Date));
 
-    setSelectedDateKey(
-      selected
-        ? formatDateLocal(new Date(selected as Date))
-        : formatDateLocal(new Date())
-    );
-
-    // Update reminders
     const todayDrugReminders = drugs
-      .filter((d) => d.date === selectedDateKey)
+      .filter((d) => d.date === dateKey)
       .map(convertDrugToReminder);
 
     const todayAppointmentReminders: Reminder[] = appointments
-      .filter((a) => a.date === selectedDateKey)
+      .filter((a) => a.date === dateKey)
       .map((a) => ({
         ...convertAppointment(a),
         id: `appt-${a.id}`,
@@ -104,10 +97,9 @@ export default function HealthDiary() {
 
     setReminders(allReminders);
 
-    // Fetch diary
     const fetchDiary = async () => {
       setLoading(true);
-      const res = await fetchDiariesByDate(selectedDateKey, uid);
+      const res = await fetchDiariesByDate(dateKey, uid);
       if (res.success && res.data) {
         setDiaries(res.data);
       } else {
@@ -117,10 +109,9 @@ export default function HealthDiary() {
     };
 
     fetchDiary();
-  }, [selected, uid, drugs, appointments, selected]);
+  }, [selected, uid, drugs, appointments]);
 
   const diaryData = diaries[0];
-
   const handleEditDrug = useCallback((reminder: Reminder) => {
     router.push({
       pathname: "/meditrack/drugForm",

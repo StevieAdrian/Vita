@@ -3,11 +3,6 @@ import { Dimensions, StyleSheet } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
-const scaleWidth = (size: number) => (width / 375) * size;
-const scaleHeight = (size: number) => (height / 812) * size;
-const moderateScale = (size: number, factor = 0.5) =>
-  size + (scaleWidth(size) - size) * factor;
-
 export const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
@@ -83,7 +78,7 @@ export const styles = StyleSheet.create({
     color: COLORS.black,
   },
   dropdownMenu: {
-    marginTop: scaleHeight(6),
+    marginTop: 6,
     backgroundColor: COLORS.white,
     borderWidth: 1,
     borderColor: COLORS.gray1,
@@ -95,7 +90,7 @@ export const styles = StyleSheet.create({
     elevation: 4,
   },
   dropdownScroll: {
-    maxHeight: scaleHeight(180),
+    maxHeight: 180,
   },
   dropdownOption: {
     paddingHorizontal: 10,

@@ -3,13 +3,7 @@ import { useAuthState } from "@/hooks/useAuthState";
 import { useMetricSummary } from "@/hooks/useMetricSummary";
 import { styles } from "@/styles/analysis/analysis.styles";
 import { Dimensions, Text, View } from "react-native";
-import {
-  VictoryAxis,
-  VictoryBar,
-  VictoryChart,
-  VictoryGroup,
-  VictoryLegend,
-} from "victory";
+import { BarChart } from "react-native-gifted-charts";
 
 export default function BloodPressureDetail() {
   const { user } = useAuthState();
@@ -55,6 +49,21 @@ export default function BloodPressureDetail() {
 
   const { status, color } = classifyBP(today.systolic, today.diastolic);
 
+  const chartData = dailyData.flatMap(
+    (d: { day: string; systolic: number; diastolic: number }) => [
+      {
+        value: d.systolic,
+        label: d.day,
+        frontColor: COLORS.primary,
+      },
+      {
+        value: d.diastolic,
+        label: "",
+        frontColor: COLORS.secondary,
+      },
+    ]
+  );
+
   return (
     <View style={styles.bpContainer}>
       <Text style={styles.bpTitle}>Blood Pressure This Week</Text>
@@ -73,32 +82,59 @@ export default function BloodPressureDetail() {
 
       {/* Chart */}
       <View style={styles.borderChart}>
-        <VictoryChart
-          width={screenWidth - 32}
-          height={240}
-          domainPadding={{ x: 25 }}
-          categories={{ x: dailyData.map((d: { day: any }) => d.day) }}
+        <BarChart
+          data={chartData}
+          barWidth={20}
+          spacing={10}
+          roundedTop
+          xAxisThickness={0}
+          yAxisThickness={0}
+          noOfSections={4}
+          yAxisTextStyle={{ color: COLORS.black }}
+          xAxisLabelTextStyle={{
+            color: COLORS.black,
+            textAlign: "center",
+          }}
+          width={250}
+          height={200}
+        />
+
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            marginTop: 10,
+          }}
         >
-          <VictoryAxis />
-          <VictoryAxis dependentAxis />
-          <VictoryLegend
-            x={100}
-            y={5}
-            orientation="horizontal"
-            gutter={20}
-            data={[
-              { name: "Systolic", symbol: { fill: COLORS.primary } },
-              { name: "Diastolic", symbol: { fill: COLORS.secondary } },
-            ]}
-          />
-          <VictoryGroup
-            offset={12}
-            colorScale={[COLORS.primary, COLORS.secondary]}
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginRight: 20,
+            }}
           >
-            <VictoryBar data={dailyData} x="day" y="systolic" />
-            <VictoryBar data={dailyData} x="day" y="diastolic" />
-          </VictoryGroup>
-        </VictoryChart>
+            <View
+              style={{
+                width: 12,
+                height: 12,
+                backgroundColor: COLORS.primary,
+                marginRight: 5,
+              }}
+            />
+            <Text style={{ color: COLORS.black }}>Systolic</Text>
+          </View>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <View
+              style={{
+                width: 12,
+                height: 12,
+                backgroundColor: COLORS.secondary,
+                marginRight: 5,
+              }}
+            />
+            <Text style={{ color: COLORS.black }}>Diastolic</Text>
+          </View>
+        </View>
       </View>
     </View>
   );

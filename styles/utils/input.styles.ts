@@ -36,5 +36,6 @@ export const styles = StyleSheet.create({
   container: {
     marginBottom: 10,
     borderRadius: 10,
+    width: "100%",
   },
 });
