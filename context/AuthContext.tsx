@@ -18,10 +18,9 @@ export function AuthContext({ children }: { children: React.ReactNode}) {
 
         const inAuthGroup = segments[0] === "auth";
 
-        if (user && !inAuthGroup) {
-            // temp
-            return;
-        } else if (!user && !inAuthGroup) {
+        if (initializing) return;
+        
+        if (!user && !inAuthGroup) {
             router.push("/auth/login/login" as any);
         }  
     }, [user, initializing, segments])
