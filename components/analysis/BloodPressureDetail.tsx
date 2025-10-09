@@ -84,17 +84,19 @@ export default function BloodPressureDetail() {
       <View style={styles.borderChart}>
         <BarChart
           data={chartData}
-          barWidth={12}
-          spacing={20}
+          barWidth={20}
+          spacing={10}
           roundedTop
-          hideRules
           xAxisThickness={0}
           yAxisThickness={0}
           noOfSections={4}
           yAxisTextStyle={{ color: COLORS.black }}
-          xAxisLabelTextStyle={{ color: COLORS.black, textAlign: "center" }}
-          width={screenWidth - 32}
-          height={240}
+          xAxisLabelTextStyle={{
+            color: COLORS.black,
+            textAlign: "center",
+          }}
+          width={250}
+          height={200}
         />
 
         <View
