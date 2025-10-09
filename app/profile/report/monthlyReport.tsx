@@ -80,7 +80,7 @@ export default function MonthlyReport() {
               <View style={styles.previewSection}>
                 <Text style={styles.warningText}>Preview Content</Text>
                 <Image
-                  source={require("@/assets/images/ReportTemplateCard.svg")}
+                  source={require("@/assets/images/ReportTemplateCard.png")}
                   style={styles.previewImage}
                 />
               </View>
