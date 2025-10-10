@@ -19,8 +19,12 @@ export function useHealthDiary() {
     try {
       console.log("halo dri hook");
       console.log(data);
-      await addHealthDiary({ ...data, fromUid: uid });
-      return { success: true };
+      const result = await addHealthDiary({ ...data, fromUid: uid });
+      if (result.success) {
+        return { success: true, id: result.id };
+      } else {
+        return { success: false, message: result.message };
+      }
     } catch (err: any) {
       return { success: false, message: err.message };
     } finally {
