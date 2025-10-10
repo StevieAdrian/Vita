@@ -1,3 +1,5 @@
+import { useAuthState } from "@/hooks/useAuthState";
+import { useNotifications } from "@/hooks/useNotifications";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { styles } from "@/styles/component/upheader";
 import { UpHeaderProps } from "@/types/titlenav";
@@ -7,7 +9,10 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 
 export default function UpHeader({ title, showProfile = true }: UpHeaderProps) {
   const { data } = useUserProfile();
-  const [notif, setNotif] = useState();
+  const { user } = useAuthState();
+  const { notifications } = useNotifications(user?.uid ?? "");
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
     <View style={styles.container}>
@@ -32,7 +37,7 @@ export default function UpHeader({ title, showProfile = true }: UpHeaderProps) {
       </View>
       <View>
         <View style={styles.amountNotif}>
-          <Text style={styles.textNotif}>1</Text>
+          <Text style={styles.textNotif}>{unreadCount}</Text>
         </View>
         <TouchableOpacity
           style={styles.notifications}
