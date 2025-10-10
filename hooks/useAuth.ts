@@ -66,6 +66,8 @@ export function useAuth() {
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     webClientId: process.env.EXPO_PUBLIC_FIREBASE_WEB_CLIENT_ID,
+    iosClientId: process.env.EXPO_PUBLIC_FIREBASE_IOS_CLIENT_ID,
+    androidClientId: process.env.EXPO_PUBLIC_FIREBASE_ANDROID_CLIENT_ID,
   });
 
   useEffect(() => {
@@ -114,8 +116,7 @@ export function useAuth() {
           }
           setLoading(false);
         }, 1000);
-      }
-      else {
+      } else {
         await promptAsync();
       }
     } catch (e) {

@@ -1,10 +1,10 @@
+import { DrugReminder } from "@/constants/drugs";
+import { AppointmentReminder } from "@/types/appointment";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { router } from "expo-router";
 import { useCallback, useEffect, useRef } from "react";
 import { Platform } from "react-native";
-import { DrugReminder } from "../constants/drugs";
-import { AppointmentReminder } from "../types/appointment";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -15,6 +15,7 @@ Notifications.setNotificationHandler({
     shouldShowList: true,
   }),
 });
+
 export interface NotificationData {
   type: "drug" | "appointment";
   id: string;
@@ -28,8 +29,16 @@ export function useRealTimeNotifications() {
     null
   );
   const responseListener = useRef<Notifications.EventSubscription | null>(null);
+  const isWeb = Platform.OS === "web";
 
-  const registerForPushNotifications = async (): Promise<string | null> => {
+  const registerForPushNotifications = useCallback(async (): Promise<
+    string | null
+  > => {
+    if (isWeb) {
+      console.log("Push notifications not supported on web");
+      return null;
+    }
+
     if (Platform.OS === "android") {
       await Notifications.setNotificationChannelAsync("default", {
         name: "default",
@@ -62,65 +71,78 @@ export function useRealTimeNotifications() {
     }
 
     return null;
-  };
+  }, [isWeb]);
 
-  const scheduleDrugNotification = useCallback(async (drug: DrugReminder) => {
-    try {
-      await Notifications.cancelScheduledNotificationAsync(drug.id);
-
-      for (const time of drug.times) {
-        const [hours, minutes] = time.split(":").map(Number);
-
-        const notificationDate = new Date(drug.date);
-        notificationDate.setHours(hours, minutes, 0, 0);
-
-        if (notificationDate < new Date() && drug.repeatDays.length === 0) {
-          continue;
-        }
-
-        const triggerTimestamp = notificationDate.getTime();
-
-        await Notifications.scheduleNotificationAsync({
-          identifier: `${drug.id}-${time}`,
-          content: {
-            title: "Medication Time",
-            body: `Time to take ${drug.drugName} at ${time}`,
-            subtitle: `Don't forget your medication!`,
-            sound: "default",
-            data: {
-              type: "drug",
-              id: drug.id,
-              drugName: drug.drugName,
-              time: time,
-              category: drug.category,
-            },
-            android: {
-              channelId: "medication-reminders",
-              largeIcon: "../assets/notifications/medicine-reminder.png",
-              color: "#1A73E8",
-              priority: Notifications.AndroidImportance.HIGH,
-            },
-            ios: {
-              sound: true,
-              badge: 1,
-            },
-          },
-          trigger: {
-            timestamp: triggerTimestamp,
-            repeats: drug.repeatDays.length > 0,
-          },
-        } as any);
+  const scheduleDrugNotification = useCallback(
+    async (drug: DrugReminder) => {
+      if (isWeb) {
+        console.log("Drug notifications skipped on web");
+        return;
       }
-      console.log(
-        `Scheduled ${drug.times.length} notifications for ${drug.drugName}`
-      );
-    } catch (error) {
-      console.error("Error scheduling drug notification:", error);
-    }
-  }, []);
+
+      try {
+        await Notifications.cancelScheduledNotificationAsync(drug.id);
+
+        for (const time of drug.times) {
+          const [hours, minutes] = time.split(":").map(Number);
+
+          const notificationDate = new Date(drug.date);
+          notificationDate.setHours(hours, minutes, 0, 0);
+
+          if (notificationDate < new Date() && drug.repeatDays.length === 0) {
+            continue;
+          }
+
+          const triggerTimestamp = notificationDate.getTime();
+
+          await Notifications.scheduleNotificationAsync({
+            identifier: `${drug.id}-${time}`,
+            content: {
+              title: "Medication Time",
+              body: `Time to take ${drug.drugName} at ${time}`,
+              subtitle: `Don't forget your medication!`,
+              sound: "default",
+              data: {
+                type: "drug",
+                id: drug.id,
+                drugName: drug.drugName,
+                time: time,
+                category: drug.category,
+              },
+              android: {
+                channelId: "medication-reminders",
+                largeIcon: "../assets/notifications/medicine-reminder.png", // ✅ KEEP
+                color: "#1A73E8",
+                priority: Notifications.AndroidImportance.HIGH,
+              },
+              ios: {
+                sound: true,
+                badge: 1,
+              },
+            },
+            trigger: {
+              timestamp: triggerTimestamp,
+              repeats: drug.repeatDays.length > 0,
+            },
+          } as any);
+        }
+        console.log(
+          `Scheduled ${drug.times.length} notifications for ${drug.drugName}`
+        );
+      } catch (error) {
+        console.error("Error scheduling drug notification:", error);
+      }
+    },
+    [isWeb]
+  );
 
   const scheduleAppointmentNotification = useCallback(
     async (appointment: AppointmentReminder) => {
+      if (isWeb) {
+        console.log("Appointment notifications skipped on web");
+        return;
+      }
+
       try {
         await Notifications.cancelScheduledNotificationAsync(appointment.id);
 
@@ -153,7 +175,7 @@ export function useRealTimeNotifications() {
                 channelId: "appointment-reminders",
                 color: "#1A73E8",
                 priority: Notifications.AndroidImportance.HIGH,
-                largeIcon: "../assets/notifications/appointment-reminder.png",
+                largeIcon: "../assets/notifications/appointment-reminder.png", // ✅ KEEP
               },
               ios: {
                 sound: true,
@@ -207,26 +229,39 @@ export function useRealTimeNotifications() {
         console.error("Error scheduling appointment notification:", error);
       }
     },
-    []
+    [isWeb]
   );
 
-  const cancelNotification = useCallback(async (id: string) => {
-    try {
-      await Notifications.cancelScheduledNotificationAsync(id);
-      console.log(`Cancelled notification: ${id}`);
-    } catch (error) {
-      console.error("Error cancelling notification:", error);
-    }
-  }, []);
+  const cancelNotification = useCallback(
+    async (id: string) => {
+      if (isWeb) {
+        console.log("Cancel notification skipped on web");
+        return;
+      }
+
+      try {
+        await Notifications.cancelScheduledNotificationAsync(id);
+        console.log(`Cancelled notification: ${id}`);
+      } catch (error) {
+        console.error("Error cancelling notification:", error);
+      }
+    },
+    [isWeb]
+  );
 
   const cancelAllNotifications = useCallback(async () => {
+    if (isWeb) {
+      console.log("Cancel all notifications skipped on web");
+      return;
+    }
+
     try {
       await Notifications.cancelAllScheduledNotificationsAsync();
       console.log("Cancelled all notifications");
     } catch (error) {
       console.error("Error cancelling all notifications:", error);
     }
-  }, []);
+  }, [isWeb]);
 
   const handleNotificationReceived = useCallback(
     (notification: Notifications.Notification) => {
@@ -244,6 +279,11 @@ export function useRealTimeNotifications() {
   );
 
   useEffect(() => {
+    if (isWeb) {
+      console.log("Notification listeners skipped on web");
+      return;
+    }
+
     registerForPushNotifications();
 
     notificationListener.current =
@@ -261,7 +301,22 @@ export function useRealTimeNotifications() {
         responseListener.current.remove();
       }
     };
-  }, [handleNotificationReceived, handleNotificationResponse]);
+  }, [
+    isWeb,
+    handleNotificationReceived,
+    handleNotificationResponse,
+    registerForPushNotifications,
+  ]);
+
+  if (isWeb) {
+    return {
+      registerForPushNotifications: async () => null,
+      scheduleDrugNotification: async () => {},
+      scheduleAppointmentNotification: async () => {},
+      cancelNotification: async () => {},
+      cancelAllNotifications: async () => {},
+    };
+  }
 
   return {
     registerForPushNotifications,
