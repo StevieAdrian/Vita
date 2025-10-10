@@ -90,7 +90,7 @@ export default function GeneralForm() {
         />
         <ListItem
           title="Log Out"
-          leftIcon={require("@/assets/images/logout-icon.svg")}
+          leftIcon={require("@/assets/images/logout-icon.png")}
           onPress={logout}
           danger
         />

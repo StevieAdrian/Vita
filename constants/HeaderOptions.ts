@@ -5,6 +5,7 @@ export type ToggleOption = {
   id: ReminderCategory;
   label: string;
   icon: keyof typeof Ionicons.glyphMap;
+  
 };
 
 export const toggleOptions: ToggleOption[] = [

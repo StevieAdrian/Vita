@@ -10,9 +10,12 @@ import { Reminder } from "@/constants/reminder";
 import { useAppointments } from "@/context/AppointmentContext";
 import { useDrugs } from "@/context/DrugContext";
 import { useAuthState } from "@/hooks/useAuthState";
+import { useAutoRefresh } from "@/hooks/useAutoRefresh";
 import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
 import { useEarlyWarning } from "@/hooks/useEarlyWarning";
 import { useFamilyMembers } from "@/hooks/useFamilyMembers";
+import { useLastHealthSync } from "@/hooks/useLastHealthSync";
+import { useLatestHealthDiary } from "@/hooks/useLatestHealthDiary";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { styles } from "@/styles/hcd/dashboard.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
@@ -28,8 +31,6 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
-import { useLatestHealthDiary } from "@/hooks/useLatestHealthDiary";
-import { useLastHealthSync } from "@/hooks/useLastHealthSync";
 
 export default function DashboardHome() {
   const insets = useSafeAreaInsets();
@@ -53,13 +54,15 @@ export default function DashboardHome() {
     attention: 0,
     total: 0,
   });
-  const { data: biomarker, loading: loadingBiomarker } = useLatestHealthDiary(user?.uid);
+  const { data: biomarker, loading: loadingBiomarker } = useLatestHealthDiary(
+    user?.uid
+  );
   const { lastSync, loading } = useLastHealthSync();
 
   const [reminders, setReminders] = useState<Reminder[]>([]);
 
-  const { drugs } = useDrugs();
-  const { appointments, remove } = useAppointments();
+  const { drugs, refreshDrugs } = useDrugs();
+  const { appointments, remove, refresh } = useAppointments();
   function formatDateLocals(date: Date) {
     return date.toLocaleDateString("en-US", {
       year: "numeric",
@@ -205,6 +208,68 @@ export default function DashboardHome() {
       : formatDateLocal(new Date())
   );
 
+  const refreshAllData = useCallback(async () => {
+    await Promise.all([refreshDrugs(), refresh()]);
+
+    if (members && members.length > 0) {
+      let healthy = 0;
+      let attention = 0;
+
+      await Promise.all(
+        members.map(async (m) => {
+          const { warnings = [] } = await getEarlyWarning(m.uid);
+          const count = warnings.filter(
+            (warn) => warn.status && !warn.status.toLowerCase().includes("good")
+          ).length;
+
+          if (count > 0) attention++;
+          else healthy++;
+        })
+      );
+      setFamilyStats({ healthy, attention, total: members.length });
+    }
+
+    if (uid) {
+      const allReminders: Reminder[] = [
+        ...drugs.map(convertDrugToReminder),
+        ...appointments.map(
+          (a): Reminder => ({
+            ...convertAppointment(a),
+            id: `appt-${a.id}`,
+            category: "appointment",
+            description: a.description ?? "",
+            completed: a.status === "done",
+          })
+        ),
+      ];
+      const now = new Date();
+      const upcomingReminders = allReminders
+        .filter((r) => {
+          if (!r.date) return false;
+
+          const reminderDateTime = new Date(
+            `${r.date} ${r.timeLabel ?? "00:00"}`
+          );
+
+          return !isNaN(reminderDateTime.getTime()) && reminderDateTime >= now;
+        })
+        .sort((a, b) => {
+          const dateTimeA = new Date(
+            `${a.date ?? ""} ${a.timeLabel ?? "00:00"}`
+          ).getTime();
+          const dateTimeB = new Date(
+            `${b.date ?? ""} ${b.timeLabel ?? "00:00"}`
+          ).getTime();
+          return dateTimeA - dateTimeB;
+        })
+        .slice(0, 3);
+
+      setReminders(upcomingReminders);
+    }
+  }, [members, uid, drugs, appointments, refreshDrugs, refresh]);
+
+  useAutoRefresh(refreshAllData);
+
   return (
     <SafeAreaView style={styles.dashboardContainer}>
       <LinearGradient
@@ -220,7 +285,7 @@ export default function DashboardHome() {
         showsVerticalScrollIndicator={false}
       >
         <UpHeader title="" showProfile={true} />
-        <View>
+        <View style={styles.contIsi}>
           <View style={styles.greetingsContainer}>
             <Text style={styles.greetings}>Welcome,</Text>
             <Text style={styles.greetingsBlue}>
@@ -307,6 +372,7 @@ export default function DashboardHome() {
                             onToggle={handleToggleReminder}
                             showActions={true}
                             onEdit={handleEditDrug}
+                            showImages={false}
                           />
                         ) : (
                           <AppointmentCard
@@ -320,6 +386,7 @@ export default function DashboardHome() {
                             showLocation={false}
                             showDetails={false}
                             showArrow={true}
+                            showImage={false}
                           />
                         )}
                       </View>
@@ -354,7 +421,7 @@ export default function DashboardHome() {
                   <View style={styles.titleHealth}>
                     <View style={styles.containerDigit}>
                       <Image
-                        source={require("@/assets/hcd/healthWarning.svg")}
+                        source={require("@/assets/hcd/healthWarning.png")}
                         style={{ width: 34, height: 35 }}
                       />
                       <Text style={styles.titleDigitWarning}>
@@ -415,7 +482,9 @@ export default function DashboardHome() {
                     <View>
                       <Text style={styles.captionNumber}>
                         {biomarker
-                          ? `${biomarker.systolic ?? "-"} / ${biomarker.diastolic ?? "-"} mmHg`
+                          ? `${biomarker.systolic ?? "-"} / ${
+                              biomarker.diastolic ?? "-"
+                            } mmHg`
                           : "-"}
                       </Text>
                       <Text style={styles.captionName}>Blood Pressure</Text>
@@ -426,7 +495,11 @@ export default function DashboardHome() {
                   <View style={styles.containerStatus}>
                     <View style={styles.bulletin}></View>
                     <View>
-                      <Text style={styles.captionNumber}>{biomarker ? `${biomarker.bloodSugar ?? "-"} mg/dL` : "-"}</Text>
+                      <Text style={styles.captionNumber}>
+                        {biomarker
+                          ? `${biomarker.bloodSugar ?? "-"} mg/dL`
+                          : "-"}
+                      </Text>
                       <Text style={styles.captionName}>Blood Sugar</Text>
                     </View>
                   </View>
@@ -436,7 +509,9 @@ export default function DashboardHome() {
                   <View style={styles.containerStatus}>
                     <View style={styles.bulletin}></View>
                     <View>
-                      <Text style={styles.captionNumber}>{biomarker ? `${biomarker.heartRate ?? "-"} bpm` : "-"}</Text>
+                      <Text style={styles.captionNumber}>
+                        {biomarker ? `${biomarker.heartRate ?? "-"} bpm` : "-"}
+                      </Text>
                       <Text style={styles.captionName}>Heart Rate</Text>
                     </View>
                   </View>
@@ -445,7 +520,9 @@ export default function DashboardHome() {
                   <View style={styles.containerStatus}>
                     <View style={styles.bulletin}></View>
                     <View>
-                      <Text style={styles.captionNumber}>{biomarker ? `${biomarker.weight ?? "-"} kg` : "-"}</Text>
+                      <Text style={styles.captionNumber}>
+                        {biomarker ? `${biomarker.weight ?? "-"} kg` : "-"}
+                      </Text>
                       <Text style={styles.captionName}>Weight</Text>
                     </View>
                   </View>
@@ -454,8 +531,8 @@ export default function DashboardHome() {
 
               {/* Latest Update */}
               <View style={styles.LatestContainer}>
-                <Text style={styles.latestText}>Latest update{" "}
-                  {loading ? "Loading..." : `${lastSync}`}
+                <Text style={styles.latestText}>
+                  Latest update {loading ? "Loading..." : `${lastSync}`}
                 </Text>
 
                 <TouchableOpacity

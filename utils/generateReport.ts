@@ -10,7 +10,7 @@ import { Platform } from "react-native";
 export async function generateReportPDF(data: ReportData) {
   try {
     const asset = Asset.fromModule(
-      require("../assets/utilsIcon/vita-logo.svg")
+      require("../assets/utilsIcon/vita-logo.png")
     );
     await asset.downloadAsync();
     const imageUri = asset.localUri || asset.uri;

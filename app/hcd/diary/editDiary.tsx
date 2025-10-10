@@ -134,7 +134,7 @@ export default function EditDiary() {
                 <View style={styles.containerInput}>
                   <View style={styles.flexInput}>
                     <Image
-                      source={require("@/assets/hcd/symptoms.svg")}
+                      source={require("@/assets/hcd/symptoms.png")}
                       style={{ width: 25, height: 25 }}
                       resizeMode="contain"
                     />
@@ -156,7 +156,7 @@ export default function EditDiary() {
                 <View style={styles.containerInput}>
                   <View style={styles.flexInput}>
                     <Image
-                      source={require("@/assets/hcd/mood.svg")}
+                      source={require("@/assets/hcd/mood.png")}
                       style={{ width: 25, height: 25 }}
                       resizeMode="contain"
                     />
@@ -178,7 +178,7 @@ export default function EditDiary() {
                 <View style={styles.containerInput}>
                   <View style={styles.flexInput}>
                     <Image
-                      source={require("@/assets/hcd/physicalAct.svg")}
+                      source={require("@/assets/hcd/physicalAct.png")}
                       style={{ width: 25, height: 25 }}
                       resizeMode="contain"
                     />
@@ -200,7 +200,7 @@ export default function EditDiary() {
                 <View style={styles.containerInput}>
                   <View style={styles.flexInput}>
                     <Image
-                      source={require("@/assets/hcd/additionalNotes.svg")}
+                      source={require("@/assets/hcd/additionalNotes.png")}
                       style={{ width: 25, height: 25 }}
                       resizeMode="contain"
                     />

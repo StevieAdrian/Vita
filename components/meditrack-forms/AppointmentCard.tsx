@@ -14,6 +14,7 @@ type AppointmentCardProps = {
   showLocation?: boolean;
   showDetails?: boolean;
   showArrow?: boolean;
+  showImage?: boolean;
 };
 const truncateText = (text: string, wordLimit: number) => {
   if (!text) return "";
@@ -33,6 +34,7 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
   showLocation = true,
   showDetails = true,
   showArrow = false,
+  showImage = true,
 }) => {
   const isUpcoming = appointment.status === "upcoming";
   const backgroundColor = isUpcoming
@@ -55,12 +57,14 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
     <TouchableOpacity onPress={handleEditPress}>
       <View style={[styles.container, { backgroundColor }]}>
         <View style={styles.leftColumn}>
-          <View style={styles.iconWrapper}>
-            <Image
-              source={require("@/assets/mediTrack/medicalCheckUp.svg")}
-              style={{ width: 35, height: 35 }}
-            />
-          </View>
+          {showImage && (
+            <View style={styles.iconWrapper}>
+              <Image
+                source={require("@/assets/mediTrack/medicalCheckUp.png")}
+                style={{ width: 35, height: 35 }}
+              />
+            </View>
+          )}
           <View style={styles.infoWrapper}>
             <Text style={styles.title} numberOfLines={1}>
               {truncateText(appointment.title, 8)}
