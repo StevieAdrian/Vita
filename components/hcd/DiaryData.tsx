@@ -26,10 +26,14 @@ export default function DiaryData({
   return (
     <View>
       {/* Vital Signs */}
-      {/* Vital Signs */}
       <TouchableOpacity
         style={styles.containerAllDigitBio}
-        onPress={() => router.push("/profile/digitalBiomarker")}
+        onPress={() =>
+          router.push({
+            pathname: "/profile/digitalBiomarker",
+            params: { date: selectedDateKey },
+          })
+        }
       >
         {/* Judul */}
         <View style={styles.titleHealth}>

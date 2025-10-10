@@ -95,6 +95,7 @@ export const getHealthDiaries = async (uid: string) => {
     ...doc.data(),
   })) as (DiaryEntry & { id: string })[];
 };
+
 export const getHealthDiariesByDate = async (date: string, uid: string) => {
   const dateObj = new Date(date);
   dateObj.setHours(0, 0, 0, 0);
@@ -114,7 +115,6 @@ export const getHealthDiariesByDate = async (date: string, uid: string) => {
 
   const snapshot = await getDocs(q);
   if (snapshot.empty) return [];
-  
   return snapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),

@@ -10,7 +10,6 @@ import { Reminder } from "@/constants/reminder";
 import { useAppointments } from "@/context/AppointmentContext";
 import { useDrugs } from "@/context/DrugContext";
 import { useAuthState } from "@/hooks/useAuthState";
-import { useAutoRefresh } from "@/hooks/useAutoRefresh";
 import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
 import { useEarlyWarning } from "@/hooks/useEarlyWarning";
 import { useFamilyMembers } from "@/hooks/useFamilyMembers";
@@ -208,68 +207,6 @@ export default function DashboardHome() {
       ? formatDateLocal(new Date(selected as Date))
       : formatDateLocal(new Date())
   );
-
-  const refreshAllData = useCallback(async () => {
-    await Promise.all([refreshDrugs(), refresh()]);
-
-    if (members && members.length > 0) {
-      let healthy = 0;
-      let attention = 0;
-
-      await Promise.all(
-        members.map(async (m) => {
-          const { warnings = [] } = await getEarlyWarning(m.uid);
-          const count = warnings.filter(
-            (warn) => warn.status && !warn.status.toLowerCase().includes("good")
-          ).length;
-
-          if (count > 0) attention++;
-          else healthy++;
-        })
-      );
-      setFamilyStats({ healthy, attention, total: members.length });
-    }
-
-    if (uid) {
-      const allReminders: Reminder[] = [
-        ...drugs.map(convertDrugToReminder),
-        ...appointments.map(
-          (a): Reminder => ({
-            ...convertAppointment(a),
-            id: `appt-${a.id}`,
-            category: "appointment",
-            description: a.description ?? "",
-            completed: a.status === "done",
-          })
-        ),
-      ];
-      const now = new Date();
-      const upcomingReminders = allReminders
-        .filter((r) => {
-          if (!r.date) return false;
-
-          const reminderDateTime = new Date(
-            `${r.date} ${r.timeLabel ?? "00:00"}`
-          );
-
-          return !isNaN(reminderDateTime.getTime()) && reminderDateTime >= now;
-        })
-        .sort((a, b) => {
-          const dateTimeA = new Date(
-            `${a.date ?? ""} ${a.timeLabel ?? "00:00"}`
-          ).getTime();
-          const dateTimeB = new Date(
-            `${b.date ?? ""} ${b.timeLabel ?? "00:00"}`
-          ).getTime();
-          return dateTimeA - dateTimeB;
-        })
-        .slice(0, 3);
-
-      setReminders(upcomingReminders);
-    }
-  }, [members, uid, drugs, appointments, refreshDrugs, refresh]);
-
-  useAutoRefresh(refreshAllData);
 
   return (
     <SafeAreaView style={styles.dashboardContainer}>
