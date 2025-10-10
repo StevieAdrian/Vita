@@ -151,11 +151,13 @@ const AppointmentTimeRange: React.FC<AppointmentTimeRangeProps> = ({
   const handleStartTimeChange = (time: string) => {
     setStartTime(time);
     setShowStartTimePicker(false);
+    onTimeRangeChange(time, endTime);
   };
 
   const handleEndTimeChange = (time: string) => {
     setEndTime(time);
     setShowEndTimePicker(false);
+    onTimeRangeChange(startTime, time);
   };
 
   return (
