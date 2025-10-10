@@ -121,7 +121,10 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
               onPress={handleEditPress}
               style={styles.actionButton}
             >
-              <Image source={require("@/assets/utilsIcon/arrow-right.svg")} />
+              <Image
+                source={require("@/assets/utilsIcon/arrow-left.png")}
+                style={{ transform: [{ rotate: "180deg" }] }}
+              />
             </TouchableOpacity>
           </View>
         )}
