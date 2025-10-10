@@ -60,8 +60,8 @@ export default function DashboardHome() {
 
   const [reminders, setReminders] = useState<Reminder[]>([]);
 
-  const { drugs, refreshDrugs } = useDrugs();
-  const { appointments, remove, refresh } = useAppointments();
+  const { drugs } = useDrugs();
+  const { appointments, remove } = useAppointments();
   function formatDateLocals(date: Date) {
     return date.toLocaleDateString("en-US", {
       year: "numeric",
