@@ -36,7 +36,7 @@ export default function PasswordForm() {
       setValues({ oldPassword: "", newPassword: "", confirmNewPassword: "" });
       setShowSuccess(true);
     } catch (err: any) {
-      setErrorMessage("Failed to update password, invalid credential.");
+      setErrorMessage("Current password is incorrect.");
       setShowError(true);
     }
   };
