@@ -21,7 +21,6 @@ interface DrugContextType {
   update: (id: string, data: Partial<DrugReminder>) => Promise<void>;
   remove: (id: string) => Promise<void>;
   removeExpiredDrugs: () => Promise<number>;
-  refreshDrugs: () => Promise<void>;
 }
 
 const DrugContext = createContext<DrugContextType | undefined>(undefined);
@@ -32,17 +31,6 @@ export const DrugProvider: React.FC<{ children: React.ReactNode }> = ({
   const { user } = useAuthState();
   const [drugs, setDrugs] = useState<DrugReminder[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const refreshDrugs = useCallback(async () => {
-    if (!user) return;
-
-    try {
-      const data = await getDrugByUser(user.uid);
-      setDrugs(data);
-    } catch (err) {
-      console.error("Error refreshing drugs:", err);
-    }
-  }, [user]);
 
   useEffect(() => {
     if (!user) {
@@ -141,7 +129,6 @@ export const DrugProvider: React.FC<{ children: React.ReactNode }> = ({
         update,
         remove,
         removeExpiredDrugs,
-        refreshDrugs,
       }}
     >
       {children}
