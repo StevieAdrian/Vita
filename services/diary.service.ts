@@ -114,6 +114,7 @@ export const getHealthDiariesByDate = async (date: string, uid: string) => {
 
   const snapshot = await getDocs(q);
   if (snapshot.empty) return [];
+  
   return snapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),

@@ -354,7 +354,10 @@ export default function DashboardHome() {
           <View>
             {!loadingWarning &&
               (warningCount > 0 ? (
-                <TouchableOpacity style={styles.containerHealthWarning}>
+                <TouchableOpacity
+                  style={styles.containerHealthWarning}
+                  onPress={() => router.push("/analysis/analysis")}
+                >
                   <View style={styles.titleHealth}>
                     <View style={styles.containerDigit}>
                       <Image
