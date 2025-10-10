@@ -137,8 +137,7 @@ export default function DashboardHome() {
       })
       .slice(0, 3);
 
-    setReminders(upcomingReminders);
-    console.log(upcomingReminders);
+    setReminders(upcomingReminders);  
   }, [members, selected, uid, drugs, appointments]);
 
   const handleToggleReminder = useCallback((id: string) => {

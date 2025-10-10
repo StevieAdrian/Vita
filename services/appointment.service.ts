@@ -1,10 +1,13 @@
 import dayjs from "dayjs";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
 import {
   addDoc,
   collection,
   deleteDoc,
   doc,
   getDocs,
+  onSnapshot,
   query,
   updateDoc,
   where,
@@ -12,9 +15,7 @@ import {
 import { db } from "../config/firebaseConfig";
 import { AppointmentReminder } from "../types/appointment";
 import { addNotification } from "./notification.service";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-import { toTimeLabel, toDateTimeISO } from "@/utils/dateUtils";
+import { Unsubscribe } from "firebase/auth";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -27,7 +28,9 @@ export const createAppointment = async (
   const docRef = await addDoc(collection(db, "appointments"), data);
 
   const dateTime = dayjs(`${data.date} ${data.startTime}`).toISOString();
-  const timeLabel = dayjs(`${data.startTime}`, ["HH:mm", "H:mm"]).format("hh:mm A");
+  const timeLabel = dayjs(`${data.startTime}`, ["HH:mm", "H:mm"]).format(
+    "hh:mm A"
+  );
 
   const message = `You have a ${data.category.toLowerCase()} appointment at ${timeLabel}. Don’t miss it.`;
 
@@ -56,6 +59,30 @@ export const getAppointmentsByUser = async (userId: string) => {
       ...data,
     };
   });
+};
+export const listenAppointmentsByUser = (
+  userId: string,
+  onChange: (appointments: AppointmentReminder[]) => void,
+  onError?: (error: any) => void
+): Unsubscribe => {
+  const q = query(appointmentCollection, where("userId", "==", userId));
+
+  const unsubscribe = onSnapshot(
+    q,
+    (snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as Omit<AppointmentReminder, "id">),
+      }));
+      onChange(data);
+    },
+    (error) => {
+      console.error("Error in listenAppointmentsByUser:", error);
+      if (onError) onError(error);
+    }
+  );
+
+  return unsubscribe;
 };
 
 export const updateAppointment = async (
