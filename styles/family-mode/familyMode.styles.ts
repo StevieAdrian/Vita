@@ -58,7 +58,6 @@ export const styles = StyleSheet.create({
     width: "100%",
     paddingTop: 12,
     paddingBottom: 14,
-    backgroundColor: COLORS.background2nd,
   },
   cont: {
     width: "100%",

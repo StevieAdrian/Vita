@@ -13,6 +13,8 @@ import { useAuthState } from "@/hooks/useAuthState";
 import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
 import { useEarlyWarning } from "@/hooks/useEarlyWarning";
 import { useFamilyMembers } from "@/hooks/useFamilyMembers";
+import { useLastHealthSync } from "@/hooks/useLastHealthSync";
+import { useLatestHealthDiary } from "@/hooks/useLatestHealthDiary";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { styles } from "@/styles/hcd/dashboard.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
@@ -28,8 +30,6 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
-import { useLatestHealthDiary } from "@/hooks/useLatestHealthDiary";
-import { useLastHealthSync } from "@/hooks/useLastHealthSync";
 
 export default function DashboardHome() {
   const insets = useSafeAreaInsets();
@@ -53,7 +53,9 @@ export default function DashboardHome() {
     attention: 0,
     total: 0,
   });
-  const { data: biomarker, loading: loadingBiomarker } = useLatestHealthDiary(user?.uid);
+  const { data: biomarker, loading: loadingBiomarker } = useLatestHealthDiary(
+    user?.uid
+  );
   const { lastSync, loading } = useLastHealthSync();
 
   const [reminders, setReminders] = useState<Reminder[]>([]);
@@ -220,7 +222,7 @@ export default function DashboardHome() {
         showsVerticalScrollIndicator={false}
       >
         <UpHeader title="" showProfile={true} />
-        <View>
+        <View style={styles.contIsi}>
           <View style={styles.greetingsContainer}>
             <Text style={styles.greetings}>Welcome,</Text>
             <Text style={styles.greetingsBlue}>
@@ -307,6 +309,7 @@ export default function DashboardHome() {
                             onToggle={handleToggleReminder}
                             showActions={true}
                             onEdit={handleEditDrug}
+                            showImages={false}
                           />
                         ) : (
                           <AppointmentCard
@@ -320,6 +323,7 @@ export default function DashboardHome() {
                             showLocation={false}
                             showDetails={false}
                             showArrow={true}
+                            showImage={false}
                           />
                         )}
                       </View>
@@ -415,7 +419,9 @@ export default function DashboardHome() {
                     <View>
                       <Text style={styles.captionNumber}>
                         {biomarker
-                          ? `${biomarker.systolic ?? "-"} / ${biomarker.diastolic ?? "-"} mmHg`
+                          ? `${biomarker.systolic ?? "-"} / ${
+                              biomarker.diastolic ?? "-"
+                            } mmHg`
                           : "-"}
                       </Text>
                       <Text style={styles.captionName}>Blood Pressure</Text>
@@ -426,7 +432,11 @@ export default function DashboardHome() {
                   <View style={styles.containerStatus}>
                     <View style={styles.bulletin}></View>
                     <View>
-                      <Text style={styles.captionNumber}>{biomarker ? `${biomarker.bloodSugar ?? "-"} mg/dL` : "-"}</Text>
+                      <Text style={styles.captionNumber}>
+                        {biomarker
+                          ? `${biomarker.bloodSugar ?? "-"} mg/dL`
+                          : "-"}
+                      </Text>
                       <Text style={styles.captionName}>Blood Sugar</Text>
                     </View>
                   </View>
@@ -436,7 +446,9 @@ export default function DashboardHome() {
                   <View style={styles.containerStatus}>
                     <View style={styles.bulletin}></View>
                     <View>
-                      <Text style={styles.captionNumber}>{biomarker ? `${biomarker.heartRate ?? "-"} bpm` : "-"}</Text>
+                      <Text style={styles.captionNumber}>
+                        {biomarker ? `${biomarker.heartRate ?? "-"} bpm` : "-"}
+                      </Text>
                       <Text style={styles.captionName}>Heart Rate</Text>
                     </View>
                   </View>
@@ -445,7 +457,9 @@ export default function DashboardHome() {
                   <View style={styles.containerStatus}>
                     <View style={styles.bulletin}></View>
                     <View>
-                      <Text style={styles.captionNumber}>{biomarker ? `${biomarker.weight ?? "-"} kg` : "-"}</Text>
+                      <Text style={styles.captionNumber}>
+                        {biomarker ? `${biomarker.weight ?? "-"} kg` : "-"}
+                      </Text>
                       <Text style={styles.captionName}>Weight</Text>
                     </View>
                   </View>
@@ -454,8 +468,8 @@ export default function DashboardHome() {
 
               {/* Latest Update */}
               <View style={styles.LatestContainer}>
-                <Text style={styles.latestText}>Latest update{" "}
-                  {loading ? "Loading..." : `${lastSync}`}
+                <Text style={styles.latestText}>
+                  Latest update {loading ? "Loading..." : `${lastSync}`}
                 </Text>
 
                 <TouchableOpacity
