@@ -274,7 +274,7 @@ export default function DashboardHome() {
                       See All
                     </Text>
                     <Image
-                      source={require("@/assets/utilsIcon/arrow-right-white.svg")}
+                      source={require("@/assets/utilsIcon/arrow-right-white.png")}
                     />
                   </TouchableOpacity>
                 </View>
@@ -358,7 +358,7 @@ export default function DashboardHome() {
                   <View style={styles.titleHealth}>
                     <View style={styles.containerDigit}>
                       <Image
-                        source={require("@/assets/hcd/healthWarning.svg")}
+                        source={require("@/assets/hcd/healthWarning.png")}
                         style={{ width: 34, height: 35 }}
                       />
                       <Text style={styles.titleDigitWarning}>

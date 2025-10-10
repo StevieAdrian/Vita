@@ -29,9 +29,15 @@ export const styles = StyleSheet.create({
     bottom: 0,
     height: "70%",
   },
-  container: { width: "100%", paddingHorizontal: 16 },
+  container: {
+    width: "100%",
+    paddingHorizontal: 16,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   formContainer: {
-    alignItems: "flex-start",
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: COLORS.white,
     maxWidth: 369,
     borderRadius: 10,
