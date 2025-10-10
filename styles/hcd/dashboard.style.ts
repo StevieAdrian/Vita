@@ -244,7 +244,6 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 15,
     width: "100%",
-    
   },
   containerHealthAmount: {
     width: "47%",
@@ -282,6 +281,7 @@ export const styles = StyleSheet.create({
     borderColor: COLORS.gray3,
     width: "100%",
     backgroundColor: "white",
+    overflow: "hidden",
   },
   reminderTimesCard: {
     alignItems: "flex-start",
