@@ -246,4 +246,12 @@ export const styles = StyleSheet.create({
     color: COLORS.red,
     marginBottom: 5,
   },
+  deleteSty: {
+    width: 46,
+    height: 46,
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
+    borderRadius: 6,
+  },
 });
