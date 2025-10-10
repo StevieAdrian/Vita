@@ -1,21 +1,16 @@
 import { auth, db } from "@/config/firebaseConfig";
-import * as Google from "expo-auth-session/providers/google";
 import { router } from "expo-router";
-import * as WebBrowser from "expo-web-browser";
 import { FirebaseError } from "firebase/app";
 import {
-  GoogleAuthProvider,
   sendPasswordResetEmail,
-  signInWithCredential,
   signInWithEmailAndPassword,
-  signInWithPopup,
   signOut,
 } from "firebase/auth";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Platform } from "react-native";
-
-WebBrowser.maybeCompleteAuthSession();
+import { useMobileAuth } from "./useMobileAuth";
+import { useWebAuth } from "./useWebAuth";
 
 async function checkUserExistsInDatabase(email: string): Promise<boolean> {
   try {
@@ -29,52 +24,12 @@ async function checkUserExistsInDatabase(email: string): Promise<boolean> {
   }
 }
 
-async function handleGoogleSignInMobile(authentication: any) {
-  try {
-    const credential = GoogleAuthProvider.credential(
-      authentication.idToken,
-      authentication.accessToken
-    );
-
-    const result = await signInWithCredential(auth, credential);
-    const userEmail = result.user.email;
-
-    if (!userEmail) {
-      alert("Email not found from Google account");
-      return;
-    }
-
-    const userExists = await checkUserExistsInDatabase(userEmail);
-
-    router.push("/auth/loading/loading");
-
-    setTimeout(() => {
-      if (userExists) {
-        router.push("/");
-      } else {
-        router.push("/auth/signup/signup_google");
-      }
-    }, 1000);
-  } catch (error) {
-    console.error("Google Sign In Mobile Error:", error);
-    alert("Google sign in failed");
-  }
-}
-
 export function useAuth() {
   const [loading, setLoading] = useState(false);
 
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    webClientId: process.env.EXPO_PUBLIC_FIREBASE_WEB_CLIENT_ID,
-    iosClientId: process.env.EXPO_PUBLIC_FIREBASE_IOS_CLIENT_ID,
-    androidClientId: process.env.EXPO_PUBLIC_FIREBASE_ANDROID_CLIENT_ID,
-  });
-
-  useEffect(() => {
-    if (response?.type === "success" && response.authentication) {
-      handleGoogleSignInMobile(response.authentication);
-    }
-  }, [response]);
+  // Platform-specific auth hooks
+  const { promptAsync } = useMobileAuth();
+  const { signInWithGoogleWeb } = useWebAuth();
 
   const signIn = async (email: string, password: string) => {
     setLoading(true);
@@ -91,37 +46,17 @@ export function useAuth() {
 
   const signInWithGoogle = async () => {
     setLoading(true);
-
     try {
       if (Platform.OS === "web") {
-        const provider = new GoogleAuthProvider();
-        const result = await signInWithPopup(auth, provider);
-
-        const userEmail = result.user.email;
-
-        if (!userEmail) {
-          alert("Email not found from Google account");
-          return;
-        }
-
-        const userExists = await checkUserExistsInDatabase(userEmail);
-
-        router.push("/auth/loading/loading");
-
-        setTimeout(() => {
-          if (userExists) {
-            router.push("/");
-          } else {
-            router.push("/auth/signup/signup_google");
-          }
-          setLoading(false);
-        }, 1000);
+        await signInWithGoogleWeb();
       } else {
         await promptAsync();
       }
     } catch (e) {
       const err = e as FirebaseError;
       console.log(err);
+      alert("Google sign in failed");
+    } finally {
       setLoading(false);
     }
   };
@@ -149,5 +84,11 @@ export function useAuth() {
     }
   };
 
-  return { signIn, signInWithGoogle, loading, logout, resetPassword };
+  return {
+    signIn,
+    signInWithGoogle,
+    loading,
+    logout,
+    resetPassword,
+  };
 }
