@@ -11,6 +11,7 @@ import {
   createDrug,
   deleteDrugs,
   getDrugByUser,
+  listenDrugsByUser,
   updateDrugs,
 } from "../services/drug.service";
 
@@ -46,22 +47,24 @@ export const DrugProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     if (!user) {
+      setDrugs([]);
       setLoading(false);
       return;
     }
 
-    const loadData = async () => {
-      try {
-        const data = await getDrugByUser(user.uid);
+    const unsubscribe = listenDrugsByUser(
+      user.uid,
+      (data) => {
         setDrugs(data);
-        console.log(data);
-      } catch (err) {
-        console.error(err);
-      } finally {
+        setLoading(false);
+      },
+      (error) => {
+        console.error(error);
         setLoading(false);
       }
-    };
-    loadData();
+    );
+
+    return () => unsubscribe();
   }, [user]);
 
   const remove = async (id: string) => {

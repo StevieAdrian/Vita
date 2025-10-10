@@ -1,5 +1,6 @@
 import { toDateTimeISO, toTimeLabel } from "@/utils/dateUtils";
 import dayjs from "dayjs";
+import { Unsubscribe } from "firebase/auth";
 import {
   addDoc,
   collection,
@@ -7,6 +8,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   query,
   updateDoc,
   where,
@@ -58,6 +60,31 @@ export const getDrugByUser = async (userId: string) => {
       ...data,
     } as DrugReminder;
   });
+};
+
+export const listenDrugsByUser = (
+  userId: string,
+  onChange: (appointments: DrugReminder[]) => void,
+  onError?: (error: any) => void
+): Unsubscribe => {
+  const q = query(drugsCollection, where("userId", "==", userId));
+
+  const unsubscribe = onSnapshot(
+    q,
+    (snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as Omit<DrugReminder, "id">),
+      }));
+      onChange(data);
+    },
+    (error) => {
+      console.error("Error in listenDrugByUser:", error);
+      if (onError) onError(error);
+    }
+  );
+
+  return unsubscribe;
 };
 
 export const updateDrugs = async (id: string, data: Partial<DrugReminder>) => {
