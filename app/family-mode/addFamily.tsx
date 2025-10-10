@@ -165,7 +165,7 @@ export default function AddFamily() {
               placeholderTextColor={COLORS.gray2}
               onChangeText={(text) => {
                 handleChange("username", text);
-                if (text.trim().length >= 3) {
+                if (text.trim().length >= 1) {
                   verifyUsername(text.trim());
                 } else {
                   verifyUsername("");
