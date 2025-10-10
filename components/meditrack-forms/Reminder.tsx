@@ -168,7 +168,7 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
             onPress={handleEditPress}
             style={styles.actionButton}
           >
-            <Image source={require("@/assets/utilsIcon/arrow-right.png")} />
+            <Image source={require("@/assets/utilsIcon/arrow-right.svg")} />
           </TouchableOpacity>
         </View>
       )}
