@@ -4,7 +4,6 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   dashboardContainer: {
     flex: 1,
-    paddingHorizontal: 20,
     position: "absolute",
     top: 0,
     left: 0,
@@ -22,6 +21,7 @@ export const styles = StyleSheet.create({
     height: "70%",
   },
   scrollContent: {
+    marginHorizontal: 20,
     flexGrow: 1,
     alignItems: "center",
     justifyContent: "flex-start",

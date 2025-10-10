@@ -9,6 +9,7 @@ import {
   validateForm,
   ValidationErrors,
 } from "@/utils/emergencyValidation";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -97,6 +98,10 @@ export default function EmergencyContact() {
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="handled"
     >
+      <LinearGradient
+        colors={["#1A73E8", "#21E2CF"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
       <KeyboardAvoidingView
         style={{ flex: 1 }}

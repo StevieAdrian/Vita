@@ -133,8 +133,8 @@ export default function Analysis() {
               : recommendation
               ? recommendation
                   .split("\n")
-                  .map((line) =>
-                    line
+                  .map((lines) =>
+                    lines
                       .trim()
                       .replace(/^[-•]\s*/, "")
                       .trim()

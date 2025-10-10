@@ -1,12 +1,5 @@
 import { COLORS } from "@/constants/colors";
-import { Dimensions, StyleSheet } from "react-native";
-
-const { width, height } = Dimensions.get("window");
-
-const scaleWidth = (size: number) => (width / 375) * size;
-const scaleHeight = (size: number) => (height / 812) * size;
-const moderateScale = (size: number, factor = 0.5) =>
-  size + (scaleWidth(size) - size) * factor;
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   safeArea: {
@@ -60,9 +53,9 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.gray1,
     paddingHorizontal: 10,
-    paddingVertical: scaleHeight(12),
-    minHeight: scaleHeight(48),
-    borderRadius: scaleWidth(8),
+    paddingVertical: 12,
+    minHeight: 48,
+    borderRadius: 8,
   },
   dropdownButtonActive: {
     borderColor: COLORS.primary,
@@ -73,14 +66,14 @@ export const styles = StyleSheet.create({
     elevation: 3,
   },
   dropdownText: {
-    fontSize: moderateScale(15),
+    fontSize: 15,
     color: COLORS.black,
   },
   placeholderText: {
     color: COLORS.black,
   },
   dropdownMenu: {
-    marginTop: scaleHeight(6),
+    marginTop: 6,
     backgroundColor: COLORS.white,
     borderWidth: 1,
     borderColor: COLORS.gray1,
@@ -92,11 +85,11 @@ export const styles = StyleSheet.create({
     elevation: 4,
   },
   dropdownScroll: {
-    maxHeight: scaleHeight(180),
+    maxHeight: 180,
   },
   dropdownOption: {
-    paddingHorizontal: scaleWidth(10),
-    paddingVertical: scaleHeight(10),
+    paddingHorizontal: 10,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.primary5th,
   },

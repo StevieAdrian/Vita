@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
 import InputField from "@/components/utils/InputField";
 import { COLORS } from "@/constants/colors";
 import { useAuth } from "@/hooks/useAuth";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
+import { useState } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "../../../styles/auth/login/login.styles";
 
 export default function ForgotPassword() {
@@ -23,31 +24,46 @@ export default function ForgotPassword() {
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require("@/assets/images/welcome-logo.png")}
-        style={styles.welcomeImage}
-      />
-
-      <View style={styles.boxContainer}>
-        <InputField
-          label="Email"
-          required
-          onChangeText={setEmail}
-          placeholder="johndoe@gmail.com"
-          placeholderTextColor={COLORS.gray2}
+      <LinearGradient
+        colors={["#1A73E8", "#21E2CF"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
+      <View style={styles.header}>
+        <Image
+          source={require("../../../assets/images/Logo Vita.png")}
+          style={styles.logo}
+          resizeMode="contain"
         />
+        <Text style={styles.title}>Welcome Back</Text>
+        <Text style={styles.subtitle}>
+          Let's continue your health journey{"\n"}with us.
+        </Text>
+      </View>
+      <View style={styles.upCont}>
+        <View style={styles.boxContainer}>
+          <InputField
+            label="Email"
+            required
+            onChangeText={setEmail}
+            placeholder="johndoe@gmail.com"
+            placeholderTextColor={COLORS.gray2}
+          />
 
-        <TouchableOpacity
-          style={styles.continueButton}
-          onPress={handleReset}
-          disabled={loading}
-        >
-          <Text style={styles.continueText}>Send Reset Link</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.continueButton}
+            onPress={handleReset}
+            disabled={loading}
+          >
+            <Text style={styles.continueText}>Send Reset Link</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => router.back()} style={styles.forgotContainer}>
-          <Text style={styles.forgotText}>Back to Login</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => router.back()}
+            style={styles.forgotContainer}
+          >
+            <Text style={styles.forgotText}>Back to Login</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

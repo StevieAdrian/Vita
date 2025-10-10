@@ -1,12 +1,5 @@
 import { COLORS } from "@/constants/colors";
-import { Dimensions, StyleSheet } from "react-native";
-
-const { width, height } = Dimensions.get("window");
-
-const scaleWidth = (size: number) => (width / 375) * size;
-const scaleHeight = (size: number) => (height / 812) * size;
-const moderateScale = (size: number, factor = 0.5) =>
-  size + (scaleWidth(size) - size) * factor;
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   safeArea: {
@@ -58,22 +51,22 @@ export const styles = StyleSheet.create({
   },
   genderContainer: {
     flexDirection: "row",
-    marginTop: scaleHeight(6),
-    marginBottom: scaleHeight(12),
+    marginTop: 6,
+    marginBottom: 12,
     width: "100%",
   },
   genderOption: {
     flexDirection: "row",
     alignItems: "center",
-    marginRight: scaleWidth(30),
+    marginRight: 20,
   },
   radioButton: {
     width: 18,
     height: 18,
-    borderRadius: scaleWidth(9),
+    borderRadius: 10,
     borderWidth: 2,
     borderColor: "#D0D0D0",
-    marginRight: scaleWidth(8),
+    marginRight: 10,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -81,14 +74,14 @@ export const styles = StyleSheet.create({
     borderColor: COLORS.black,
   },
   radioButtonInner: {
-    width: scaleWidth(8),
-    height: scaleWidth(8),
-    borderRadius: scaleWidth(4),
+    width: 8,
+    height: 8,
+    borderRadius: 4,
     backgroundColor: COLORS.black,
     borderColor: COLORS.gray2,
   },
   genderText: {
-    fontSize: moderateScale(15),
+    fontSize: 16,
     color: COLORS.black,
   },
   saveBtn: {
@@ -106,12 +99,11 @@ export const styles = StyleSheet.create({
   otherInput: {
     backgroundColor: "rgba(255, 255, 255, 0.85)",
     borderRadius: 10,
-    paddingVertical: scaleHeight(14),
-    paddingHorizontal: scaleWidth(16),
-    fontSize: moderateScale(16),
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    fontSize: 16,
     color: COLORS.black,
     elevation: 4,
-    minHeight: scaleHeight(60),
     borderWidth: 1,
     borderColor: COLORS.gray2,
   },
