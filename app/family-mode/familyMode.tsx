@@ -49,7 +49,7 @@ export default function FamilyMode() {
             <Text style={styles.requestSubtitle}>{count} Request(s)</Text>
           </View>
           <Image
-            source={require("@/assets/mediTrack/arrow-right.svg")}
+            source={require("@/assets/utilsIcon/arrow-left.png")}
             style={styles.chevron}
           />
         </TouchableOpacity>
@@ -62,7 +62,7 @@ export default function FamilyMode() {
                 {editMode ? (
                   <TouchableOpacity onPress={() => setEditMode(false)}>
                     <Image
-                      source={require("@/assets/mediTrack/remove.svg")}
+                      source={require("@/assets/family/red-decline.png")}
                       style={styles.memberIcon}
                       resizeMode="contain"
                     />
@@ -73,14 +73,14 @@ export default function FamilyMode() {
                       onPress={() => router.push("/family-mode/addFamily")}
                     >
                       <Image
-                        source={require("@/assets/mediTrack/plus.svg")}
+                        source={require("@/assets/mediTrack/plus.png")}
                         style={styles.memberIcon}
                         resizeMode="contain"
                       />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => setEditMode(true)}>
                       <Image
-                        source={require("@/assets/mediTrack/edit.svg")}
+                        source={require("@/assets/mediTrack/edit.png")}
                         style={styles.memberIcon}
                         resizeMode="contain"
                       />

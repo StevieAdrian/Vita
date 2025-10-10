@@ -60,7 +60,7 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
           {showImage && (
             <View style={styles.iconWrapper}>
               <Image
-                source={require("@/assets/mediTrack/medicalCheckUp.svg")}
+                source={require("@/assets/mediTrack/medicalCheckUp.png")}
                 style={{ width: 35, height: 35 }}
               />
             </View>
@@ -121,7 +121,7 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
               onPress={handleEditPress}
               style={styles.actionButton}
             >
-              <Image source={require("@/assets/utilsIcon/arrow-right.svg")} />
+              <Image source={require("@/assets/utilsIcon/arrow-right.png")} />
             </TouchableOpacity>
           </View>
         )}

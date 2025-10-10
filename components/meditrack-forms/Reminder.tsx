@@ -62,11 +62,11 @@ const getCardBackground = (reminderType: ReminderCategory | "other") => {
 const getReminderIcon = (reminderType: ReminderCategory | "other") => {
   switch (reminderType) {
     case "drug":
-      return require("@/assets/mediTrack/pill.svg");
+      return require("@/assets/mediTrack/pill.png");
     case "appointment":
-      return require("@/assets/mediTrack/medicalCheckUp.svg");
+      return require("@/assets/mediTrack/medicalCheckUp.png");
     default:
-      return require("@/assets/mediTrack/pill.svg");
+      return require("@/assets/mediTrack/pill.png");
   }
 };
 
@@ -168,7 +168,7 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
             onPress={handleEditPress}
             style={styles.actionButton}
           >
-            <Image source={require("@/assets/utilsIcon/arrow-right.svg")} />
+            <Image source={require("@/assets/utilsIcon/arrow-right.png")} />
           </TouchableOpacity>
         </View>
       )}
