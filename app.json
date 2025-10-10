@@ -39,6 +39,18 @@
             "backgroundColor": "#000000"
           }
         }
+      ],
+      "expo-web-browser",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          },
+          "ios": {
+            "usesNonExemptEncryption": false
+          }
+        }
       ]
     ],
     "experiments": {
