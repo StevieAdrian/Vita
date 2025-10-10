@@ -96,7 +96,6 @@ export default function DashboardHome() {
     fetchFamilyStats();
 
     if (!uid) return;
-
     setSelectedDateKey(
       selected
         ? formatDateLocals(new Date(selected as Date))
@@ -108,13 +107,14 @@ export default function DashboardHome() {
       ...appointments.map(
         (a): Reminder => ({
           ...convertAppointment(a),
-          id: `appt-${a.id}`,
+          id: a.id,
           category: "appointment",
           description: a.description ?? "",
           completed: a.status === "done",
         })
       ),
     ];
+
     const now = new Date();
     const upcomingReminders = allReminders
       .filter((r) => {
@@ -138,6 +138,7 @@ export default function DashboardHome() {
       .slice(0, 3);
 
     setReminders(upcomingReminders);
+    console.log(upcomingReminders);
   }, [members, selected, uid, drugs, appointments]);
 
   const handleToggleReminder = useCallback((id: string) => {
