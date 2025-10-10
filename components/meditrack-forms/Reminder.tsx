@@ -12,6 +12,7 @@ type ReminderCardProps = {
   onDelete?: (reminder: Reminder) => void;
   showDescription?: boolean;
   showActions?: boolean;
+  showImages?: boolean;
 };
 
 const truncateText = (text: string, wordLimit: number) => {
@@ -76,6 +77,7 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
   onDelete,
   showDescription = true,
   showActions = false,
+  showImages = true,
 }) => {
   const reminderType = reminder.category;
   const cardBackground = getCardBackground(reminderType);
@@ -102,18 +104,20 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
       }}
     >
       <View style={styles.leftColumn}>
-        <View>
-          {reminderIcon && (
-            <Image
-              source={reminderIcon}
-              style={[
-                { width: 35, height: 35 },
-                reminder.completed && { opacity: 0.5 },
-              ]}
-              resizeMode="contain"
-            />
-          )}
-        </View>
+        {showImages && (
+          <View>
+            {reminderIcon && (
+              <Image
+                source={reminderIcon}
+                style={[
+                  { width: 35, height: 35 },
+                  reminder.completed && { opacity: 0.5 },
+                ]}
+                resizeMode="contain"
+              />
+            )}
+          </View>
+        )}
         <View style={styles.textContainer}>
           <Text
             style={[
