@@ -13,7 +13,9 @@ import { convertAppointment } from "@/components/utils/DateUtils";
 import type { Reminder, ReminderCategory } from "@/constants/reminder";
 import { useAppointments } from "@/context/AppointmentContext";
 import { useDrugs } from "@/context/DrugContext";
+import { useRealTimeNotifications } from "@/hooks/useRealTimeNotification";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
+import { AppointmentReminder } from "@/types/appointment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
@@ -45,6 +47,11 @@ const ScheduleScreen: React.FC = () => {
     loading: appointmentsLoading,
     remove,
   } = useAppointments();
+  const {
+    scheduleDrugNotification,
+    scheduleAppointmentNotification,
+    registerForPushNotifications,
+  } = useRealTimeNotifications();
 
   const [showDrugNotification, setShowDrugNotification] = useState(false);
   const [showAppointmentNotification, setShowAppointmentNotification] =
@@ -124,7 +131,7 @@ const ScheduleScreen: React.FC = () => {
     }));
 
     return [...drugItems, ...appointmentItems];
-  }, [drugReminders, todayAppointments]);
+  }, [todayDrugReminders, todayAppointments]);
 
   const limitedTodayReminders = useMemo(() => {
     return todayReminders.slice(0, 3);
@@ -209,6 +216,29 @@ const ScheduleScreen: React.FC = () => {
     checkDaily();
     return () => clearInterval(interval);
   }, [removeExpiredDrugs]);
+
+  useEffect(() => {
+    registerForPushNotifications();
+
+    drugs.forEach((drug) => {
+      if (!drug.isCompleted) {
+        scheduleDrugNotification(drug);
+      }
+    });
+
+    appointmentReminders.forEach((appointment: AppointmentReminder) => {
+      if (!appointment.isCompleted) {
+        scheduleAppointmentNotification(appointment);
+      }
+    });
+  }, [
+    drugs,
+    appointmentReminders,
+    scheduleDrugNotification,
+    scheduleAppointmentNotification,
+    registerForPushNotifications,
+  ]);
+
 
   const handleToggleReminder = useCallback((id: string) => {
     console.log(id);

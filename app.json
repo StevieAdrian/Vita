@@ -9,7 +9,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.Vita",
+      "infoPlist": {
+        "NSRemindersUsageDescription": "This app needs access to reminders for medication and appointment notifications."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -20,7 +24,12 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.Vita"
+      "package": "com.anonymous.Vita",
+      "permissions": [
+        "RECEIVE_BOOT_COMPLETED",
+        "SCHEDULE_EXACT_ALARM",
+        "WAKE_LOCK"
+      ]
     },
     "web": {
       "output": "static",
@@ -42,13 +51,27 @@
       ],
       "expo-web-browser",
       [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon.png",
+          "color": "#1A73E8",
+          "defaultChannel": "default",
+          "mode": "production"
+        }
+      ],
+      [
         "expo-build-properties",
         {
           "android": {
-            "usesCleartextTraffic": true
+            "useNextNotificationsApi": true,
+            "usesCleartextTraffic": true,
+            "compileSdkVersion": 34,
+            "targetSdkVersion": 34,
+            "buildToolsVersion": "34.0.0"
           },
           "ios": {
-            "usesNonExemptEncryption": false
+            "usesNonExemptEncryption": false,
+            "deploymentTarget": "13.4"
           }
         }
       ]
