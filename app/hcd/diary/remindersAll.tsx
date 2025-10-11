@@ -22,6 +22,7 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { DateType } from "react-native-ui-datepicker";
+import { normalizeFirebaseDate } from "@/utils/firebaseDateUtils";
 
 export default function ReminderPageAll() {
   const insets = useSafeAreaInsets();
@@ -76,6 +77,7 @@ export default function ReminderPageAll() {
         category: "appointment",
         description: a.description ?? "",
         completed: a.status === "done",
+        date: normalizeFirebaseDate(a.date),
       }));
 
     const allReminders: Reminder[] = [

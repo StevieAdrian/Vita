@@ -17,6 +17,7 @@ import { styles } from "@/styles/hcd/viewHealthDiary.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
 import { stylesMonitor } from "@/styles/utils/monitoring.styles";
 import { DiaryEntry } from "@/types/diary";
+import { normalizeFirebaseDate } from "@/utils/firebaseDateUtils";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -107,6 +108,7 @@ export default function HealthDiary() {
         category: "appointment",
         description: a.description ?? "",
         completed: a.status === "done",
+        date: normalizeFirebaseDate(a.date),
       }));
 
     const allReminders: Reminder[] = [
