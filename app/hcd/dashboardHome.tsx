@@ -139,9 +139,10 @@ export default function DashboardHome() {
       .filter((r) => {
         if (!r.date) return "No Date";
 
-        const reminderDateTime = new Date(
-          `${r.date} ${r.timeLabel ?? "00:00"}`
-        );
+        const reminderDateTime = dayjs(`${r.date} ${r.timeLabel ?? "00:00"}`, [
+          "MMMM D, YYYY HH:mm",
+          "YYYY-MM-DD HH:mm",
+        ]).toDate();
 
         return !isNaN(reminderDateTime.getTime()) && reminderDateTime >= now;
       })
