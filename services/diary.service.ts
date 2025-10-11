@@ -47,7 +47,6 @@ export const addHealthDiary = async (payload: DiaryEntry) => {
     payload.date instanceof Date
       ? payload.date
       : (payload.date as Timestamp).toDate();
-  console.log("payload.date type:", payload.date.constructor.name);
   const existingDiary = await checkDiaryByDate(diaryDate, payload.fromUid);
   console.log("existingDiary:", existingDiary);
 
@@ -58,7 +57,7 @@ export const addHealthDiary = async (payload: DiaryEntry) => {
       id: existingDiary.id,
     };
   } else {
-    console.log("test");
+    console.log("Gagal");
   }
 
   const diaryData = {
@@ -95,6 +94,7 @@ export const getHealthDiaries = async (uid: string) => {
     ...doc.data(),
   })) as (DiaryEntry & { id: string })[];
 };
+
 export const getHealthDiariesByDate = async (date: string, uid: string) => {
   const dateObj = new Date(date);
   dateObj.setHours(0, 0, 0, 0);

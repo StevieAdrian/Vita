@@ -103,8 +103,9 @@ export default function AddFamily() {
 
           <View style={styles.container}>
             <InputField
-              label="Name"
+              label="Your Name"
               placeholder={"John Doe"}
+              placeholderTextColor={COLORS.gray2}
               onChangeText={(text) => handleChange("name", text)}
               required
             />
@@ -161,9 +162,10 @@ export default function AddFamily() {
             <InputField
               label="Account Username"
               placeholder={"John Doe"}
+              placeholderTextColor={COLORS.gray2}
               onChangeText={(text) => {
                 handleChange("username", text);
-                if (text.trim().length >= 3) {
+                if (text.trim().length >= 1) {
                   verifyUsername(text.trim());
                 } else {
                   verifyUsername("");

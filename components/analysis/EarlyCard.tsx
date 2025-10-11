@@ -7,7 +7,7 @@ export function EarlyWarningCard(props: AnalysisProps) {
     <View style={styles.warningCard}>
       <View style={styles.warningHeader}>
         <Image
-          source={require("@/assets/hcd/healthWarning.svg")}
+          source={require("@/assets/hcd/healthWarning.png")}
           style={styles.warningIcon}
         />
         <View style={styles.warningText}>

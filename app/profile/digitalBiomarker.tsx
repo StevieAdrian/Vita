@@ -1,40 +1,46 @@
 import PrimaryButtonColorForm from "@/components/utils/PrimaryButtonColorForm";
 import TitleBack from "@/components/utils/TitleBack";
+import { useDigitalBiomarker } from "@/hooks/useDigitalBiomarker";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
-import { useState } from "react";
+import { LinearGradient } from "expo-linear-gradient";
+import { useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
 import { ScrollView, Text, TextInput, View } from "react-native";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { styles } from "../../styles/profile/digitalBiomarker.styles";
-import { LinearGradient } from "expo-linear-gradient";
-import { useDigitalBiomarker } from "@/hooks/useDigitalBiomarker";
-
 
 export default function DigitalBiomarker() {
   const insets = useSafeAreaInsets();
   const [hasInput, setHasInput] = useState(false);
   const { data, setData, saveProfile } = useUserProfile();
-  const { form, hasChanges, loading, handleChange, saveBiomarker } = useDigitalBiomarker();
+  const {
+    form,
+    hasChanges,
+    loading,
+    handleChange,
+    saveBiomarker,
+    loadBiomarkerByDate,
+  } = useDigitalBiomarker();
 
-  // const handleInputChange = (field: keyof typeof formValues, value: string) => {
-  //   setFormValues((prev) => {
-  //     const updated = { ...prev, [field]: value };
-  //     // cek apakah ada salah satu field yg terisi
-  //     const anyFilled = Object.values(updated).some((v) => v.trim().length > 0);
-  //     setHasInput(anyFilled);
-  //     return updated;
-  //   });
-  // };
+  const { date } = useLocalSearchParams<{ date?: string }>();
+
+  useEffect(() => {
+    if (date) {
+      loadBiomarkerByDate(date);
+    }
+    console.log(date);
+  }, [date]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
-        <LinearGradient
-          colors={["#E9F3FF", "#1A73E8"]}
-          style={styles.dashboardContainerLinear}
-        ></LinearGradient>
+      <LinearGradient
+        colors={["#E9F3FF", "#1A73E8"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
       <View style={styles.scrollWrapper}>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -64,9 +70,7 @@ export default function DigitalBiomarker() {
                   <TextInput
                     value={form.diastolic}
                     style={styles.bpInput}
-                    onChangeText={(text) =>
-                      handleChange("diastolic", text)
-                    }
+                    onChangeText={(text) => handleChange("diastolic", text)}
                     keyboardType="numeric"
                   />
                   <Text style={styles.bpLabel}>Diastolic</Text>
@@ -103,7 +107,11 @@ export default function DigitalBiomarker() {
             </View>
           </View>
 
-          <PrimaryButtonColorForm text="Save Changes" active={hasChanges} onPress={saveBiomarker} />
+          <PrimaryButtonColorForm
+            text="Save Changes"
+            active={hasChanges}
+            onPress={saveBiomarker}
+          />
         </ScrollView>
       </View>
     </SafeAreaView>

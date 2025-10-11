@@ -24,11 +24,12 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+    height: 100,
   },
   label: {
     marginTop: 8,
     textAlign: "center",
-    color: COLORS.black,  
+    color: COLORS.black,
     fontSize: 14,
     fontFamily: "Inter-Medium",
   },
