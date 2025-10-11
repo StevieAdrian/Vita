@@ -21,7 +21,7 @@ export default function Login() {
 
       <View style={styles.header}>
         <Image
-          source={require("@/assets/images/Logo Vita.png")}
+          source={require("@/assets/images/logo-vita.png")}
           style={styles.logo}
           resizeMode="contain"
         />
@@ -87,7 +87,7 @@ export default function Login() {
           disabled={loading}
         >
           <Image
-            source={require("../../../assets/images/Logo Google.png")}
+            source={require("../../../assets/images/logo-google.png")}
             style={styles.googleIcon}
           />
           <Text style={styles.googleText}>Google</Text>

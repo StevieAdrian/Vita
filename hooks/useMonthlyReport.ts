@@ -5,6 +5,32 @@ import { getHealthDiaries } from "../services/healthDiary.service";
 import { calcMetric, filterDataByMonth, formatDate } from "../utils/reportUtils";
 import { useAuthState } from "./useAuthState";
 
+function safeFormatDate(input: any): string {
+  if (!input) return "-";
+
+  // klo ISO string (2025-10-10T13:52:00.479Z)
+  if (typeof input === "string" && input.includes("T")) {
+    const d = dayjs(input);
+    return d.isValid() ? d.format("MMMM D, YYYY") : "-";
+  }
+
+  // klo plain english (october 30, 2025)
+  if (typeof input === "string") {
+    const d = new Date(input);
+    if (!isNaN(d.getTime())) return dayjs(d).format("MMMM D, YYYY");
+    return input; 
+  }
+
+  // klo firestore timestamp
+  if (typeof input === "object" && typeof input.toDate === "function") {
+    const d = dayjs(input.toDate());
+    return d.isValid() ? d.format("MMMM D, YYYY") : "-";
+  }
+
+  return "-";
+}
+
+
 export function useMonthlyReport(selectedMonth: string) {
   const { user } = useAuthState();
   const [loading, setLoading] = useState(false);
@@ -60,7 +86,7 @@ export function useMonthlyReport(selectedMonth: string) {
             lowDate: weight.lowDate,
           },
           appointments: filteredAppointments.map((a: any) => ({
-            date: dayjs(a.date).format("MMMM D, YYYY"),
+            date: safeFormatDate(a.date),
             desc: `${a.title || a.desc || "Appointment"} - ${a.location || ""}`,
             status: a.status || "—",
           })),
