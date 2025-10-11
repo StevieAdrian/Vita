@@ -2,14 +2,15 @@ import { auth, db } from "@/config/firebaseConfig";
 import { router } from "expo-router";
 import { FirebaseError } from "firebase/app";
 import {
-  GoogleAuthProvider,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
-  signInWithPopup,
   signOut,
 } from "firebase/auth";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { useState } from "react";
-import { sendPasswordResetEmail } from "firebase/auth";
+import { Platform } from "react-native";
+import { useMobileAuth } from "./useMobileAuth";
+import { useWebAuth } from "./useWebAuth";
 
 async function checkUserExistsInDatabase(email: string): Promise<boolean> {
   try {
@@ -26,6 +27,10 @@ async function checkUserExistsInDatabase(email: string): Promise<boolean> {
 export function useAuth() {
   const [loading, setLoading] = useState(false);
 
+  // Platform-specific auth hooks
+  const { promptAsync } = useMobileAuth();
+  const { signInWithGoogleWeb } = useWebAuth();
+
   const signIn = async (email: string, password: string) => {
     setLoading(true);
     try {
@@ -41,40 +46,17 @@ export function useAuth() {
 
   const signInWithGoogle = async () => {
     setLoading(true);
-
-    const timeoutId = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-
     try {
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-
-      const userEmail = result.user.email;
-
-      if (!userEmail) {
-        alert("Email not found from Google account");
-        return;
+      if (Platform.OS === "web") {
+        await signInWithGoogleWeb();
+      } else {
+        await promptAsync();
       }
-
-      const userExists = await checkUserExistsInDatabase(userEmail);
-
-      router.push("/auth/loading/loading");
-
-      setTimeout(() => {
-        if (userExists) {
-          router.push("/");
-        } else {
-          router.push("/auth/signup/signup_google");
-        }
-        setLoading(false);
-      }, 1000);
     } catch (e) {
       const err = e as FirebaseError;
       console.log(err);
-      setLoading(false);
+      alert("Google sign in failed");
     } finally {
-      clearTimeout(timeoutId);
       setLoading(false);
     }
   };
@@ -102,5 +84,11 @@ export function useAuth() {
     }
   };
 
-  return { signIn, signInWithGoogle, loading, logout, resetPassword };
+  return {
+    signIn,
+    signInWithGoogle,
+    loading,
+    logout,
+    resetPassword,
+  };
 }

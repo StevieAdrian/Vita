@@ -63,7 +63,7 @@ const Allergics: React.FC = () => {
         >
           <View style={styles.logoContainer}>
             <Image
-              source={require("../../../assets/images/Logo Vita.png")}
+              source={require("../../../assets/images/logo-vita.png")}
               style={styles.logo}
               resizeMode="contain"
             />
