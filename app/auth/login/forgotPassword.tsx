@@ -30,7 +30,7 @@ export default function ForgotPassword() {
       ></LinearGradient>
       <View style={styles.header}>
         <Image
-          source={require("../../../assets/images/Logo Vita.png")}
+          source={require("../../../assets/images/logo-vita.png")}
           style={styles.logo}
           resizeMode="contain"
         />
