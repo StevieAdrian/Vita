@@ -6,6 +6,7 @@ export type Appointment = {
   provider: string;
   location: string;
   dateLabel: string;
+  date?: string;
   timeLabel: string;
   status: AppointmentStatus;
 };

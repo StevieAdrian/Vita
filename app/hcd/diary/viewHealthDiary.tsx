@@ -17,6 +17,7 @@ import { styles } from "@/styles/hcd/viewHealthDiary.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
 import { stylesMonitor } from "@/styles/utils/monitoring.styles";
 import { DiaryEntry } from "@/types/diary";
+import { normalizeFirebaseDate } from "@/utils/firebaseDateUtils";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -42,9 +43,27 @@ export default function HealthDiary() {
   const [activities, setActivities] = useState("");
   const [notes, setNotes] = useState("");
   const { date } = useLocalSearchParams<{ date?: string }>();
-  const [selected, setSelected] = useState<DateType>(
-    date ? new Date(date) : new Date()
-  );
+  const [selected, setSelected] = useState<DateType>(() => {
+    if (!date) return new Date();
+
+    // coba parse format umum dulu
+    const d = new Date(date);
+    if (!isNaN(d.getTime())) return d;
+
+    // fallback parse manual utk Android (contoh: "October 11, 2025")
+    const match = date.match(/^([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})$/);
+    if (match) {
+      const months: Record<string, number> = {
+        january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
+        july: 6, august: 7, september: 8, october: 9, november: 10, december: 11,
+      };
+      const monthIndex = months[match[1].toLowerCase()];
+      return new Date(parseInt(match[3]), monthIndex, parseInt(match[2]));
+    }
+
+    // kalau gagal semua
+    return new Date();
+  });
   const datePickerStyle = useDatePickerStyles(
     selected instanceof Date ? selected : new Date()
   );
@@ -89,6 +108,7 @@ export default function HealthDiary() {
         category: "appointment",
         description: a.description ?? "",
         completed: a.status === "done",
+        date: normalizeFirebaseDate(a.date),
       }));
 
     const allReminders: Reminder[] = [

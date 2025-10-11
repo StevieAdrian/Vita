@@ -2,6 +2,12 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 
+export function safeDate(value?: string | Date | null) {
+  if (!value) return null;
+  const d = dayjs(value);
+  return d.isValid() ? d.toDate() : null;
+}
+
 export function calculateAge(dob: string | Date | null): number {
   if (!dob) return 0;
 
