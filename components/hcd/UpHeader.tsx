@@ -4,7 +4,6 @@ import { useUserProfile } from "@/hooks/useUserProfile";
 import { styles } from "@/styles/component/upheader";
 import { UpHeaderProps } from "@/types/titlenav";
 import { router } from "expo-router";
-import { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
 export default function UpHeader({ title, showProfile = true }: UpHeaderProps) {
@@ -23,11 +22,7 @@ export default function UpHeader({ title, showProfile = true }: UpHeaderProps) {
             onPress={() => router.push("/profile/profile")}
           >
             <Image
-              source={
-                data.avatarUrl
-                  ? { uri: data.avatarUrl }
-                  : require("@/assets/images/Vita.png")
-              }
+              source={data.avatarUrl ? {uri: data.avatarUrl} : require("@/assets/images/default-avatar.png")}
               style={{ width: 40, height: 40, borderRadius: 45 / 2 }}
               resizeMode="cover"
             />
