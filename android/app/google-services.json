@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "830939428146",
+    "project_id": "vita-36fd0",
+    "storage_bucket": "vita-36fd0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830939428146:android:27d2f8a5387217957e532b",
+        "android_client_info": {
+          "package_name": "com.anonymous.Vita"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "830939428146-qvfbdvvra0a9q973v79shpulpqugph1g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnLbzQe5AQ96hrqVCwfni8xd8OEU-GVC4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "830939428146-qvfbdvvra0a9q973v79shpulpqugph1g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "830939428146-6h50165ujkrp0cbqaernl0echsv1ivsi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.anonymous.Vita"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
