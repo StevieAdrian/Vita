@@ -170,7 +170,6 @@ export default function CreateDiary() {
                 />
               </TouchableOpacity>
             </View>
-
             <View style={styles.calenderContainer}>
               {showPicker && (
                 <DateTimePicker
@@ -186,8 +185,6 @@ export default function CreateDiary() {
                 />
               )}
             </View>
-            <View style={styles.divider} />
-
             {/* VitalSign */}
             <View style={styles.subformContainer}>
               <Text style={styles.subtitle}>Vital Signs</Text>
@@ -228,7 +225,9 @@ export default function CreateDiary() {
                 {/* Heart Rate and Blood Sugar */}
                 <View style={styles.inputRow}>
                   <View style={styles.inputGroup}>
-                    <Text style={styles.inputTitle}>Heart Rate per Minutes (bpm)</Text>
+                    <Text style={styles.inputTitle}>
+                      Heart Rate per Minutes (bpm)
+                    </Text>
                     <TextInput
                       style={styles.halfInput}
                       value={heartRate}
@@ -272,7 +271,7 @@ export default function CreateDiary() {
             <View style={styles.divider} />
 
             {/* Symptoms and Mood */}
-            <View style={styles.fullContainer}>
+            <View style={styles.subformContainer}>
               <Text style={styles.subtitle}>Symptoms and Mood</Text>
               {/* Symptoms */}
               <View style={styles.bottomInputCont}>
@@ -338,13 +337,13 @@ export default function CreateDiary() {
                 />
               </View>
             </View>
+            <PrimaryButtonColorForm
+              text={loading ? "Saving..." : "Save Changes"}
+              active={hasInput}
+              onPress={saveDiary}
+            />
           </View>
 
-          <PrimaryButtonColorForm
-            text={loading ? "Saving..." : "Save Changes"}
-            active={hasInput}
-            onPress={saveDiary}
-          />
           <ModalSuccess
             visible={showSuccess}
             title="Success"

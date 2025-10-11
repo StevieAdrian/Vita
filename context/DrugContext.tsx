@@ -61,12 +61,7 @@ export const DrugProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const add = async (data: DrugReminder) => {
-    const { id, ...dataWithoutId } = data;
-    const newId = await createDrug({
-      ...dataWithoutId,
-      userId: user?.uid ?? "",
-    } as any);
-    setDrugs((prev) => [...prev, { ...dataWithoutId, id: newId }]);
+    await createDrug(data);
   };
 
   const update = async (id: string, data: Partial<DrugReminder>) => {
