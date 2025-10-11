@@ -3,7 +3,7 @@ import { useAuthState } from "@/hooks/useAuthState";
 import { useMetricSummary } from "@/hooks/useMetricSummary";
 import { styles } from "@/styles/analysis/analysis.styles";
 import { Dimensions, Text, View } from "react-native";
-import { VictoryAxis, VictoryBar, VictoryChart } from "victory";
+import { BarChart, LineChart } from "react-native-gifted-charts";
 
 interface Props {
   field: "bloodSugar" | "heartRate" | "systolic" | "diastolic";
@@ -24,41 +24,68 @@ export default function MetricDetailCard({
 
   if (loading || !summary) return null;
 
+  const chartData = summary.dailyValues.map(
+    (d: { day: string; value: number }) => ({
+      value: d.value,
+      label: d.day,
+      frontColor: COLORS.primary,
+    })
+  );
+
   return (
     <View style={styles.barContainer}>
       <Text style={styles.barTitle}>{title}</Text>
+
       <View style={styles.bsTitle}>
         <Text style={styles.barNumber}>{summary.avg}</Text>
         <Text style={styles.barSatuan}>{unit}</Text>
       </View>
 
-      <VictoryChart
-        width={screenWidth - 32}
-        height={220}
-        domainPadding={{ x: 20 }}
-      >
-        <VictoryAxis
-          tickValues={summary.dailyValues.map((d: { day: any }) => d.day)}
-          tickFormat={summary.dailyValues.map((d: { day: any }) => d.day)}
-        />
-        <VictoryAxis dependentAxis />
-        <VictoryBar
-          data={summary.dailyValues}
-          x="day"
-          y="value"
-          style={{ data: { fill: COLORS.primary, width: 20, borderRadius: 6 } }}
-        />
-      </VictoryChart>
+      <View style={styles.borderChart}>
+        {chartType === "bar" ? (
+          <BarChart
+            data={chartData}
+            barWidth={20}
+            spacing={15}
+            roundedTop
+            hideRules
+            xAxisThickness={0}
+            yAxisThickness={0}
+            noOfSections={4}
+            yAxisTextStyle={{ color: COLORS.black }}
+            xAxisLabelTextStyle={{
+              color: COLORS.black,
+              textAlign: "center",
+            }}
+            width={screenWidth * 0.74}
+            height={150}
+          />
+        ) : (
+          <LineChart
+            data={chartData.map((d: { value: any; label: any }) => ({
+              value: d.value,
+              label: d.label,
+              dataPointColor: COLORS.primary,
+            }))}
+            curved
+            hideRules
+            thickness={1}
+            yAxisTextStyle={{ color: COLORS.black }}
+            xAxisLabelTextStyle={{ color: COLORS.black }}
+            color={COLORS.primary}
+            width={screenWidth - 60}
+            height={220}
+          />
+        )}
+      </View>
 
       {summary.highestValue && (
-        <>
-          <View>
-            <Text style={styles.highestText}>
-              Highest this week: {summary.highestValue} mg/dL
-            </Text>
-            <Text style={styles.highestDay}>on {summary.highestDay}</Text>
-          </View>
-        </>
+        <View style={{ marginTop: 10 }}>
+          <Text style={styles.highestText}>
+            Highest this week: {summary.highestValue} {unit}
+          </Text>
+          <Text style={styles.highestDay}>on {summary.highestDay}</Text>
+        </View>
       )}
     </View>
   );

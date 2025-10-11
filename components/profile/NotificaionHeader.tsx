@@ -55,7 +55,7 @@ export default function NotificationHeader({
         >
           <Text style={styles.filterText}>{selectedFilter}</Text>
           <Image
-            source={require("@/assets/utilsIcon/arrow-down-white.svg")}
+            source={require("@/assets/utilsIcon/arrow-down-white.png")}
             style={{ width: 15, height: 15 }}
           />
         </TouchableOpacity>

@@ -27,6 +27,7 @@ export const styles = StyleSheet.create({
     color: COLORS.primary,
     fontFamily: "Inter-Bold",
     marginBottom: 2,
+    textAlign: "center",
   },
   description: {
     fontSize: 16,

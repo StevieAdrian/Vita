@@ -4,8 +4,8 @@ import { COLORS } from "../../constants/colors";
 export const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.background2nd,
     position: "absolute",
+    backgroundColor: COLORS.background2nd,
     top: 0,
     left: 0,
     right: 0,

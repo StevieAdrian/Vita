@@ -2,20 +2,13 @@ import {
   generateReportHTML,
   ReportData,
 } from "@/components/report/ReportTemplate";
-import { Asset } from "expo-asset";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import { Platform } from "react-native";
 
 export async function generateReportPDF(data: ReportData) {
   try {
-    const asset = Asset.fromModule(
-      require("../assets/utilsIcon/vita-logo.svg")
-    );
-    await asset.downloadAsync();
-    const imageUri = asset.localUri || asset.uri;
-
-    const htmlContent = generateReportHTML({ data, imageUri });
+    const htmlContent = generateReportHTML({ data });
 
     if (Platform.OS === "web") {
       const printFrame = document.createElement("iframe");

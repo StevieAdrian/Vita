@@ -74,6 +74,7 @@ export default function HealthDiary() {
 
   useEffect(() => {
     if (!uid || !selected) return;
+    if (drugs === undefined || appointments === undefined) return;
     const dateKey = formatDateLocal(new Date(selected as Date));
 
     const todayDrugReminders = drugs

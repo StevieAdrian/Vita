@@ -50,6 +50,7 @@ export const styles = StyleSheet.create({
   chevron: {
     width: 12,
     height: 24,
+    transform: [{ rotate: "180deg" }],
   },
   container: {
     flexDirection: "row",
@@ -58,7 +59,6 @@ export const styles = StyleSheet.create({
     width: "100%",
     paddingTop: 12,
     paddingBottom: 14,
-    backgroundColor: COLORS.background2nd,
   },
   cont: {
     width: "100%",
