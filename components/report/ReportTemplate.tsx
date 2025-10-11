@@ -47,13 +47,9 @@ export interface ReportData {
 
 interface ReportTemplateProps {
   data: ReportData;
-  imageUri: string;
 }
 
-export const generateReportHTML = ({
-  data,
-  imageUri,
-}: ReportTemplateProps): string => {
+export const generateReportHTML = ({ data }: ReportTemplateProps): string => {
   return `
     <!DOCTYPE html>
     <html>
@@ -92,13 +88,18 @@ export const generateReportHTML = ({
                 gap: 15px;
             }
             .logo {
-                width: 120px;
-                height: auto;
+                display: flex;
+                align-items: baseline;
+                color: white;
+                font-style: italic;
             }
-            .logo img {
-                width: 100%;
-                height: auto;
-                display: block;
+            .logo-v {
+                font-size: 28px;
+                font-weight: 600;
+            }
+            .logo-ita {
+                font-size: 20px; 
+                font-weight: 600;
             }
             .header-title h1 {
                 font-size: 32px;
@@ -300,12 +301,13 @@ export const generateReportHTML = ({
         </style>
     </head>
     <body>
-        <div class="container">
+         <div class="container">
             <div class="header">
                 <div class="header-left">
                     <div class="logo">
-                        <img src="${imageUri}" alt="Vita Logo" />
+                        <span class="logo-v">V</span><span class="logo-ita">ita.</span>
                     </div>
+
                 </div>
                 <div class="header-date">${data.period}</div>
             </div>
@@ -357,7 +359,7 @@ export const generateReportHTML = ({
                                 <span class="vital-label">Average</span>
                                 <span class="vital-value">${
                                   data.bloodSugar.avg
-                                } mg/dL
+                                } mg/dL</span>
                             </div>
                             <div class="vital-item">
                                 <span class="vital-label">Highest</span>
@@ -494,7 +496,6 @@ export const generateReportHTML = ({
                                 </div>
                             </div>
                         </div>
-
                     `
                       )
                       .join("")}
