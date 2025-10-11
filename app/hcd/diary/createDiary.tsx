@@ -27,7 +27,9 @@ export default function CreateDiary() {
   const insets = useSafeAreaInsets();
   const [selected, setSelected] = useState<Date | undefined>(new Date());
   const [showPicker, setShowPicker] = useState(false);
-  const datePickerStyles = useDatePickerStyles(selected instanceof Date ? selected : new Date());
+  const datePickerStyles = useDatePickerStyles(
+    selected instanceof Date ? selected : new Date()
+  );
   const [hasInput, setHasInput] = useState(false);
   const { loading } = useUserProfile();
   const [showSuccess, setShowSuccess] = useState(false);
@@ -193,8 +195,8 @@ export default function CreateDiary() {
               {/* Blood Pressure */}
               <View style={styles.bottomInputCont}>
                 <Text style={styles.inputTitle}>Blood Pressure (mm Hg)</Text>
-                <View style={styles.separatedInput}>
-                  <View style={styles.bottomInputCont}>
+                <View style={styles.inputRow}>
+                  <View style={styles.inputGroup}>
                     <TextInput
                       style={styles.halfInput}
                       value={systolic}
@@ -206,7 +208,7 @@ export default function CreateDiary() {
                     />
                     <Text style={styles.shadowContent}>Systolic</Text>
                   </View>
-                  <View style={styles.bottomInputCont}>
+                  <View style={styles.inputGroup}>
                     <TextInput
                       style={styles.halfInput}
                       value={diastolic}
@@ -223,29 +225,33 @@ export default function CreateDiary() {
 
               {/* Heart Rate and Blood Sugar */}
               <View style={styles.separatedInput}>
-                <View style={styles.bottomInputCont}>
-                  <Text style={styles.inputTitle}>Heart Rate(bpm)</Text>
-                  <TextInput
-                    style={styles.halfInput}
-                    value={heartRate}
-                    onChangeText={(text) => {
-                      setHeartRate(text);
-                      checkHasInput();
-                    }}
-                    keyboardType="numeric"
-                  />
-                </View>
-                <View style={styles.bottomInputCont}>
-                  <Text style={styles.inputTitle}>Blood Sugar (mg/dL)</Text>
-                  <TextInput
-                    style={styles.halfInput}
-                    value={bloodSugar}
-                    onChangeText={(text) => {
-                      setBloodSugar(text);
-                      checkHasInput();
-                    }}
-                    keyboardType="numeric"
-                  />
+                {/* Heart Rate and Blood Sugar */}
+                <View style={styles.inputRow}>
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.inputTitle}>Heart Rate per Minutes (bpm)</Text>
+                    <TextInput
+                      style={styles.halfInput}
+                      value={heartRate}
+                      onChangeText={(text) => {
+                        setHeartRate(text);
+                        checkHasInput();
+                      }}
+                      keyboardType="numeric"
+                    />
+                  </View>
+
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.inputTitle}>Blood Sugar(mg/dL)</Text>
+                    <TextInput
+                      style={styles.halfInput}
+                      value={bloodSugar}
+                      onChangeText={(text) => {
+                        setBloodSugar(text);
+                        checkHasInput();
+                      }}
+                      keyboardType="numeric"
+                    />
+                  </View>
                 </View>
               </View>
 

@@ -81,7 +81,8 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 4,
-    paddingVertical: 35,
+    paddingBottom: 35,
+    paddingTop: 15,
   },
   titleInput: {
     fontSize: 16,
@@ -90,8 +91,9 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.gray2,
     borderRadius: 5,
-    paddingHorizontal: 10,
+    paddingLeft: 10,
     paddingVertical: 15,
+    height: 46,
   },
   separator: {
     height: 1,
@@ -202,5 +204,24 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 8,
     gap: 10,
+  },
+  deleteSty: {
+    width: 46,
+    height: 46,
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
+    borderRadius: 6,
+  },
+  cardDelete: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    gap: 5,
+  },
+  deleteText: {
+    fontFamily: "Inter-Medium",
+    fontSize: 16,
+    color: COLORS.red,
   },
 });

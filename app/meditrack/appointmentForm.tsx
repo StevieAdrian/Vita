@@ -19,7 +19,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -237,6 +236,18 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             <TitleBack title="New Appointment" />
           </View>
           <View style={styles.card}>
+            <View style={styles.cardDelete}>
+              {actualEditMode && (
+                <TouchableOpacity
+                  onPress={handleDelete}
+                  style={styles.deleteSty}
+                >
+                  <View>
+                    <Text style={styles.deleteText}>Delete</Text>
+                  </View>
+                </TouchableOpacity>
+              )}
+            </View>
             <View style={styles.titleHeader}>
               <TextInput
                 style={[styles.titleInput, { flex: 1, marginBottom: 0 }]}
@@ -248,13 +259,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                   clearFieldError("title");
                 }}
               />
-              {actualEditMode && (
-                <TouchableOpacity onPress={handleDelete}>
-                  <Image
-                    source={require("../../assets/utilsIcon/delete.png")}
-                  />
-                </TouchableOpacity>
-              )}
             </View>
 
             <View style={styles.separator} />

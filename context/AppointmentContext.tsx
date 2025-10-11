@@ -3,6 +3,7 @@ import {
   createAppointment,
   deleteAppointment,
   getAppointmentsByUser,
+  listenAppointmentsByUser,
   updateAppointment,
 } from "@/services/appointment.service";
 import { AppointmentReminder } from "@/types/appointment";
@@ -29,23 +30,25 @@ export const AppointmentProvider: React.FC<{ children: React.ReactNode }> = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchAppointments = async () => {
-      if (!user) {
-        setLoading(false);
-        return;
-      }
+    if (!user) {
+      setAppointments([]);
+      setLoading(false);
+      return;
+    }
 
-      try {
-        const data = await getAppointmentsByUser(user.uid);
+    const unsubscribe = listenAppointmentsByUser(
+      user.uid,
+      (data) => {
         setAppointments(data);
-      } catch (err) {
-        console.error(err);
-      } finally {
+        setLoading(false);
+      },
+      (error) => {
+        console.error(error);
         setLoading(false);
       }
-    };
+    );
 
-    fetchAppointments();
+    return () => unsubscribe();
   }, [user]);
 
   const add = async (data: Omit<AppointmentReminder, "id">) => {
