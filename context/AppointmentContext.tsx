@@ -53,11 +53,8 @@ export const AppointmentProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const add = async (data: Omit<AppointmentReminder, "id">) => {
     try {
-      const newId = await createAppointment(data);
-      setAppointments((prev) => [
-        ...prev,
-        { ...data, id: newId } as AppointmentReminder,
-      ]);
+      await createAppointment(data);
+      await refresh(); 
     } catch (err) {
       console.error(err);
       throw err;
