@@ -36,13 +36,13 @@ export default function Profile() {
           <View style={styles.tabContainer}>
             <TabButton
               title="General"
-              icon={require("@/assets/images/user-icon.svg")}
+              icon={require("@/assets/images/user-icon.png")}
               active={activeTab === "general"}
               onPress={() => setActiveTab("general")}
             />
             <TabButton
               title="Edit Password"
-              icon={require("@/assets/images/password-icon.svg")}
+              icon={require("@/assets/images/password-icon.png")}
               active={activeTab === "password"}
               onPress={() => setActiveTab("password")}
             />

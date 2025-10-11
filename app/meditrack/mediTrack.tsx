@@ -75,17 +75,8 @@ const ScheduleScreen: React.FC = () => {
   }, [drugReminders, todayString]);
 
   const todayAppointments = useMemo(() => {
-    const today = new Date();
-    const todayString = today.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-
-    return appointmentReminders.filter((appt) => {
-      return appt.date === todayString;
-    });
-  }, [appointmentReminders]);
+    return appointmentReminders.filter((appt) => appt.date === todayString);
+  }, [appointmentReminders, todayString]);
 
   const upcomingAppointments = useMemo(() => {
     const today = new Date();
@@ -245,11 +236,15 @@ const ScheduleScreen: React.FC = () => {
   }, []);
 
   const handleSeeDetail = useCallback((appointment: any) => {
+    const originalId = appointment.id.startsWith("appt-")
+      ? appointment.id.replace("appt-", "")
+      : appointment.id;
+
     router.push({
       pathname: "/meditrack/appointmentForm",
       params: {
         editMode: "true",
-        appointmentId: appointment.id,
+        appointmentId: originalId,
       },
     });
   }, []);
@@ -265,11 +260,15 @@ const ScheduleScreen: React.FC = () => {
   }, []);
 
   const handleEditAppointment = useCallback((appointment: any) => {
+    const originalId = appointment.id.startsWith("appt-")
+      ? appointment.id.replace("appt-", "")
+      : appointment.id;
+
     router.push({
       pathname: "/meditrack/appointmentForm",
       params: {
         editMode: "true",
-        appointmentId: appointment.id,
+        appointmentId: originalId,
       },
     });
   }, []);

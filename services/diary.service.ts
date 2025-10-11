@@ -95,6 +95,7 @@ export const getHealthDiaries = async (uid: string) => {
     ...doc.data(),
   })) as (DiaryEntry & { id: string })[];
 };
+
 export const getHealthDiariesByDate = async (date: string, uid: string) => {
   const dateObj = new Date(date);
   dateObj.setHours(0, 0, 0, 0);
