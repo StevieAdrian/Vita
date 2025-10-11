@@ -202,8 +202,11 @@ const ScheduleScreen: React.FC = () => {
         console.error(err);
       }
     };
-    
     const interval = setInterval(checkDaily, 60 * 60 * 1000);
+    checkDaily();
+    return () => clearInterval(interval);
+  }, [removeExpiredDrugs]);
+
     useEffect(() => {
      registerForPushNotifications();
      
@@ -225,9 +228,6 @@ const ScheduleScreen: React.FC = () => {
      scheduleAppointmentNotification,
      registerForPushNotifications,
    ]);
-    checkDaily();
-    return () => clearInterval(interval);
-  }, [removeExpiredDrugs]);
 
   const handleToggleReminder = useCallback((id: string) => {
     console.log(id);
