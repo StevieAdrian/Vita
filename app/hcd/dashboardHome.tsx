@@ -70,6 +70,25 @@ export default function DashboardHome() {
     });
   }
 
+  const handleDateChange = ({ date }: { date: DateType }) => {
+    if (!date) return;
+    let jsDate: Date;
+
+    if (date instanceof Date) jsDate = date;
+    else if (typeof date === "string" || typeof date === "number")
+      jsDate = new Date(date);
+    else if ((date as dayjs.Dayjs)?.toDate)
+      jsDate = (date as dayjs.Dayjs).toDate();
+    else jsDate = new Date();
+
+    setSelected(jsDate);
+    setSelectedDateKey(formatDateLocal(jsDate));
+
+    router.push({
+      pathname: "/hcd/diary/viewHealthDiary",
+      params: { date: formatDateLocal(jsDate) },
+    });
+  };
   useEffect(() => {
     async function fetchFamilyStats() {
       if (!members || members.length === 0) {
@@ -137,7 +156,7 @@ export default function DashboardHome() {
       })
       .slice(0, 3);
 
-    setReminders(upcomingReminders);  
+    setReminders(upcomingReminders);
   }, [members, selected, uid, drugs, appointments]);
 
   const handleToggleReminder = useCallback((id: string) => {
@@ -234,31 +253,7 @@ export default function DashboardHome() {
             <DateTimePicker
               mode="single"
               date={selected}
-              onChange={({ date }) => {
-                if (date) {
-                  let jsDate: Date;
-
-                  if (date instanceof Date) {
-                    jsDate = date;
-                  } else if (
-                    typeof date === "string" ||
-                    typeof date === "number"
-                  ) {
-                    jsDate = new Date(date);
-                  } else {
-                    jsDate = (date as dayjs.Dayjs).toDate();
-                  }
-
-                  setSelected(jsDate);
-
-                  const selectedDate = formatDateLocal(jsDate);
-
-                  router.push({
-                    pathname: "/hcd/diary/viewHealthDiary",
-                    params: { date: selectedDate },
-                  });
-                }
-              }}
+              onChange={handleDateChange}
               styles={datePickerStyle}
             />
 
@@ -485,7 +480,10 @@ export default function DashboardHome() {
             </View>
 
             {/* Family Mode */}
-            <TouchableOpacity style={styles.containerAllDigitBio}>
+            <TouchableOpacity
+              style={styles.containerAllDigitBio}
+              onPress={() => router.push("/family-mode/familyMode")}
+            >
               {/* Judul */}
               <View style={styles.titleHealth}>
                 <View style={styles.containerDigit}>
