@@ -33,6 +33,8 @@ import {
 } from "react-native-safe-area-context";
 import { COLORS } from "../../constants/colors";
 import { styles } from "../../styles/meditrack/medistrack.style";
+import { useRealTimeNotifications } from "@/hooks/useRealTimeNotifications";
+import { AppointmentReminder } from "@/types/appointment";  
 
 const ScheduleScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
@@ -45,6 +47,11 @@ const ScheduleScreen: React.FC = () => {
     loading: appointmentsLoading,
     remove,
   } = useAppointments();
+  const {
+    scheduleDrugNotification,
+    scheduleAppointmentNotification,
+    registerForPushNotifications,
+  } = useRealTimeNotifications();
 
   const [showDrugNotification, setShowDrugNotification] = useState(false);
   const [showAppointmentNotification, setShowAppointmentNotification] =
@@ -115,7 +122,7 @@ const ScheduleScreen: React.FC = () => {
     }));
 
     return [...drugItems, ...appointmentItems];
-  }, [drugReminders, todayAppointments]);
+  }, [todayDrugReminders, todayAppointments]);
 
   const limitedTodayReminders = useMemo(() => {
     return todayReminders.slice(0, 3);
@@ -195,8 +202,29 @@ const ScheduleScreen: React.FC = () => {
         console.error(err);
       }
     };
-
+    
     const interval = setInterval(checkDaily, 60 * 60 * 1000);
+    useEffect(() => {
+     registerForPushNotifications();
+     
+     drugs.forEach((drug) => {
+       if (!drug.isCompleted) {
+         scheduleDrugNotification(drug);
+       }
+     });
+ 
+     appointmentReminders.forEach((appointment: AppointmentReminder) => {
+       if (!appointment.isCompleted) {
+         scheduleAppointmentNotification(appointment);
+       }
+     });
+   }, [
+     drugs,
+     appointmentReminders,
+     scheduleDrugNotification,
+     scheduleAppointmentNotification,
+     registerForPushNotifications,
+   ]);
     checkDaily();
     return () => clearInterval(interval);
   }, [removeExpiredDrugs]);
