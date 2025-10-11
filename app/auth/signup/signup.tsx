@@ -7,6 +7,7 @@ import { useCheckEmail } from "@/hooks/useCheckEmail";
 import { useCheckUsername } from "@/hooks/useCheckUsername";
 import { mapperSignupValues } from "@/utils/mapper";
 import { SignupValues, validateField } from "@/utils/signUpValidation";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -22,7 +23,6 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Feather";
 import { styles } from "../../../styles/auth/signup/singup.styles";
-import { LinearGradient } from "expo-linear-gradient";
 
 export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -310,7 +310,7 @@ export default function Signup() {
                 disabled={loading}
               >
                 <Image
-                  source={require("../../../assets/images/logo-google.png")}
+                  source={require("../../../assets/images/google.png")}
                   style={styles.googleIcon}
                 />
                 <Text style={styles.googleText}>Google</Text>
