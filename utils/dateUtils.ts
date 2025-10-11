@@ -9,12 +9,31 @@ export function safeDate(value?: string | Date | null) {
 }
 
 export function calculateAge(dob: string | Date | null): number {
-    if (!dob) return 0;
-    
-    const birthDate = dayjs(dob);
-    if (!birthDate.isValid()) return 0;
-    
-    return dayjs().diff(birthDate, "year");
+  if (!dob) return 0;
+
+  let birthDate = dayjs(dob);
+
+  // fallback jdi manual parse klo gagal (android/ios)
+  if (!birthDate.isValid() && typeof dob === "string") {
+    const match = dob.match(/^([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})$/);
+    if (match) {
+      const months: Record<string, number> = {
+        january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
+        july: 6, august: 7, september: 8, october: 9, november: 10, december: 11,
+      };
+      const monthIndex = months[match[1].toLowerCase()];
+      const day = parseInt(match[2], 10);
+      const year = parseInt(match[3], 10);
+
+      if (!isNaN(monthIndex) && !isNaN(day) && !isNaN(year)) {
+        birthDate = dayjs(new Date(year, monthIndex, day));
+      }
+    }
+  }
+
+  if (!birthDate.isValid()) return 0;
+
+  return dayjs().diff(birthDate, "year");
 }
 
 export function toTimeLabel(times?: string[]): string {
