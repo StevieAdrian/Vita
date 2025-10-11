@@ -87,7 +87,7 @@ export default function Login() {
           disabled={loading}
         >
           <Image
-            source={require("../../../assets/images/logo-google.png")}
+            source={require("../../../assets/images/google.png")}
             style={styles.googleIcon}
           />
           <Text style={styles.googleText}>Google</Text>
