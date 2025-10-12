@@ -1,5 +1,24 @@
 # 🌿 Vita – Your AI Health Companion
 
+---
+
+## 🏆 Tentang Hackathon
+Proyek ini dikembangkan untuk **S2C Hackathon 2025**  
+Tema: **SDG 3 – Good Health & Well-Being**  
+Fokus: *Preventive healthcare dengan AI dan pemantauan keluarga.*
+
+---
+
+## 👥 Tim Pengembang
+| Nama | Peran |
+|------|--------|
+| **Stevie Adrian** | Frontend & Backend Developer |
+| **Bryan Cornelius** | Frontend & Backend Developer |
+| **Alicia Felisha** | UI/UX, Frontend & Backend Developer |
+---
+
+> “Catat, Cegah, Sehat Bersama.” — Vita, your personal AI health companion.
+
 Vita adalah aplikasi kesehatan berbasis **React Native (Expo)** yang membantu pengguna untuk **memantau kondisi kesehatan, mencatat aktivitas harian, dan menerima pengingat obat maupun janji temu dokter secara otomatis.**  
 Aplikasi ini juga dilengkapi **AI Health Advisor** yang memberikan rekomendasi kesehatan personal menggunakan **OpenAI API**.
 
@@ -117,4 +136,19 @@ Prediksi kondisi kesehatan masa depan berdasarkan data historis pengguna.
 Simpan data biomarker dan gambar hasil pemeriksaan secara aman.  
 - Menggunakan **Cloudinary** untuk penyimpanan media  
 - Otomatis dioptimasi agar ringan & cepat diakses  
-- Dapat dihubungkan dengan riwayat diary pengguna  
+- Dapat dihubungkan dengan riwayat diary pengguna
+
+  ## 🖼️ Preview Tampilan
+
+| Tampilan | Deskripsi |
+|-----------|------------|
+| ![Dashboard](assets/screens/dashboard.png) | Ringkasan kesehatan & navigasi utama |
+| ![Diary](assets/screens/diary.png) | Health Diary & vital sign tracker |
+| ![Reminder](assets/screens/reminder.png) | Reminder obat & appointment |
+| ![Analysis](assets/screens/analysis.png) | AI Health Advisor & Early Warning |
+| ![Family](assets/screens/family.png) | Family Mode monitoring |
+
+📂 **Google Drive Resources**
+Beberapa file tambahan seperti `.env` dan asset pendukung tersedia di link berikut:  
+👉 [Vita Project Resources (Google Drive)](https://drive.google.com/drive/folders/1heqYOOosrSigI0Ye5XMW42dkBGq9jtAd)
+
