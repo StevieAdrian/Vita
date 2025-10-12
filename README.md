@@ -18,6 +18,7 @@ Fokus: *Preventive healthcare dengan AI dan pemantauan keluarga.*
 | **Alicia Felisha** | UI/UX, Frontend & Backend Developer |
 ---
 
+## 💡 About Vita
 > “Catat, Cegah, Sehat Bersama.” — Vita, your personal AI health companion.
 
 Vita adalah aplikasi kesehatan berbasis **React Native (Expo)** yang membantu pengguna untuk **memantau kondisi kesehatan, mencatat aktivitas harian, dan menerima pengingat obat maupun janji temu dokter secara otomatis.**  
