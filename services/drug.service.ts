@@ -10,6 +10,7 @@ import {
   getDocs,
   onSnapshot,
   query,
+  serverTimestamp,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -88,8 +89,17 @@ export const listenDrugsByUser = (
 };
 
 export const updateDrugs = async (id: string, data: Partial<DrugReminder>) => {
-  const ref = doc(db, "drugs", id);
-  await updateDoc(ref, data);
+  try {
+    const ref = doc(db, "drugs", id);
+    await updateDoc(ref, {
+      ...data,
+      updatedAt: serverTimestamp(),
+    });
+    console.log("update data:", data);
+    return { success: true };
+  } catch (err: any) {
+    console.error("Error updating:", err.message);
+  }
 };
 
 export const deleteDrugs = async (id: string) => {

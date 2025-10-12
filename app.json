@@ -1,6 +1,5 @@
 {
   "expo": {
-    "owner": "kucingoren",
     "name": "Vita",
     "slug": "Vita",
     "version": "1.0.0",
@@ -84,7 +83,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "047433b4-5923-4a58-ab65-d5657325ac34"
+        "projectId": "627a8cde-3201-4181-860e-2a0353e56b65"
       }
     }
   }
