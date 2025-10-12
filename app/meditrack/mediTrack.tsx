@@ -74,9 +74,17 @@ const ScheduleScreen: React.FC = () => {
     return drugReminders.filter((reminder) => reminder.date === todayString);
   }, [drugReminders, todayString]);
 
-  const todayAppointments = useMemo(() => {
-    return appointmentReminders.filter((appt) => appt.date === todayString);
-  }, [appointmentReminders, todayString]);
+const todayAppointments = useMemo(() => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  return appointmentReminders.filter((appt) => {
+    const apptDate = new Date(appt.date);
+    apptDate.setHours(0, 0, 0, 0);
+    return apptDate.getTime() === today.getTime();
+  });
+}, [appointmentReminders]);
+
 
   const upcomingAppointments = useMemo(() => {
     const today = new Date();
