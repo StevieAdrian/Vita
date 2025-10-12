@@ -74,24 +74,6 @@ export default function Login() {
             </Text>
           </Text>
         </View>
-        <View style={styles.dividerWrapper}>
-          <View style={styles.divider} />
-          <Text style={styles.dividerText}>Or Continue With</Text>
-          <View style={styles.divider} />
-        </View>
-
-        <TouchableOpacity
-          style={styles.googleButton}
-          activeOpacity={0.7}
-          onPress={signInWithGoogle}
-          disabled={loading}
-        >
-          <Image
-            source={require("../../../assets/images/google.png")}
-            style={styles.googleIcon}
-          />
-          <Text style={styles.googleText}>Google</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );

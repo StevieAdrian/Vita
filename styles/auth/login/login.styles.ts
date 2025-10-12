@@ -51,6 +51,7 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.primary,
+    paddingTop: 37,
   },
   welcomeImage: {
     width: "70%",
