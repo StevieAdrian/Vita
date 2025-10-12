@@ -151,5 +151,5 @@ Simpan data biomarker dan gambar hasil pemeriksaan secara aman.
 
 📂 **Google Drive Resources**
 Beberapa file tambahan seperti `.env` dan asset pendukung tersedia di link berikut:  
-👉 [Vita Project Resources (Google Drive)](https://drive.google.com/drive/folders/1heqYOOosrSigI0Ye5XMW42dkBGq9jtAd)
+👉 [Vita Project Resources (Google Drive)](https://drive.google.com/drive/folders/1xyfNBtO0BqwLqAKhCVxY3WuR5V3TrGG4?usp=sharing)
 
