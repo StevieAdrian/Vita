@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
   },
   header: {
     width: "100%",
-    paddingTop: 0,
+    paddingTop: 50,
     paddingVertical: 0,
   },
   scrollWrapper: {

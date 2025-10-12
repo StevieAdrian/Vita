@@ -75,4 +75,17 @@ export const styles = StyleSheet.create({
     fontFamily: "Inter-regular",
     color: COLORS.white,
   },
+  backButton: {
+    position: "absolute",
+    left: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+    zIndex: 1,
+  },
+  icon: {
+    width: 24,
+    height: 24,
+    resizeMode: "contain",
+  },
 });
