@@ -297,13 +297,6 @@ export default function Signup() {
                 </Text>
               </Text>
             </View>
-            <View style={styles.bottomContainer}>
-              <View style={styles.dividerContainer}>
-                <View style={styles.dividerLine} />
-                <Text style={styles.dividerText}>Or Continue With</Text>
-                <View style={styles.dividerLine} />
-              </View>
-            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

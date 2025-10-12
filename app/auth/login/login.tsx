@@ -74,11 +74,6 @@ export default function Login() {
             </Text>
           </Text>
         </View>
-        <View style={styles.dividerWrapper}>
-          <View style={styles.divider} />
-          <Text style={styles.dividerText}>Or Continue With</Text>
-          <View style={styles.divider} />
-        </View>
       </View>
     </View>
   );

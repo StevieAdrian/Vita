@@ -6,7 +6,6 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
-    paddingTop: 37,
     marginBottom: 37,
   },
   backButton: {
