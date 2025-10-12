@@ -42,6 +42,13 @@ const Chronic: React.FC = () => {
     console.log("debug data:", finalChronics);
     router.push("/auth/signup/emergency");
   };
+  const handlePress = () => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.push("/");
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -60,6 +67,12 @@ const Chronic: React.FC = () => {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
+          <TouchableOpacity style={styles.backButton} onPress={handlePress}>
+            <Image
+              source={require("@/assets/utilsIcon/arrow-left-white.png")}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
           <View style={styles.logoContainer}>
             <Image
               source={require("../../../assets/images/logo-vita.png")}

@@ -43,6 +43,13 @@ const Allergics: React.FC = () => {
     console.log("debug data: ", data);
     router.push("/auth/signup/chronic");
   };
+  const handlePress = () => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.push("/");
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -61,6 +68,12 @@ const Allergics: React.FC = () => {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
+          <TouchableOpacity style={styles.backButton} onPress={handlePress}>
+            <Image
+              source={require("@/assets/utilsIcon/arrow-left-white.png")}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
           <View style={styles.logoContainer}>
             <Image
               source={require("../../../assets/images/logo-vita.png")}

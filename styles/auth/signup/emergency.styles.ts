@@ -198,4 +198,19 @@ export const styles = StyleSheet.create({
     marginTop: 8,
     textAlign: "left",
   },
+  backButton: {
+    position: "absolute",
+    left: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+    zIndex: 1,
+    paddingLeft: 20,
+    paddingTop: 80,
+  },
+  icon: {
+    width: 24,
+    height: 24,
+    resizeMode: "contain",
+  },
 });

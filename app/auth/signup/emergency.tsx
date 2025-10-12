@@ -2,6 +2,7 @@ import InputField from "@/components/utils/InputField";
 import { COLORS } from "@/constants/colors";
 import { Relation, RELATION_OPTIONS } from "@/constants/relations";
 import { useSignupContext } from "@/context/SignupContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useAuthState } from "@/hooks/useAuthState";
 import { useSignup } from "@/hooks/useSignup";
 import {
@@ -24,7 +25,6 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import { styles } from "../../../styles/auth/signup/emergency.styles";
-import { useAuth } from "@/hooks/useAuth";
 
 export default function EmergencyContact() {
   const [name, setName] = useState("");
@@ -59,36 +59,46 @@ export default function EmergencyContact() {
       const finalContacts = [...(data.emergencyContacts || []), values];
 
       try {
-        if (user && user.providerData.some(p => p.providerId === "google.com")) {
-        await signupWithGoogle(user, {
-          username: data.username!,
-          firstName: data.firstName!,
-          lastName: data.lastName!,
-          phoneNumber: data.phoneNumber,
-          dateOfBirth: data.dateOfBirth,
-          gender: data.gender,
-          bloodType: data.bloodType,
-          allergies: data.allergies,
-          chronicConditions: data.chronicConditions,
-          emergencyContacts: finalContacts,
-          avatarUrl: data.avatarUrl || user.photoURL || undefined,
-        });
+        if (
+          user &&
+          user.providerData.some((p) => p.providerId === "google.com")
+        ) {
+          await signupWithGoogle(user, {
+            username: data.username!,
+            firstName: data.firstName!,
+            lastName: data.lastName!,
+            phoneNumber: data.phoneNumber,
+            dateOfBirth: data.dateOfBirth,
+            gender: data.gender,
+            bloodType: data.bloodType,
+            allergies: data.allergies,
+            chronicConditions: data.chronicConditions,
+            emergencyContacts: finalContacts,
+            avatarUrl: data.avatarUrl || user.photoURL || undefined,
+          });
 
-        router.push("/"); 
-        return;
-      }
-      if (!data.email || !data.password) {
-        return;
-      }
-      const uid = await signup({
-        ...data,
-        emergencyContacts: finalContacts,
-      } as any);
+          router.push("/");
+          return;
+        }
+        if (!data.email || !data.password) {
+          return;
+        }
+        const uid = await signup({
+          ...data,
+          emergencyContacts: finalContacts,
+        } as any);
 
         router.push("/");
       } catch (err) {
         console.error("Signup failed:", err);
       }
+    }
+  };
+  const handlePress = () => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.push("/");
     }
   };
 
@@ -113,6 +123,12 @@ export default function EmergencyContact() {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
+          <TouchableOpacity style={styles.backButton} onPress={handlePress}>
+            <Image
+              source={require("@/assets/utilsIcon/arrow-left-white.png")}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
           <View style={styles.header}>
             <Image
               source={require("../../../assets/images/logo-vita.png")}
