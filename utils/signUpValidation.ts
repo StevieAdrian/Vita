@@ -22,7 +22,7 @@ export const validateField = (
   switch (field) {
     case "firstName":
       if (!value.trim()) return "First name is required";
-      if (value.length <= 3) return "First name must be at least 3 characters";
+      if (value.length < 3) return "First name must be at least 3 characters";
       break;
 
     case "lastName":
@@ -36,7 +36,7 @@ export const validateField = (
 
     case "password":
       if (!value) return "Password is required";
-      if (value.length <= 6) return "Password must be at least 6 characters";
+      if (value.length < 6) return "Password must be at least 6 characters";
       break;
 
     case "confirmPassword":
@@ -61,7 +61,7 @@ export const validateField = (
       if (!value) return "Username is required";
       if (existingUsernames.includes(value.toLowerCase()))
         return "Username is already taken, choose another";
-      if (value.length <= 3) return "Username must be at least 3 characters";
+      if (value.length < 3) return "Username must be at least 3 characters";
       break;
   }
   return "";
