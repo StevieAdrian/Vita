@@ -1,5 +1,6 @@
 # 🌿 Vita – Your AI Health Companion
 
+![Dashboard](assets/screen/vita.png)
 ---
 
 ## 🏆 Tentang Hackathon
@@ -142,11 +143,9 @@ Simpan data biomarker dan gambar hasil pemeriksaan secara aman.
 
 | Tampilan | Deskripsi |
 |-----------|------------|
-| ![Dashboard](assets/screens/dashboard.png) | Ringkasan kesehatan & navigasi utama |
-| ![Diary](assets/screens/diary.png) | Health Diary & vital sign tracker |
-| ![Reminder](assets/screens/reminder.png) | Reminder obat & appointment |
-| ![Analysis](assets/screens/ai-analysis.png) | AI Health Advisor & Early Warning |
-| ![Family](assets/screens/family-mode.png) | Family Mode monitoring |
+| ![Reminder](assets/screen/reminder.png) | Reminder obat & appointment |
+| ![Analysis](assets/screen/ai-analysis.png) | Diary, AI Health Advisor & Early Warning |
+| ![Family](assets/screen/family-mode.png) | Family Mode monitoring |
 
 
 📂 **Google Drive Resources**
