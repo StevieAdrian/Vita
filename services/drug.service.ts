@@ -22,6 +22,7 @@ const drugsCollection = collection(db, "drugs");
 
 export const createDrug = async (data: Omit<DrugReminder, "id">) => {
   const docRef = await addDoc(drugsCollection, data);
+  await updateDoc(docRef, { id: docRef.id });
 
   const normalizedDate = dayjs(data.date).isValid()
     ? dayjs(data.date).format("YYYY-MM-DD")

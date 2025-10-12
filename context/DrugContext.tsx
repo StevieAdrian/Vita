@@ -65,7 +65,6 @@ export const DrugProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const update = async (id: string, data: Partial<DrugReminder>) => {
     try {
-      console.log("test2");
       await updateDrugs(id, data);
       setDrugs((prev) =>
         prev.map((item) => (item.id === id ? { ...item, ...data } : item))
