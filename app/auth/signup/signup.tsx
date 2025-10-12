@@ -7,6 +7,7 @@ import { useCheckEmail } from "@/hooks/useCheckEmail";
 import { useCheckUsername } from "@/hooks/useCheckUsername";
 import { mapperSignupValues } from "@/utils/mapper";
 import { SignupValues, validateField } from "@/utils/signUpValidation";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -22,7 +23,6 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Feather";
 import { styles } from "../../../styles/auth/signup/singup.styles";
-import { LinearGradient } from "expo-linear-gradient";
 
 export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -107,7 +107,7 @@ export default function Signup() {
         >
           <View style={styles.header}>
             <Image
-              source={require("../../../assets/images/Logo Vita.png")}
+              source={require("../../../assets/images/logo-vita.png")}
               style={styles.logo}
               resizeMode="contain"
             />
@@ -296,25 +296,6 @@ export default function Signup() {
                   Log In
                 </Text>
               </Text>
-            </View>
-            <View style={styles.bottomContainer}>
-              <View style={styles.dividerContainer}>
-                <View style={styles.dividerLine} />
-                <Text style={styles.dividerText}>Or Continue With</Text>
-                <View style={styles.dividerLine} />
-              </View>
-              <TouchableOpacity
-                style={styles.googleButton}
-                activeOpacity={0.7}
-                onPress={signInWithGoogle}
-                disabled={loading}
-              >
-                <Image
-                  source={require("../../../assets/images/Logo Google.png")}
-                  style={styles.googleIcon}
-                />
-                <Text style={styles.googleText}>Google</Text>
-              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>

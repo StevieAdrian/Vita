@@ -12,6 +12,7 @@ type ReminderCardProps = {
   onDelete?: (reminder: Reminder) => void;
   showDescription?: boolean;
   showActions?: boolean;
+  showImages?: boolean;
 };
 
 const truncateText = (text: string, wordLimit: number) => {
@@ -61,11 +62,11 @@ const getCardBackground = (reminderType: ReminderCategory | "other") => {
 const getReminderIcon = (reminderType: ReminderCategory | "other") => {
   switch (reminderType) {
     case "drug":
-      return require("@/assets/mediTrack/pill.svg");
+      return require("@/assets/mediTrack/pill.png");
     case "appointment":
-      return require("@/assets/mediTrack/medicalCheckUp.svg");
+      return require("@/assets/mediTrack/medicalCheckUp.png");
     default:
-      return require("@/assets/mediTrack/pill.svg");
+      return require("@/assets/mediTrack/pill.png");
   }
 };
 
@@ -76,6 +77,7 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
   onDelete,
   showDescription = true,
   showActions = false,
+  showImages = true,
 }) => {
   const reminderType = reminder.category;
   const cardBackground = getCardBackground(reminderType);
@@ -102,18 +104,20 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
       }}
     >
       <View style={styles.leftColumn}>
-        <View>
-          {reminderIcon && (
-            <Image
-              source={reminderIcon}
-              style={[
-                { width: 35, height: 35 },
-                reminder.completed && { opacity: 0.5 },
-              ]}
-              resizeMode="contain"
-            />
-          )}
-        </View>
+        {showImages && (
+          <View>
+            {reminderIcon && (
+              <Image
+                source={reminderIcon}
+                style={[
+                  { width: 35, height: 35 },
+                  reminder.completed && { opacity: 0.5 },
+                ]}
+                resizeMode="contain"
+              />
+            )}
+          </View>
+        )}
         <View style={styles.textContainer}>
           <Text
             style={[
@@ -164,7 +168,10 @@ export const ReminderCard: React.FC<ReminderCardProps> = ({
             onPress={handleEditPress}
             style={styles.actionButton}
           >
-            <Image source={require("@/assets/utilsIcon/arrow-right.svg")} />
+            <Image
+              source={require("@/assets/utilsIcon/arrow-left.png")}
+              style={{ transform: [{ rotate: "180deg" }] }}
+            />
           </TouchableOpacity>
         </View>
       )}

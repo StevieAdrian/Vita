@@ -2,7 +2,6 @@ import { COLORS } from "@/constants/colors";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  container: { flex: 1 },
   headerContainer: {
     width: "100%",
     backgroundColor: COLORS.background2nd,
@@ -30,19 +29,26 @@ export const styles = StyleSheet.create({
     bottom: 0,
     height: "70%",
   },
+  container: {
+    width: "100%",
+    paddingHorizontal: 16,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   formContainer: {
-    alignItems: "flex-start",
     backgroundColor: COLORS.white,
-    width: 369,
+    maxWidth: 369,
     borderRadius: 10,
     shadowColor: "#D7D7D7",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 2,
-    paddingHorizontal: 17,
+    paddingHorizontal: 20,
     paddingVertical: 25,
+    width: "100%",
   },
+
   calenderContainer: {
     marginTop: 10,
     borderColor: COLORS.gray3,
@@ -77,6 +83,7 @@ export const styles = StyleSheet.create({
   subformContainer: {
     gap: 10,
     marginTop: 10,
+    width: "100%",
   },
 
   subtitle: {
@@ -103,6 +110,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     gap: 15,
+    flexWrap: "wrap",
   },
 
   bottomInputCont: {
@@ -110,7 +118,7 @@ export const styles = StyleSheet.create({
   },
 
   halfInput: {
-    width: 155,
+    width: "100%",
     height: 44,
     paddingHorizontal: 5,
     paddingVertical: 5,
@@ -120,7 +128,6 @@ export const styles = StyleSheet.create({
   },
 
   fullInput: {
-    width: "100%",
     height: 44,
     paddingHorizontal: 5,
     paddingVertical: 3,
@@ -130,7 +137,6 @@ export const styles = StyleSheet.create({
   },
 
   descInput: {
-    width: "100%",
     height: 78,
     paddingHorizontal: 10,
     paddingVertical: 10,
@@ -144,5 +150,18 @@ export const styles = StyleSheet.create({
   fullContainer: {
     gap: 10,
     width: "100%",
+    paddingHorizontal: 0,
+  },
+  inputRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    flexWrap: "wrap",
+  },
+  inputGroup: {
+    flex: 1,
+    maxWidth: "48%",
+    gap: 10,
   },
 });

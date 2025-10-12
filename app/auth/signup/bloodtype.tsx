@@ -1,6 +1,7 @@
 import { BLOODTYPE_OPTIONS, bloodType } from "@/constants/bloodType";
 import { COLORS } from "@/constants/colors";
 import { useSignupContext } from "@/context/SignupContext";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -40,6 +41,10 @@ const BloodType: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <LinearGradient
+        colors={["#1A73E8", "#21E2CF"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -53,7 +58,7 @@ const BloodType: React.FC = () => {
         >
           <View style={styles.logoContainer}>
             <Image
-              source={require("../../../assets/images/Logo Vita.png")}
+              source={require("../../../assets/images/logo-vita.png")}
               style={styles.logo}
               resizeMode="contain"
             />

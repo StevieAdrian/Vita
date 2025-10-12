@@ -33,6 +33,8 @@ import {
 } from "react-native-safe-area-context";
 import { COLORS } from "../../constants/colors";
 import { styles } from "../../styles/meditrack/medistrack.style";
+import { useRealTimeNotifications } from "@/hooks/useRealTimeNotifications";
+import { AppointmentReminder } from "@/types/appointment";  
 
 const ScheduleScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
@@ -45,6 +47,11 @@ const ScheduleScreen: React.FC = () => {
     loading: appointmentsLoading,
     remove,
   } = useAppointments();
+  const {
+    scheduleDrugNotification,
+    scheduleAppointmentNotification,
+    registerForPushNotifications,
+  } = useRealTimeNotifications();
 
   const [showDrugNotification, setShowDrugNotification] = useState(false);
   const [showAppointmentNotification, setShowAppointmentNotification] =
@@ -68,17 +75,8 @@ const ScheduleScreen: React.FC = () => {
   }, [drugReminders, todayString]);
 
   const todayAppointments = useMemo(() => {
-    const today = new Date();
-    const todayString = today.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-
-    return appointmentReminders.filter((appt) => {
-      return appt.date === todayString;
-    });
-  }, [appointmentReminders]);
+    return appointmentReminders.filter((appt) => appt.date === todayString);
+  }, [appointmentReminders, todayString]);
 
   const upcomingAppointments = useMemo(() => {
     const today = new Date();
@@ -124,7 +122,7 @@ const ScheduleScreen: React.FC = () => {
     }));
 
     return [...drugItems, ...appointmentItems];
-  }, [drugReminders, todayAppointments]);
+  }, [todayDrugReminders, todayAppointments]);
 
   const limitedTodayReminders = useMemo(() => {
     return todayReminders.slice(0, 3);
@@ -204,22 +202,47 @@ const ScheduleScreen: React.FC = () => {
         console.error(err);
       }
     };
-
     const interval = setInterval(checkDaily, 60 * 60 * 1000);
     checkDaily();
     return () => clearInterval(interval);
   }, [removeExpiredDrugs]);
+
+    useEffect(() => {
+     registerForPushNotifications();
+     
+     drugs.forEach((drug) => {
+       if (!drug.isCompleted) {
+         scheduleDrugNotification(drug);
+       }
+     });
+ 
+     appointmentReminders.forEach((appointment: AppointmentReminder) => {
+       if (!appointment.isCompleted) {
+         scheduleAppointmentNotification(appointment);
+       }
+     });
+   }, [
+     drugs,
+     appointmentReminders,
+     scheduleDrugNotification,
+     scheduleAppointmentNotification,
+     registerForPushNotifications,
+   ]);
 
   const handleToggleReminder = useCallback((id: string) => {
     console.log(id);
   }, []);
 
   const handleSeeDetail = useCallback((appointment: any) => {
+    const originalId = appointment.id.startsWith("appt-")
+      ? appointment.id.replace("appt-", "")
+      : appointment.id;
+
     router.push({
       pathname: "/meditrack/appointmentForm",
       params: {
         editMode: "true",
-        appointmentId: appointment.id,
+        appointmentId: originalId,
       },
     });
   }, []);
@@ -235,11 +258,15 @@ const ScheduleScreen: React.FC = () => {
   }, []);
 
   const handleEditAppointment = useCallback((appointment: any) => {
+    const originalId = appointment.id.startsWith("appt-")
+      ? appointment.id.replace("appt-", "")
+      : appointment.id;
+
     router.push({
       pathname: "/meditrack/appointmentForm",
       params: {
         editMode: "true",
-        appointmentId: appointment.id,
+        appointmentId: originalId,
       },
     });
   }, []);

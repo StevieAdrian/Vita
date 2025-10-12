@@ -1,4 +1,5 @@
 import { Appointment } from "@/constants/appointment";
+import { normalizeFirebaseDate } from "@/utils/firebaseDateUtils";
 
 export const formatDateLabel = (dateString: string): string => {
   if (!dateString) return "No date set";
@@ -84,6 +85,7 @@ export const getAppointmentStatus = (
 };
 
 export const convertAppointment = (appointmentReminder: any): Appointment => {
+    const safeDate = normalizeFirebaseDate(appointmentReminder.date); // ✅ normalize dulu
   const status = appointmentReminder.status
     ? (appointmentReminder.status as "upcoming" | "history")
     : getAppointmentStatus(
@@ -96,7 +98,10 @@ export const convertAppointment = (appointmentReminder: any): Appointment => {
     title: appointmentReminder.title || "Appointment",
     provider: appointmentReminder.medicalStaff || "Healthcare Provider",
     location: appointmentReminder.location || "Not specified",
-    dateLabel: formatDateLabel(appointmentReminder.date),
+    // dateLabel: formatDateLabel(appointmentReminder.date),
+    dateLabel: safeDate,
+    date: safeDate,
+
     timeLabel: formatTimeLabel(
       appointmentReminder.startTime,
       appointmentReminder.endTime

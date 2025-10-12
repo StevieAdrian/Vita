@@ -3,6 +3,7 @@ import { CHRONIC_OPTIONS } from "@/constants/chronic";
 import { COLORS } from "@/constants/colors";
 import { useSignupContext } from "@/context/SignupContext";
 import { useChronic } from "@/utils/chronicValidation";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React from "react";
 import {
@@ -44,6 +45,10 @@ const Chronic: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <LinearGradient
+        colors={["#1A73E8", "#21E2CF"]}
+        style={styles.dashboardContainerLinear}
+      ></LinearGradient>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -57,7 +62,7 @@ const Chronic: React.FC = () => {
         >
           <View style={styles.logoContainer}>
             <Image
-              source={require("../../../assets/images/Logo Vita.png")}
+              source={require("../../../assets/images/logo-vita.png")}
               style={styles.logo}
               resizeMode="contain"
             />

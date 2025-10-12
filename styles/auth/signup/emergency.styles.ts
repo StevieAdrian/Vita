@@ -3,11 +3,6 @@ import { Dimensions, StyleSheet } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
-const scaleWidth = (size: number) => (width / 375) * size;
-const scaleHeight = (size: number) => (height / 812) * size;
-const moderateScale = (size: number, factor = 0.5) =>
-  size + (scaleWidth(size) - size) * factor;
-
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -24,52 +19,52 @@ export const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingHorizontal: scaleWidth(24),
-    paddingTop: scaleHeight(40),
-    paddingBottom: scaleHeight(30),
+    paddingHorizontal: 24,
+    paddingTop: 40,
+    paddingBottom: 30,
   },
   header: {
     backgroundColor: COLORS.primary,
-    paddingTop: scaleHeight(50),
-    paddingHorizontal: scaleWidth(25),
-    paddingBottom: scaleHeight(30),
+    paddingTop: 50,
+    paddingHorizontal: 25,
+    paddingBottom: 30,
     alignItems: "center",
     minHeight: height * 0.3,
     justifyContent: "center",
   },
   logo: {
-    width: scaleWidth(35),
-    height: scaleWidth(35),
-    marginBottom: scaleHeight(20),
+    width: 35,
+    height: 35,
+    marginBottom: 20,
     tintColor: COLORS.white,
     alignSelf: "center",
   },
   title: {
-    fontSize: width < 375 ? scaleWidth(28) : scaleWidth(32),
+    fontSize: width < 375 ? 28 : 32,
     fontWeight: "bold",
     color: COLORS.white,
-    marginBottom: scaleHeight(20),
+    marginBottom: 20,
     textAlign: "center",
     width: "100%",
-    lineHeight: scaleHeight(38),
+    lineHeight: 38,
   },
   progressBarContainer: {
     width: "100%",
     alignItems: "center",
-    marginBottom: scaleHeight(30),
-    paddingHorizontal: scaleWidth(20),
+    marginBottom: 30,
+    paddingHorizontal: 20,
   },
   progressBar: {
-    height: scaleHeight(8),
+    height: 8,
     width: "80%",
     backgroundColor: "rgba(255, 255, 255, 0.3)",
-    borderRadius: scaleHeight(4),
+    borderRadius: 4,
     overflow: "hidden",
   },
   progressFill: {
     height: "100%",
     backgroundColor: COLORS.white,
-    borderRadius: scaleHeight(4),
+    borderRadius: 4,
     width: "80%",
   },
   formWrapper: {
@@ -78,22 +73,22 @@ export const styles = StyleSheet.create({
   },
   formContainer: {
     backgroundColor: COLORS.white,
-    paddingHorizontal: scaleWidth(20),
-    paddingVertical: scaleHeight(24),
-    width: width - scaleWidth(40),
-    marginHorizontal: scaleWidth(20),
-    borderRadius: scaleWidth(12),
+    paddingHorizontal: 20,
+    paddingVertical: 24,
+    width: width - 40,
+    marginHorizontal: 20,
+    borderRadius: 12,
     shadowColor: COLORS.black,
     shadowOffset: {
       width: 0,
-      height: scaleHeight(2),
+      height: 2,
     },
     shadowOpacity: 0.1,
-    shadowRadius: scaleWidth(4),
+    shadowRadius: 4,
     elevation: 3,
   },
   sectionTitle: {
-    fontSize: moderateScale(18),
+    fontSize: 18,
     fontWeight: "600",
     color: COLORS.black,
     textAlign: "left",
@@ -102,8 +97,8 @@ export const styles = StyleSheet.create({
     height: 0.1,
     backgroundColor: COLORS.gray1,
     width: "100%",
-    marginTop: scaleHeight(12),
-    marginBottom: scaleHeight(12),
+    marginTop: 12,
+    marginBottom: 12,
   },
   label: {
     alignSelf: "flex-start",
@@ -127,9 +122,9 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.gray1,
     paddingHorizontal: 10,
-    paddingVertical: scaleHeight(12),
-    minHeight: scaleHeight(48),
-    borderRadius: scaleWidth(8),
+    paddingVertical: 12,
+    minHeight: 48,
+    borderRadius: 8,
   },
   dropdownButtonActive: {
     borderColor: COLORS.primary,
@@ -140,14 +135,14 @@ export const styles = StyleSheet.create({
     elevation: 3,
   },
   dropdownText: {
-    fontSize: moderateScale(15),
+    fontSize: 15,
     color: COLORS.black,
   },
   placeholderText: {
     color: COLORS.black,
   },
   dropdownMenu: {
-    marginTop: scaleHeight(6),
+    marginTop: 6,
     backgroundColor: COLORS.white,
     borderWidth: 1,
     borderColor: COLORS.gray1,
@@ -159,11 +154,11 @@ export const styles = StyleSheet.create({
     elevation: 4,
   },
   dropdownScroll: {
-    maxHeight: scaleHeight(200),
+    maxHeight: 200,
   },
   dropdownOption: {
-    paddingHorizontal: scaleWidth(10),
-    paddingVertical: scaleHeight(12),
+    paddingHorizontal: 10,
+    paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.primary5th,
   },
@@ -180,21 +175,21 @@ export const styles = StyleSheet.create({
     elevation: 2,
   },
   dropdownOptionText: {
-    fontSize: moderateScale(15),
+    fontSize: 15,
     color: COLORS.black,
   },
   continueButton: {
     backgroundColor: COLORS.black,
-    paddingVertical: scaleHeight(14),
-    borderRadius: scaleWidth(6),
+    paddingVertical: 14,
+    borderRadius: 6,
     alignItems: "center",
-    marginTop: scaleHeight(20),
-    marginBottom: scaleHeight(16),
+    marginTop: 20,
+    marginBottom: 16,
     width: "100%",
   },
   continueText: {
     color: COLORS.white,
-    fontSize: moderateScale(15),
+    fontSize: 15,
     fontWeight: "600",
   },
   errorText: {

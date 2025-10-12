@@ -1,12 +1,5 @@
 import { COLORS } from "@/constants/colors";
-import { Dimensions, StyleSheet } from "react-native";
-
-const { width, height } = Dimensions.get("window");
-
-const scaleWidth = (size: number): number => (width / 375) * size;
-const scaleHeight = (size: number): number => (height / 812) * size;
-const moderateScale = (size: number, factor: number = 0.5): number =>
-  size + (scaleWidth(size) - size) * factor;
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
@@ -15,9 +8,18 @@ export const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingHorizontal: scaleWidth(24),
-    paddingTop: scaleHeight(40),
-    paddingBottom: scaleHeight(30),
+    paddingHorizontal: 24,
+    paddingTop: 40,
+    paddingBottom: 30,
+  },
+  dashboardContainerLinear: {
+    flex: 1,
+    paddingHorizontal: 20,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: "70%",
   },
   mainWrapper: {
     alignItems: "center",
@@ -27,30 +29,29 @@ export const styles = StyleSheet.create({
 
   logoContainer: {
     alignItems: "center",
-    marginBottom: scaleHeight(20),
+    marginBottom: 20,
   },
   logo: {
-    width: scaleWidth(60),
-    height: scaleHeight(60),
+    width: 60,
+    height: 60,
   },
 
   avatarContainer: {
     alignItems: "center",
-    marginBottom: scaleHeight(25),
+    marginBottom: 25,
   },
 
   inputSection: {
     width: "100%",
-    marginBottom: scaleHeight(25),
+    marginBottom: 25,
   },
   inputBox: {
-    backgroundColor: COLORS.white,
-    borderRadius: scaleWidth(10),
-    paddingVertical: scaleHeight(14),
-    paddingHorizontal: scaleWidth(16),
-    fontSize: moderateScale(16),
+    backgroundColor: COLORS.gray3,
+    borderRadius: 10,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    fontSize: 16,
     color: COLORS.black,
-    borderWidth: 1,
   },
 
   buttonContainer: {
@@ -58,17 +59,10 @@ export const styles = StyleSheet.create({
   },
   continueButton: {
     backgroundColor: COLORS.black,
-    paddingVertical: scaleHeight(18),
-    paddingHorizontal: scaleWidth(24),
-    borderRadius: scaleWidth(12),
+    paddingVertical: 15,
+    paddingHorizontal: 24,
+    borderRadius: 12,
     alignItems: "center",
-    shadowColor: COLORS.black,
-    shadowOffset: {
-      width: 0,
-      height: scaleHeight(4),
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: scaleWidth(6),
     elevation: 8,
   },
   continueButtonDisabled: {
@@ -77,8 +71,8 @@ export const styles = StyleSheet.create({
     elevation: 2,
   },
   continueButtonText: {
-    fontSize: moderateScale(18),
-    fontWeight: "600",
+    fontSize: 14,
+    fontFamily: "Inter-regular",
     color: COLORS.white,
   },
 });

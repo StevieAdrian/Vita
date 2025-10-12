@@ -4,7 +4,6 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   dashboardContainer: {
     flex: 1,
-    paddingHorizontal: 20,
     position: "absolute",
     top: 0,
     left: 0,
@@ -21,7 +20,9 @@ export const styles = StyleSheet.create({
     bottom: 0,
     height: "70%",
   },
+
   scrollContent: {
+    marginHorizontal: 20,
     flexGrow: 1,
     alignItems: "center",
     justifyContent: "flex-start",
@@ -242,27 +243,28 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingVertical: 15,
+    width: "100%",
   },
   containerHealthAmount: {
-    width: 160,
+    width: "47%",
     height: 71,
     backgroundColor: COLORS.secondary5th,
     borderColor: COLORS.secondary,
     borderWidth: 1,
     paddingVertical: 15,
-    paddingHorizontal: 30,
+    paddingHorizontal: 10,
     borderRadius: 5,
     alignItems: "center",
     justifyContent: "center",
   },
   containerAlertAmount: {
-    width: 160,
+    width: "47%",
     height: 71,
     backgroundColor: COLORS.red3rd,
     borderColor: COLORS.red,
     borderWidth: 1,
     paddingVertical: 15,
-    paddingHorizontal: 30,
+    paddingHorizontal: 10,
     borderRadius: 5,
     alignItems: "center",
     justifyContent: "center",
@@ -279,6 +281,7 @@ export const styles = StyleSheet.create({
     borderColor: COLORS.gray3,
     width: "100%",
     backgroundColor: "white",
+    overflow: "hidden",
   },
   reminderTimesCard: {
     alignItems: "flex-start",
@@ -298,5 +301,8 @@ export const styles = StyleSheet.create({
     fontFamily: "Inter-Medium",
     fontSize: 14,
     paddingVertical: 10,
+  },
+  contIsi: {
+    width: "100%",
   },
 });

@@ -6,7 +6,6 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
-    paddingTop: 50,
     marginBottom: 37,
   },
   backButton: {
@@ -21,15 +20,13 @@ export const styles = StyleSheet.create({
     width: 24,
     height: 24,
     resizeMode: "contain",
-    transform: [{ rotate: "180deg" }],
   },
 
   title: {
     color: COLORS.black,
     fontSize: 24,
-    fontWeight: 600,
     textAlign: "center",
     flex: 1,
-    fontFamily: "Inter-Regular",
+    fontFamily: "Inter-SemiBold",
   },
 });

@@ -13,6 +13,8 @@ import { useAuthState } from "@/hooks/useAuthState";
 import { useDatePickerStyles } from "@/hooks/useDatePicker.styles";
 import { useEarlyWarning } from "@/hooks/useEarlyWarning";
 import { useFamilyMembers } from "@/hooks/useFamilyMembers";
+import { useLastHealthSync } from "@/hooks/useLastHealthSync";
+import { useLatestHealthDiary } from "@/hooks/useLatestHealthDiary";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { styles } from "@/styles/hcd/dashboard.style";
 import { NAV_ITEMS } from "@/styles/utils/bottom-nav.styles";
@@ -28,8 +30,6 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
-import { useLatestHealthDiary } from "@/hooks/useLatestHealthDiary";
-import { useLastHealthSync } from "@/hooks/useLastHealthSync";
 
 export default function DashboardHome() {
   const insets = useSafeAreaInsets();
@@ -53,7 +53,9 @@ export default function DashboardHome() {
     attention: 0,
     total: 0,
   });
-  const { data: biomarker, loading: loadingBiomarker } = useLatestHealthDiary(user?.uid);
+  const { data: biomarker, loading: loadingBiomarker } = useLatestHealthDiary(
+    user?.uid
+  );
   const { lastSync, loading } = useLastHealthSync();
 
   const [reminders, setReminders] = useState<Reminder[]>([]);
@@ -68,6 +70,25 @@ export default function DashboardHome() {
     });
   }
 
+  const handleDateChange = ({ date }: { date: DateType }) => {
+    if (!date) return;
+    let jsDate: Date;
+
+    if (date instanceof Date) jsDate = date;
+    else if (typeof date === "string" || typeof date === "number")
+      jsDate = new Date(date);
+    else if ((date as dayjs.Dayjs)?.toDate)
+      jsDate = (date as dayjs.Dayjs).toDate();
+    else jsDate = new Date();
+
+    setSelected(jsDate);
+    setSelectedDateKey(formatDateLocal(jsDate));
+
+    router.push({
+      pathname: "/hcd/diary/viewHealthDiary",
+      params: { date: formatDateLocal(jsDate) },
+    });
+  };
   useEffect(() => {
     async function fetchFamilyStats() {
       if (!members || members.length === 0) {
@@ -94,7 +115,6 @@ export default function DashboardHome() {
     fetchFamilyStats();
 
     if (!uid) return;
-
     setSelectedDateKey(
       selected
         ? formatDateLocals(new Date(selected as Date))
@@ -106,21 +126,23 @@ export default function DashboardHome() {
       ...appointments.map(
         (a): Reminder => ({
           ...convertAppointment(a),
-          id: `appt-${a.id}`,
+          id: a.id,
           category: "appointment",
           description: a.description ?? "",
           completed: a.status === "done",
         })
       ),
     ];
+
     const now = new Date();
     const upcomingReminders = allReminders
       .filter((r) => {
         if (!r.date) return "No Date";
 
-        const reminderDateTime = new Date(
-          `${r.date} ${r.timeLabel ?? "00:00"}`
-        );
+        const reminderDateTime = dayjs(`${r.date} ${r.timeLabel ?? "00:00"}`, [
+          "MMMM D, YYYY HH:mm",
+          "YYYY-MM-DD HH:mm",
+        ]).toDate();
 
         return !isNaN(reminderDateTime.getTime()) && reminderDateTime >= now;
       })
@@ -220,7 +242,7 @@ export default function DashboardHome() {
         showsVerticalScrollIndicator={false}
       >
         <UpHeader title="" showProfile={true} />
-        <View>
+        <View style={styles.contIsi}>
           <View style={styles.greetingsContainer}>
             <Text style={styles.greetings}>Welcome,</Text>
             <Text style={styles.greetingsBlue}>
@@ -232,31 +254,7 @@ export default function DashboardHome() {
             <DateTimePicker
               mode="single"
               date={selected}
-              onChange={({ date }) => {
-                if (date) {
-                  let jsDate: Date;
-
-                  if (date instanceof Date) {
-                    jsDate = date;
-                  } else if (
-                    typeof date === "string" ||
-                    typeof date === "number"
-                  ) {
-                    jsDate = new Date(date);
-                  } else {
-                    jsDate = (date as dayjs.Dayjs).toDate();
-                  }
-
-                  setSelected(jsDate);
-
-                  const selectedDate = formatDateLocal(jsDate);
-
-                  router.push({
-                    pathname: "/hcd/diary/viewHealthDiary",
-                    params: { date: selectedDate },
-                  });
-                }
-              }}
+              onChange={handleDateChange}
               styles={datePickerStyle}
             />
 
@@ -307,6 +305,7 @@ export default function DashboardHome() {
                             onToggle={handleToggleReminder}
                             showActions={true}
                             onEdit={handleEditDrug}
+                            showImages={false}
                           />
                         ) : (
                           <AppointmentCard
@@ -320,6 +319,7 @@ export default function DashboardHome() {
                             showLocation={false}
                             showDetails={false}
                             showArrow={true}
+                            showImage={false}
                           />
                         )}
                       </View>
@@ -350,11 +350,14 @@ export default function DashboardHome() {
           <View>
             {!loadingWarning &&
               (warningCount > 0 ? (
-                <TouchableOpacity style={styles.containerHealthWarning}>
+                <TouchableOpacity
+                  style={styles.containerHealthWarning}
+                  onPress={() => router.push("/analysis/analysis")}
+                >
                   <View style={styles.titleHealth}>
                     <View style={styles.containerDigit}>
                       <Image
-                        source={require("@/assets/hcd/healthWarning.svg")}
+                        source={require("@/assets/hcd/healthWarning.png")}
                         style={{ width: 34, height: 35 }}
                       />
                       <Text style={styles.titleDigitWarning}>
@@ -415,7 +418,9 @@ export default function DashboardHome() {
                     <View>
                       <Text style={styles.captionNumber}>
                         {biomarker
-                          ? `${biomarker.systolic ?? "-"} / ${biomarker.diastolic ?? "-"} mmHg`
+                          ? `${biomarker.systolic ?? "-"} / ${
+                              biomarker.diastolic ?? "-"
+                            } mmHg`
                           : "-"}
                       </Text>
                       <Text style={styles.captionName}>Blood Pressure</Text>
@@ -426,7 +431,11 @@ export default function DashboardHome() {
                   <View style={styles.containerStatus}>
                     <View style={styles.bulletin}></View>
                     <View>
-                      <Text style={styles.captionNumber}>{biomarker ? `${biomarker.bloodSugar ?? "-"} mg/dL` : "-"}</Text>
+                      <Text style={styles.captionNumber}>
+                        {biomarker
+                          ? `${biomarker.bloodSugar ?? "-"} mg/dL`
+                          : "-"}
+                      </Text>
                       <Text style={styles.captionName}>Blood Sugar</Text>
                     </View>
                   </View>
@@ -436,7 +445,9 @@ export default function DashboardHome() {
                   <View style={styles.containerStatus}>
                     <View style={styles.bulletin}></View>
                     <View>
-                      <Text style={styles.captionNumber}>{biomarker ? `${biomarker.heartRate ?? "-"} bpm` : "-"}</Text>
+                      <Text style={styles.captionNumber}>
+                        {biomarker ? `${biomarker.heartRate ?? "-"} bpm` : "-"}
+                      </Text>
                       <Text style={styles.captionName}>Heart Rate</Text>
                     </View>
                   </View>
@@ -445,7 +456,9 @@ export default function DashboardHome() {
                   <View style={styles.containerStatus}>
                     <View style={styles.bulletin}></View>
                     <View>
-                      <Text style={styles.captionNumber}>{biomarker ? `${biomarker.weight ?? "-"} kg` : "-"}</Text>
+                      <Text style={styles.captionNumber}>
+                        {biomarker ? `${biomarker.weight ?? "-"} kg` : "-"}
+                      </Text>
                       <Text style={styles.captionName}>Weight</Text>
                     </View>
                   </View>
@@ -454,8 +467,8 @@ export default function DashboardHome() {
 
               {/* Latest Update */}
               <View style={styles.LatestContainer}>
-                <Text style={styles.latestText}>Latest update{" "}
-                  {loading ? "Loading..." : `${lastSync}`}
+                <Text style={styles.latestText}>
+                  Latest update {loading ? "Loading..." : `${lastSync}`}
                 </Text>
 
                 <TouchableOpacity
@@ -468,7 +481,10 @@ export default function DashboardHome() {
             </View>
 
             {/* Family Mode */}
-            <TouchableOpacity style={styles.containerAllDigitBio}>
+            <TouchableOpacity
+              style={styles.containerAllDigitBio}
+              onPress={() => router.push("/family-mode/familyMode")}
+            >
               {/* Judul */}
               <View style={styles.titleHealth}>
                 <View style={styles.containerDigit}>
