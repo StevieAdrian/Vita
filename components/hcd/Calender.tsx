@@ -2,8 +2,9 @@ import { COLORS } from "@/constants/colors";
 import { styles } from "@/styles/hcd/calender.styles";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, Modal, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Calendar } from "react-native-calendars";
+const { height } = Dimensions.get("window");
 
 type CalenderProps = {
   value: string;
@@ -93,9 +94,9 @@ export default function Calender({
     });
   };
 
-  useEffect(() => {
-    setCurrentDate(getInitialDate());
-  }, []);
+    useEffect(() => {
+      setCurrentDate(getInitialDate());
+    }, []);
 
   return (
     <>
@@ -117,7 +118,7 @@ export default function Calender({
         }}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
+            <View style={[ styles.modalContent, Platform.OS === "android" ? { height: height * 0.55, justifyContent: "flex-start", } : {} ]} >
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Select Date</Text>
               <TouchableOpacity

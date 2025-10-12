@@ -93,7 +93,7 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
     paddingLeft: 10,
     paddingVertical: 15,
-    height: 46,
+    height: 60,
   },
   separator: {
     height: 1,
