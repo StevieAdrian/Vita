@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
   chevron: {
     width: 14,
     height: 16,
-    marginLeft: 8,
+    marginLeft: -10,
     tintColor: COLORS.gray1,
     resizeMode: "contain",
   },
