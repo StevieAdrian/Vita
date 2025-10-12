@@ -145,8 +145,9 @@ Simpan data biomarker dan gambar hasil pemeriksaan secara aman.
 | ![Dashboard](assets/screens/dashboard.png) | Ringkasan kesehatan & navigasi utama |
 | ![Diary](assets/screens/diary.png) | Health Diary & vital sign tracker |
 | ![Reminder](assets/screens/reminder.png) | Reminder obat & appointment |
-| ![Analysis](assets/screens/analysis.png) | AI Health Advisor & Early Warning |
-| ![Family](assets/screens/family.png) | Family Mode monitoring |
+| ![Analysis](assets/screens/ai-analysis.png) | AI Health Advisor & Early Warning |
+| ![Family](assets/screens/family-mode.png) | Family Mode monitoring |
+
 
 📂 **Google Drive Resources**
 Beberapa file tambahan seperti `.env` dan asset pendukung tersedia di link berikut:  
