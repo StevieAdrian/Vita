@@ -128,4 +128,19 @@ export const styles = StyleSheet.create({
     marginTop: 8,
     textAlign: "center",
   },
+  backButton: {
+    position: "absolute",
+    left: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+    zIndex: 1,
+    paddingLeft: 20,
+    paddingTop: 20,
+  },
+  icon: {
+    width: 24,
+    height: 24,
+    resizeMode: "contain",
+  },
 });

@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     marginBottom: 37,
+    marginTop: 30,
   },
   backButton: {
     position: "absolute",
