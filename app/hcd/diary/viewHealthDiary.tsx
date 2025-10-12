@@ -101,14 +101,22 @@ export default function HealthDiary() {
       .map(convertDrugToReminder);
 
     const todayAppointmentReminders: Reminder[] = appointments
-      .filter((a) => a.date === dateKey)
+      .filter((a) => {
+        try {
+          const apptDate = new Date(a.date);
+          const selectedDate = new Date(selected as Date);
+          return apptDate.toDateString() === selectedDate.toDateString();
+        } catch {
+          return false;
+        }
+      })
       .map((a) => ({
         ...convertAppointment(a),
         id: `appt-${a.id}`,
         category: "appointment",
         description: a.description ?? "",
         completed: a.status === "done",
-        date: normalizeFirebaseDate(a.date),
+        date: a.date,
       }));
 
     const allReminders: Reminder[] = [
