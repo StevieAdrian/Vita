@@ -10,7 +10,6 @@ import { useAuthState } from "../hooks/useAuthState";
 import {
   createDrug,
   deleteDrugs,
-  getDrugByUser,
   listenDrugsByUser,
   updateDrugs,
 } from "../services/drug.service";
@@ -65,10 +64,15 @@ export const DrugProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const update = async (id: string, data: Partial<DrugReminder>) => {
-    await updateDrugs(id, data);
-    setDrugs((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, ...data } : item))
-    );
+    try {
+      await updateDrugs(id, data);
+      setDrugs((prev) =>
+        prev.map((item) => (item.id === id ? { ...item, ...data } : item))
+      );
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
   };
 
   const removeExpiredDrugs = useCallback(async (): Promise<number> => {
