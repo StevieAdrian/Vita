@@ -36,8 +36,6 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   formContainer: {
-    alignItems: "center",
-    justifyContent: "center",
     backgroundColor: COLORS.white,
     maxWidth: 369,
     borderRadius: 10,
@@ -46,9 +44,11 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 2,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     paddingVertical: 25,
+    width: "100%",
   },
+
   calenderContainer: {
     marginTop: 10,
     borderColor: COLORS.gray3,
@@ -150,6 +150,7 @@ export const styles = StyleSheet.create({
   fullContainer: {
     gap: 10,
     width: "100%",
+    paddingHorizontal: 0,
   },
   inputRow: {
     flexDirection: "row",

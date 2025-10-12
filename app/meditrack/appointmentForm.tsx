@@ -29,6 +29,7 @@ import {
 import { TextInput } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "../../styles/meditrack/appointmentform.style";
+import dayjs from "dayjs";
 
 interface AppointmentFormProps {
   initialData?: AppointmentReminder;
@@ -128,11 +129,12 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
     }
 
     const calculatedStatus = getAppointmentStatus(date, startTime);
+    const normalizedDate = dayjs(date, ["MMMM D, YYYY", "YYYY-MM-DD"]).format("YYYY-MM-DD");
 
     const appointmentData: Omit<AppointmentReminder, "id"> = {
       title: title.trim(),
       description: description.trim(),
-      date,
+      date: normalizedDate,
       category,
       medicalStaff: medicalStaff.trim(),
       location: location.trim(),

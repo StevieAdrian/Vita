@@ -115,7 +115,7 @@ export default function EmergencyContact() {
         >
           <View style={styles.header}>
             <Image
-              source={require("../../../assets/images/Logo Vita.png")}
+              source={require("../../../assets/images/logo-vita.png")}
               style={styles.logo}
             />
             <Text style={styles.title}>Add Emergency{"\n"}Contacts</Text>
