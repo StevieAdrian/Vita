@@ -122,7 +122,6 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 16,
     fontSize: 16,
     color: COLORS.black,
-    elevation: 4,
     minHeight: 60,
   },
   reqNotes: {
