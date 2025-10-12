@@ -35,6 +35,7 @@ Aplikasi ini juga dilengkapi **AI Health Advisor** yang memberikan rekomendasi k
 | 📦 **EAS Build** | Deployment | Untuk generate .APK / .AAB produksi |
 
 ## ⚙️ How To Run?
+Untuk melakukan running, bisa menggunakan branch utama, yaitu ```main```
 
 ### 1️⃣ Clone Repository
 ```bash
