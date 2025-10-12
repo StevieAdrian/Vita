@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-start",
     gap: 12,
+    marginBottom: 10,
   },
   leftColumn: {
     flexDirection: "row",

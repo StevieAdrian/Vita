@@ -181,7 +181,9 @@ const DrugForm: React.FC<DrugFormProps> = ({
                   style={styles.deleteSty}
                 >
                   <View>
-                    <Text style={styles.deleteText}>Delete</Text>
+                    <Text numberOfLines={1} style={styles.deleteText}>
+                      Delete
+                    </Text>
                   </View>
                 </TouchableOpacity>
               )}
