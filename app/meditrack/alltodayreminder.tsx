@@ -34,7 +34,15 @@ const AllTodayRemindersScreen: React.FC = () => {
       day: "numeric",
     });
 
-    return appointments.filter((appt) => appt.date === todayString);
+    return appointments.filter((appt) => {
+      const apptDate = new Date(appt.date);
+      const today = new Date();
+      return (
+        apptDate.getFullYear() === today.getFullYear() &&
+        apptDate.getMonth() === today.getMonth() &&
+        apptDate.getDate() === today.getDate()
+      );
+    });
   }, [appointments]);
 
   const allTodayReminders = useMemo(() => {

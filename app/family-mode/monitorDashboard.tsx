@@ -169,7 +169,7 @@ export default function MonitorDashboard() {
 
                 router.push({
                   pathname: "/hcd/diary/viewHealthDiary",
-                  params: { date: selectedDate },
+                  params: { date: selectedDate, uid: monitoringUid, isMonitoring: "1", },
                 });
               }
             }}
