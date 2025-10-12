@@ -5,7 +5,7 @@
     "slug": "Vita",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/vita.png",
     "scheme": "vita",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -19,9 +19,9 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "foregroundImage": "./assets/images/vita.png",
+        "backgroundImage": "./assets/images/vita.png",
+        "monochromeImage": "./assets/images/vita.png"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
@@ -34,7 +34,7 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/vita.png"
     },
     "plugins": [
       "expo-router",
@@ -54,7 +54,7 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/images/icon.png",
+          "icon": "./assets/images/vita.png",
           "color": "#1A73E8",
           "defaultChannel": "default",
           "mode": "production"
@@ -84,7 +84,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "627a8cde-3201-4181-860e-2a0353e56b65"
+        "projectId": "047433b4-5923-4a58-ab65-d5657325ac34"
       }
     }
   }
